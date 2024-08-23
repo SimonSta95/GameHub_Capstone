@@ -34,6 +34,7 @@ It’s the ultimate tool for any gamer who wants to keep track of their gaming a
 
 ### CI/CD
 - **GitHub Actions**: Automates builds, tests, and deployment. Triggers workflows for both frontend and backend when code is pushed or a pull request is made.
+- **Docker**: Image creation and containerization on Render
 - **Render**: Hosts the App, providing automatic deployment on each push to the main branch with zero-downtime updates.
 
 ### External API Integration

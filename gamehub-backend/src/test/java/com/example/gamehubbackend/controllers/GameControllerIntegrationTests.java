@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void getAllGames_When_DbNotEmpty_ReturnsGames() throws Exception {
 
         gameRepository.save(new Game("1","Super Mario World", "Jump and Run", localDate, List.of("NES","SNES"), "Nintendo", "Nintendo", "test123", "linkToImg"));
@@ -62,6 +64,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void getGameById_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", "Jump and Run", localDate, List.of("NES","SNES"), "Nintendo", "Nintendo", "test123", "linkToImg"));
 
@@ -84,6 +87,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void getGameById_Test_IdNotFound() throws Exception {
 
         mockMvc.perform(get("/api/games/1"))
@@ -97,6 +101,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void addGame_Test() throws Exception {
 
         mockMvc.perform(post("/api/games")
@@ -132,6 +137,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void updateGame_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", "Jump and Run", localDate, List.of("NES","SNES"), "Nintendo", "Nintendo", "test123", "linkToImg"));
 
@@ -167,6 +173,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @DirtiesContext
     void deleteGame_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", "Jump and Run", localDate, List.of("NES","SNES"), "Nintendo", "Nintendo", "test123", "linkToImg"));
 

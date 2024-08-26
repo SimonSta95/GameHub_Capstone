@@ -1,0 +1,9 @@
+.footer-logo {
+    width: 100px;
+    height: auto;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: row;
+}

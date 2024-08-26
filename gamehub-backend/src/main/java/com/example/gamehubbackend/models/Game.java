@@ -1,0 +1,19 @@
+package com.example.gamehubbackend.models;
+
+import lombok.With;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@With
+public record Game(
+        String id,
+        String title,
+        String genre,
+        LocalDate releaseDate,
+        List<String> platforms,
+        String developer,
+        String publisher,
+        String description,
+        String coverImage
+) {}

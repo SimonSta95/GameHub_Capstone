@@ -93,10 +93,11 @@ class GameServiceUnitTests {
         when(gameRepo.findById(id)).thenReturn(Optional.of(existingGame));
         when(gameRepo.save(updateGame)).thenReturn(updateGame);
 
+        Game expected = new Game("1","Super Mario World 2", "Jump and Run", localDate, List.of("NES","SNES"), "Nintendo", "Nintendo", "test123456", "linkToImg");
         Game actual = gameService.updateGame(updateGameDTO,id);
 
         assertNotNull(actual);
-        assertEquals(updateGame,actual);
+        assertEquals(expected,actual);
         verify(gameRepo).findById(id);
         verify(gameRepo).save(updateGame);
     }

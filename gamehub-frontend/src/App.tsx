@@ -2,9 +2,10 @@ import './App.css'
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
+import {User} from "./types.ts";
 
 function App() {
-    const [user, setUser] = useState<string | null | undefined>(undefined)
+    const [user, setUser] = useState<User | null | undefined>(undefined)
 
     useEffect(() => {
         loadUser()
@@ -15,7 +16,7 @@ function App() {
             .then((response) => {
                 setUser(response.data)
             })
-            .catch((error) => {
+            .catch(() => {
                 setUser(null)
             })
     }
@@ -34,15 +35,15 @@ function App() {
         window.open(host + '/logout', '_self')
     }
 
-  return (
+    return (
       <>
           <h1>App</h1>
-          <p>{user}</p>
+          <p>{user?.username}</p>
           <button onClick={login}>GitHub Login</button>
           <button onClick={logout}>Logout</button>
           <Footer/>
       </>
-  )
+    )
 }
 
 export default App

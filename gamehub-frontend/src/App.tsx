@@ -1,8 +1,10 @@
 import './App.css'
+import logo from "./assets/gamehub-color.png"
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
 import {User} from "./types.ts";
+import {Button} from "@mui/material";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -37,10 +39,10 @@ function App() {
 
     return (
       <>
-          <h1>App</h1>
+          <img className={"main-logo"} src={logo} alt={"logo"}/>
           <p>{user?.username}</p>
-          <button onClick={login}>GitHub Login</button>
-          <button onClick={logout}>Logout</button>
+          <Button variant={"contained"} onClick={login}>GitHub Login</Button>
+          <Button variant={"outlined"} onClick={logout}>Logout</Button>
           <Footer/>
       </>
     )

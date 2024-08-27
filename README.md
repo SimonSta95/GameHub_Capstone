@@ -30,7 +30,7 @@ It’s the ultimate tool for any gamer who wants to keep track of their gaming a
 - **TypeScript** 🛡️: Statically typed JavaScript for better code reliability and development.
 - **Vite** ⚡: A fast, modern build tool for frontend projects.
 - **React Router** 🧭: Handle navigation and routing in the app.
-- **Chakra UI** 🎨: A sleek and customizable component library for building a responsive UI.
+- **Material UI** 🎨: A sleek and customizable component library for building a responsive UI.
 
 ### CI/CD
 - **GitHub Actions**: Automates builds, tests, and deployment. Triggers workflows for both frontend and backend when code is pushed or a pull request is made.

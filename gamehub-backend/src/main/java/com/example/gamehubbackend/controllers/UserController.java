@@ -25,7 +25,7 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @GetMapping("/{gitHubId}")
+    @GetMapping("/g/{gitHubId}")
     public User getUserByGitHubId(@PathVariable String gitHubId) {
         return userService.getUserByGitHubId(gitHubId);
     }

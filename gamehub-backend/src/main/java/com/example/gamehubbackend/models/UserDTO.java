@@ -10,7 +10,7 @@ public record UserDTO(
         String username,
         String gitHubId,
         String role,
-        List<Game> gameLibrary,
+        List<String> gameLibrary,
         LocalDateTime creationDate,
         LocalDateTime lastUpdateDate
 ) {}

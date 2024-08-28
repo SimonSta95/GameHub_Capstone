@@ -4,7 +4,7 @@ import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
 import {Game, User} from "./types.ts";
-import {Button} from "@mui/material";
+import {Button, CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
 
@@ -51,20 +51,30 @@ function App() {
             })
     }
 
-    return (
-      <>
-          <img className={"main-logo"} src={logo} alt={"logo"}/>
-          <p>{user?.username}</p>
-          <div className={"button-container"}>
-              <Button variant={"contained"} onClick={login}>GitHub Login</Button>
-              <Button variant={"outlined"} onClick={logout}>Logout</Button>
-          </div>
+    if (data.length === 0 && user !== null) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </div>
+        );
+    }
 
-          <Routes>
-              <Route path={"/games"} element={<GameGallery games={data} />}/>
-          </Routes>
-          <Footer/>
-      </>
+    return (
+        <>
+            <img className="main-logo" src={logo} alt="logo"/>
+            <p>{user?.username ?? 'Welcome, Guest!'}</p>
+            <div className="button-container">
+                {!user ? (
+                    <Button variant="contained" onClick={login}>GitHub Login</Button>
+                ) : (
+                    <Button variant="outlined" onClick={logout}>Logout</Button>
+                )}
+            </div>
+            <Routes>
+                <Route path={"/games"} element={<GameGallery games={data}/>}/>
+            </Routes>
+            <Footer/>
+        </>
     )
 }
 

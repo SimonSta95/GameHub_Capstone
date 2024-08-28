@@ -7,6 +7,7 @@ import {Game, User} from "./types.ts";
 import {Button, CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
+import GameDetail from "./pages/GameDetail/GameDetail.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -72,6 +73,7 @@ function App() {
             </div>
             <Routes>
                 <Route path={"/games"} element={<GameGallery games={data}/>}/>
+                <Route path={"/games/:id"} element={<GameDetail/>}/>
             </Routes>
             <Footer/>
         </>

@@ -6,71 +6,85 @@ type GameCardProps = {
     game: Game
 }
 
-function GameCard(props: Readonly<GameCardProps>) {
+export default function GameCard(props: Readonly<GameCardProps>) {
 
     return (
-        <Link to={`/games/${props.game.id}`} style={{ textDecoration: 'none' }}>
+        <Link to={`/games/${props.game.id}`} style={{ textDecoration: "none" }}>
             <Card
                 variant="outlined"
                 sx={{
-                    width: '100%',
-                    height: '400px',
+                    width: "100%",
+                    height: "100%", // Allow the card to grow dynamically based on content
+                    maxHeight: "400px", // Max height to keep uniform card sizes
                     borderRadius: 4,
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                    overflow: 'hidden',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    '&:hover': {
-                        transform: 'translateY(-10px)',
-                        boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
-                    }
+                    backgroundColor: "background.paper",
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    "&:hover": {
+                        transform: "translateY(-8px)",
+                        boxShadow: "0 8px 25px rgba(0, 0, 0, 0.2)",
+                    },
                 }}
             >
                 <CardMedia
                     component="img"
-                    height={250}
+                    height={200} // Ensure a balanced height between the image and content
                     image={props.game.coverImage}
                     alt={`${props.game.title} cover image`}
                     sx={{
-                        objectFit: 'cover',
-                        width: '100%',
-                        transition: 'transform 0.5s ease',
-                        '&:hover': {
-                            transform: 'scale(1.05)',
-                        }
+                        objectFit: "cover",
+                        width: "100%",
+                        display: "block", // Prevent white space under the image
+                        transition: "transform 0.5s ease",
+                        "&:hover": {
+                            transform: "scale(1.05)",
+                        },
                     }}
                 />
 
-                <CardContent sx={{
-                    padding: 3,
-                    transition: 'opacity 0.3s ease-in-out',
-                    '&:hover': {
-                        opacity: 0.85,
-                    }
-                }}>
+                <CardContent
+                    sx={{
+                        padding: 2,
+                        flexGrow: 1, // Allow content to take remaining space dynamically
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                    }}
+                >
                     <Typography
-                        variant="h5"
+                        variant="h6"
                         sx={{
                             fontWeight: 700,
-                            marginBottom: 2,
-                            background: 'linear-gradient(45deg, #f39c12, #d35400)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
+                            marginBottom: 1,
+                            color: "primary.contrastText",
+                            background: "linear-gradient(45deg, #ffba08, #fca311)", // Gradient text effect
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
                         }}
                     >
                         {props.game.title}
                     </Typography>
 
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                         {props.game.platforms.map((platform) => (
                             <Chip
                                 key={platform}
                                 label={platform}
                                 variant="outlined"
                                 sx={{
-                                    textTransform: 'capitalize',
+                                    textTransform: "capitalize",
                                     fontWeight: 500,
-                                    fontSize: '0.75rem',
-                                    borderRadius: '12px',
+                                    fontSize: "0.75rem",
+                                    borderRadius: "12px",
+                                    color: "primary.main",
+                                    borderColor: "primary.light",
+                                    "&:hover": {
+                                        backgroundColor: "primary.light",
+                                        color: "primary.contrastText",
+                                    },
                                 }}
                             />
                         ))}
@@ -80,5 +94,3 @@ function GameCard(props: Readonly<GameCardProps>) {
         </Link>
     );
 }
-
-export default GameCard;

@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 .footer {
     background-color: #1b263b;
     color: #ffffff;
@@ -9,7 +13,6 @@
     justify-content: center;
     min-height: 60px;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .footer-logo {

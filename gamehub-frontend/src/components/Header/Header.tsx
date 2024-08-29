@@ -17,8 +17,9 @@ export default function Header(props: Readonly<HeaderProps>) {
             <Link to="/" className="logo-link">
                 <img className="logo" src={logo} alt="GameHub Logo"/>
             </Link>
-            {props.user && <Link to="/games" className="nav-link">Games</Link>}
+
             <nav className="nav">
+                {props.user && <Link to="/games" className="nav-link">Games</Link>}
                 {props.user ? (
                     <div className="user-info">
                         <Avatar className="avatar" alt={props.user.username} src={props.user.avatarUrl}/>

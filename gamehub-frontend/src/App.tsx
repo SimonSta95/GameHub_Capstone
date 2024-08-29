@@ -62,17 +62,17 @@ function App() {
     }
 
     return (
-        <>
+        <div className={"grid"}>
             <Header user={user} onLogin={login} onLogout={logout} />
             <main>
                 <Routes>
-                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/" element={<LandingPage user={user} onLogin={login}/>} />
                     <Route path="/games" element={<GameGallery games={data} />} />
                     <Route path="/games/:id" element={<GameDetail />} />
                 </Routes>
             </main>
             <Footer />
-        </>
+        </div>
     )
 }
 

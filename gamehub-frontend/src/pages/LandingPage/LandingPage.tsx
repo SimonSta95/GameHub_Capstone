@@ -1,6 +1,14 @@
 import './LandingPage.css';
+import githubLogo from "../../assets/github-mark.svg"
+import {Button} from "@mui/material";
+import {User} from "../../types.ts";
 
-export default function LandingPage() {
+type LandingPageProps = {
+    user?: User | null;
+    onLogin: () => void;
+};
+
+export default function LandingPage(props: Readonly<LandingPageProps>) {
 
     return (
         <>
@@ -8,6 +16,16 @@ export default function LandingPage() {
                 <div className="hero-content">
                     <h1 className="hero-heading">Welcome to GameHub</h1>
                     <p className="hero-subheading">Your ultimate destination for discovering and enjoying your favorite games.</p>
+                    {!props.user && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={props.onLogin}
+                            className="github-login-button"
+                        >
+                            <img src={githubLogo} alt="GitHub Logo" className="github-logo" /> Sign in with GitHub
+                        </Button>
+                    )}
                 </div>
             </section>
 

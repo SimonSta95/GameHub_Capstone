@@ -168,6 +168,9 @@ export default function GameDetail(){
                             <strong>Developer:</strong> {game.developer}
                         </Typography>
                         <Typography variant="body2" sx={{ color: '#555', marginBottom: 1 }}>
+                            <strong>Publisher:</strong> {game.publisher}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#555', marginBottom: 1 }}>
                             <strong>Genre:</strong> {game.genre}
                         </Typography>
                     </CardContent>

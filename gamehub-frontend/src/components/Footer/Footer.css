@@ -1,5 +1,4 @@
 .footer {
-    position: relative;
     background-color: #1b263b;
     color: #ffffff;
     padding: 16px;
@@ -9,6 +8,8 @@
     align-items: center;
     justify-content: center;
     min-height: 60px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .footer-logo {

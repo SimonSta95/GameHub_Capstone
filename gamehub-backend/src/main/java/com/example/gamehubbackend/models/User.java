@@ -12,6 +12,7 @@ public record User(
    String id,
    String username,
    String gitHubId,
+   String avatarUrl,
    String role,
    List<String> gameLibrary,
    LocalDateTime creationDate,

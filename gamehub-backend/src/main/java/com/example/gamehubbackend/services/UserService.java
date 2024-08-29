@@ -34,6 +34,7 @@ public class UserService {
                 idService.randomId(),
                 userDTO.username(),
                 userDTO.gitHubId(),
+                userDTO.avatarUrl(),
                 userDTO.role(),
                 userDTO.gameLibrary(),
                 userDTO.creationDate(),

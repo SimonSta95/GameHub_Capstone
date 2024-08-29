@@ -2,6 +2,7 @@ export type User = {
     id: string,
     username: string,
     gitHubId: string,
+    avatarUrl: string,
     role: string,
     gameLibrary: Game[],
 }

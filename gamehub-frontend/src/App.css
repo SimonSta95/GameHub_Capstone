@@ -10,7 +10,7 @@ body {
 .main-logo {
     display: block;
     margin: 20px auto;
-    max-width: 200px; /* Adjust the size as needed */
+    max-width: 200px;
     height: auto;
 }
 

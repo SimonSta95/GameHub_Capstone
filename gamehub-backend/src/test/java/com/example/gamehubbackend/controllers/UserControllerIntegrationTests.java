@@ -41,7 +41,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void getUserById() throws Exception {
-        userRepository.save(new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/1"))
                 .andExpect(status().isOk())
@@ -79,7 +79,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void getUserByGitHubId() throws Exception {
-        userRepository.save(new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/g/1"))
                 .andExpect(status().isOk())
@@ -152,7 +152,7 @@ class UserControllerIntegrationTests {
     @DirtiesContext
     void updateUser() throws Exception {
 
-        userRepository.save(new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -187,7 +187,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void deleteUser() throws Exception {
-        userRepository.save(new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime));
 
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isOk());

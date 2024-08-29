@@ -66,6 +66,7 @@ public class SecurityConfig {
                 gitHubUser = userService.saveUser(new UserDTO(
                         user.getAttributes().get("login").toString(),
                         user.getName(),
+                        user.getAttributes().get("avatar_url").toString(),
                         "USER",
                         new ArrayList<>(),
                         LocalDateTime.now(),

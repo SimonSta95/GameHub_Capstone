@@ -33,7 +33,7 @@ class AuthControllerTest {
     @DirtiesContext
     void getLoggedInUser() throws Exception {
 
-        userRepository.save(new User("1", "TestUser", "1", "USER", List.of("Game 1", "Game 2"), localDate, createdDate));
+        userRepository.save(new User("1", "TestUser", "1","link", "USER", List.of("Game 1", "Game 2"), localDate, createdDate));
 
         mockMvc.perform(get("/api/auth/me")
                 .with(oidcLogin().idToken(token-> token.subject("1"))

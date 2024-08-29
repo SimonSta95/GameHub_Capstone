@@ -1,13 +1,13 @@
 import './App.css'
-import logo from "./assets/gamehub-color.png"
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
 import {Game, User} from "./types.ts";
-import {Button, CircularProgress} from "@mui/material";
+import {CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
 import GameDetail from "./pages/GameDetail/GameDetail.tsx";
+import Header from "./components/Header/Header.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -62,20 +62,12 @@ function App() {
 
     return (
         <>
-            <img className="main-logo" src={logo} alt="logo"/>
-            <p>{user?.username ?? 'Welcome, Guest!'}</p>
-            <div className="button-container">
-                {!user ? (
-                    <Button variant="contained" onClick={login}>GitHub Login</Button>
-                ) : (
-                    <Button variant="outlined" onClick={logout}>Logout</Button>
-                )}
-            </div>
+            <Header user={user} onLogin={login} onLogout={logout} />
             <Routes>
-                <Route path={"/games"} element={<GameGallery games={data}/>}/>
-                <Route path={"/games/:id"} element={<GameDetail/>}/>
+                <Route path="/games" element={<GameGallery games={data} />} />
+                <Route path="/games/:id" element={<GameDetail />} />
             </Routes>
-            <Footer/>
+            <Footer />
         </>
     )
 }

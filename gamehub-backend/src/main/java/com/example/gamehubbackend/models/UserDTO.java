@@ -9,6 +9,7 @@ import java.util.List;
 public record UserDTO(
         String username,
         String gitHubId,
+        String avatarUrl,
         String role,
         List<String> gameLibrary,
         LocalDateTime creationDate,

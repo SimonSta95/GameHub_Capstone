@@ -8,6 +8,7 @@ import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
 import GameDetail from "./pages/GameDetail/GameDetail.tsx";
 import Header from "./components/Header/Header.tsx";
+import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -61,14 +62,17 @@ function App() {
     }
 
     return (
-        <>
+        <div className={"grid"}>
             <Header user={user} onLogin={login} onLogout={logout} />
-            <Routes>
-                <Route path="/games" element={<GameGallery games={data} />} />
-                <Route path="/games/:id" element={<GameDetail />} />
-            </Routes>
+            <main>
+                <Routes>
+                    <Route path="/" element={<LandingPage user={user} onLogin={login}/>} />
+                    <Route path="/games" element={<GameGallery games={data} />} />
+                    <Route path="/games/:id" element={<GameDetail />} />
+                </Routes>
+            </main>
             <Footer />
-        </>
+        </div>
     )
 }
 

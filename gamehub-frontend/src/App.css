@@ -1,67 +1,22 @@
-/* Overall Container */
-body {
+html, body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
+    min-height: 100%;
 }
 
-/* Logo */
-.main-logo {
-    display: block;
-    margin: 20px auto;
-    max-width: 200px;
-    height: auto;
-}
-
-/* User Info */
-p {
-    text-align: center;
-    font-size: 1.25rem;
-    color: #333;
-    margin: 10px 0;
-}
-
-/* Button Container */
-.button-container {
+body {
     display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 20px 0;
+    flex-direction: column;
 }
 
-/* Buttons */
-.MuiButton-contained {
-    background-color: #007bff;
-    color: white;
-    &:hover {
-        background-color: #0056b3;
-    }
+.grid {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
 }
 
-.MuiButton-outlined {
-    border-color: #007bff;
-    color: #007bff;
-    &:hover {
-        background-color: #e7f0ff;
-        border-color: #0056b3;
-    }
-}
-
-.spinner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* Footer */
-footer {
-    background-color: #282c34;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+main {
+    flex: 1;
 }

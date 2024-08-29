@@ -21,17 +21,18 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     display: 'flex',
                     flexWrap: 'wrap',
                     justifyContent: 'center',
-                    gap: '16px', // Space between items
+                    gap: '16px',
                 }}
             >
                 {props.games.map((game) => (
                     <Box
                         key={game.id}
                         sx={{
-                            flex: '1 1 calc(25% - 16px)', // 4 items per row with gap adjustment
-                            maxWidth: 'calc(25% - 16px)', // 4 items per row with gap adjustment
-                            minWidth: '280px', // Adjust as needed for responsiveness
-                            boxSizing: 'border-box', // Include padding and border in the element's total width and height
+                            flex: '1 1 calc(25% - 16px)',
+                            maxWidth: 'calc(25% - 16px)',
+                            minWidth: '280px',
+                            boxSizing: 'border-box',
+                            height: 'auto',
                         }}
                     >
                         <GameCard game={game} />

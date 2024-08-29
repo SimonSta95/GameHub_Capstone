@@ -14,8 +14,8 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                 variant="outlined"
                 sx={{
                     width: "100%",
-                    height: "100%", // Allow the card to grow dynamically based on content
-                    maxHeight: "400px", // Max height to keep uniform card sizes
+                    height: "100%",
+                    maxHeight: "500px",
                     borderRadius: 4,
                     backgroundColor: "background.paper",
                     boxShadow: "0 4px 15px rgba(0, 0, 0, 0.1)",
@@ -31,13 +31,13 @@ export default function GameCard(props: Readonly<GameCardProps>) {
             >
                 <CardMedia
                     component="img"
-                    height={200} // Ensure a balanced height between the image and content
+                    height={200}
                     image={props.game.coverImage}
                     alt={`${props.game.title} cover image`}
                     sx={{
                         objectFit: "cover",
                         width: "100%",
-                        display: "block", // Prevent white space under the image
+                        display: "block",
                         transition: "transform 0.5s ease",
                         "&:hover": {
                             transform: "scale(1.05)",
@@ -48,10 +48,11 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                 <CardContent
                     sx={{
                         padding: 2,
-                        flexGrow: 1, // Allow content to take remaining space dynamically
+                        flexGrow: 1,
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
+                        height: 'auto',
                     }}
                 >
                     <Typography
@@ -60,7 +61,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                             fontWeight: 700,
                             marginBottom: 1,
                             color: "primary.contrastText",
-                            background: "linear-gradient(45deg, #ffba08, #fca311)", // Gradient text effect
+                            background: "linear-gradient(45deg, #ffba08, #fca311)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
                         }}

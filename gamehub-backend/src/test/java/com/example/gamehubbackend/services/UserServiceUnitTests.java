@@ -26,13 +26,13 @@ class UserServiceUnitTests {
     @Test
     void getAllUsers_Test(){
         List<User> users = List.of(
-                new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime),
-                new User("2","TestUser2", "2", "USER", List.of("Game 3", "Game 4"), localDateTime, localDateTime)
+                new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime),
+                new User("2","TestUser2", "2","link", "USER", List.of("Game 3", "Game 4"), localDateTime, localDateTime)
         );
 
         List<User> expectedUsers = List.of(
-                new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime),
-                new User("2","TestUser2", "2", "USER", List.of("Game 3", "Game 4"), localDateTime, localDateTime)
+                new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime),
+                new User("2","TestUser2", "2","link", "USER", List.of("Game 3", "Game 4"), localDateTime, localDateTime)
         );
 
         when(userRepository.findAll()).thenReturn(users);
@@ -53,11 +53,11 @@ class UserServiceUnitTests {
 
     @Test
     void getUserById_Test(){
-        User user = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User user = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
         when(userRepository.findById("1")).thenReturn(Optional.of(user));
 
         User actualUser = userService.getUserById("1");
-        User expectedUser = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User expectedUser = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
 
         verify(userRepository).findById("1");
         assertEquals(expectedUser, actualUser);
@@ -73,11 +73,11 @@ class UserServiceUnitTests {
 
     @Test
     void getUserByGitHubId_Test(){
-        User user = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User user = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
         when(userRepository.findByGitHubId("1")).thenReturn(Optional.of(user));
 
         User actualUser = userService.getUserByGitHubId("1");
-        User expectedUser = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User expectedUser = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
 
         verify(userRepository).findByGitHubId("1");
         assertEquals(expectedUser, actualUser);
@@ -93,15 +93,15 @@ class UserServiceUnitTests {
 
     @Test
     void createUser_Test(){
-        UserDTO userDTO = new UserDTO("TestUser1","1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
-        User userToSave = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        UserDTO userDTO = new UserDTO("TestUser1","1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User userToSave = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
 
         when(idService.randomId()).thenReturn("1");
         when(userRepository.save(userToSave)).thenReturn(userToSave);
 
         User actualUser = userService.saveUser(userDTO);
 
-        User expectedUser = new User("1","TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        User expectedUser = new User("1","TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
         verify(idService).randomId();
         verify(userRepository).save(userToSave);
         assertEquals(expectedUser, actualUser);
@@ -118,9 +118,9 @@ class UserServiceUnitTests {
     void updateUser_Test_Success(){
         String id = "1";
 
-        User existingUser = new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
-        UserDTO updateUserDTO = new UserDTO("TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
-        User updatedUser = new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
+        User existingUser = new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2"), localDateTime, localDateTime);
+        UserDTO updateUserDTO = new UserDTO("TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
+        User updatedUser = new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
         when(userRepository.save(updatedUser)).thenReturn(updatedUser);
@@ -130,7 +130,7 @@ class UserServiceUnitTests {
 
             User actualUser = userService.updateUser(id, updateUserDTO);
 
-            User expectedUser = new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
+            User expectedUser = new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
 
             mockedLocalDate.verify(LocalDateTime::now);
             verify(userRepository).findById(id);
@@ -142,8 +142,8 @@ class UserServiceUnitTests {
     @Test
     void updateUser_Test_Failure(){
         String id = "1";
-        UserDTO userDTO = new UserDTO("TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
-        User updatedUser = new User("1", "TestUser1", "1", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
+        UserDTO userDTO = new UserDTO("TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
+        User updatedUser = new User("1", "TestUser1", "1","link", "USER", List.of("Game 1", "Game 2", "Game 3"), localDateTime, updateDateTime);
 
         when(userRepository.findById(id)).thenReturn(Optional.empty());
 

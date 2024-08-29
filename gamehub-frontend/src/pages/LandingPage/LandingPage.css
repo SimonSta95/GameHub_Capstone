@@ -1,0 +1,84 @@
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    background: #1b263b;
+    color: #ffffff;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.hero-heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-subheading {
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+.hero-heading, .hero-subheading {
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Button */
+.MuiButton-contained {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.MuiButton-contained:hover {
+    background-color: #0056b3;
+}
+
+/* Features Section */
+.features {
+    padding: 40px 20px;
+    background: #f5f5f5;
+    text-align: center;
+}
+
+.features-heading {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1b263b;
+}
+
+.feature-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.feature {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.feature h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 1rem;
+    color: #333;
+}

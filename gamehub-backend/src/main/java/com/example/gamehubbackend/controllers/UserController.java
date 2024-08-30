@@ -1,5 +1,6 @@
 package com.example.gamehubbackend.controllers;
 
+import com.example.gamehubbackend.models.AddGameDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.services.UserService;
@@ -38,6 +39,16 @@ public class UserController {
     @PutMapping("/{id}")
     public User updateUser(@PathVariable String id ,@RequestBody UserDTO userDTO) {
         return userService.updateUser(id, userDTO);
+    }
+
+    @PutMapping("/addGame")
+    public User addGameToLibrary(@RequestBody AddGameDTO gameToAdd) {
+        return userService.addGameToLibrary(gameToAdd.userId(), gameToAdd.gameId());
+    }
+
+    @PutMapping("/deleteGame")
+    public User deleteGameFromLibrary(@RequestBody AddGameDTO gameToDelete) {
+        return userService.removeGameFromLibrary(gameToDelete.userId(), gameToDelete.gameId());
     }
 
     @DeleteMapping("/{id}")

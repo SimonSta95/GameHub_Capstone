@@ -1,13 +1,17 @@
 
-import {Game} from "../../types.ts";
+import {Game, User} from "../../types.ts";
 import GameCard from "./components/GameCard/GameCard.tsx";
 import {Box} from '@mui/material';
 
 type GameGalleryProps = {
     games: Game[]
+    user: User
+    addGameToLibrary: (gameId: string) => void
+    deleteGameFromLibrary: (gameId: string) => void
 }
 
 export default function GameGallery(props: Readonly<GameGalleryProps>) {
+
     return (
         <Box
             sx={{
@@ -35,7 +39,12 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                             height: 'auto',
                         }}
                     >
-                        <GameCard game={game} />
+
+                        <GameCard game={game}
+                                  user={props.user}
+                                  addGameToLibrary={props.addGameToLibrary}
+                                  deleteGameFromLibrary={props.deleteGameFromLibrary}
+                        />
                     </Box>
                 ))}
             </Box>

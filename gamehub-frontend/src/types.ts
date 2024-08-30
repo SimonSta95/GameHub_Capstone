@@ -4,7 +4,7 @@ export type User = {
     gitHubId: string,
     avatarUrl: string,
     role: string,
-    gameLibrary: Game[],
+    gameLibrary: string[],
 }
 
 export type Game = {
@@ -17,4 +17,9 @@ export type Game = {
     publisher: string,
     description: string,
     coverImage: string
+}
+
+export type GameLibraryOptions = {
+    userId: string
+    gameId: string
 }

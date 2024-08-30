@@ -56,7 +56,7 @@ public class UserService {
     }
 
     public User addGameToLibrary(String userId,String gameId) {
-        User user = getUserById(userId);
+        User user = getUserByGitHubId(userId);
 
         if(!user.gameLibrary().contains(gameId)) {
 

@@ -1,24 +1,38 @@
 import { Link } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography, Box, Chip, Button } from "@mui/material";
-import {AddCircle, RemoveCircle} from "@mui/icons-material";
-import {Game, User} from "../../types.ts";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { Game, User } from "../../types.ts";
 
 type GameCardProps = {
-    user: User
-    game: Game
-    addGameToLibrary: (gameId: string) => void
-    deleteGameFromLibrary: (gameId: string) => void
-}
+    user: User;
+    game: Game;
+    addGameToLibrary: (gameId: string) => void;
+    deleteGameFromLibrary: (gameId: string) => void;
+};
 
 export default function GameCard(props: Readonly<GameCardProps>) {
 
+    const platformColors: Record<string, string> = {
+        'PC': '#0078d4',
+        'PlayStation 3': '#003b5c',
+        'PlayStation 4': '#003b5c',
+        'PlayStation 5': '#0072ce',
+        'Xbox 360': '#4d5d53',
+        'Xbox One': '#5b5b5b',
+        'Xbox Series X/S': '#0e6f00',
+        'Nintendo Switch': '#e4002b',
+        'Wii U': '#005b96',
+        'Switch': '#e4002b',
+        'Stadia': '#e50050',
+    };
+
     const handleAddGame = () => {
-        props.addGameToLibrary(props.game.id)
-    }
+        props.addGameToLibrary(props.game.id);
+    };
 
     const handleDeleteGame = () => {
-        props.deleteGameFromLibrary(props.game.id)
-    }
+        props.deleteGameFromLibrary(props.game.id);
+    };
 
     return (
         <Card
@@ -82,29 +96,29 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                     >
                         {props.game.title}
                     </Typography>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {props.game.platforms.map((platform) => (
+                            <Chip
+                                key={platform}
+                                label={platform}
+                                variant="outlined"
+                                sx={{
+                                    textTransform: "capitalize",
+                                    fontWeight: 500,
+                                    fontSize: "0.75rem",
+                                    borderRadius: "12px",
+                                    backgroundColor: 'transparent',
+                                    color: platformColors[platform] || '#808080',
+                                    borderColor: platformColors[platform] || '#808080',
+                                    "&:hover": {
+                                        backgroundColor: 'transparent',
+                                        borderColor: `${platformColors[platform] || '#808080'}80`,
+                                    },
+                                }}
+                            />
+                        ))}
+                    </Box>
                 </Link>
-
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {props.game.platforms.map((platform) => (
-                        <Chip
-                            key={platform}
-                            label={platform}
-                            variant="outlined"
-                            sx={{
-                                textTransform: "capitalize",
-                                fontWeight: 500,
-                                fontSize: "0.75rem",
-                                borderRadius: "12px",
-                                color: "primary.main",
-                                borderColor: "primary.light",
-                                "&:hover": {
-                                    backgroundColor: "primary.light",
-                                    color: "primary.contrastText",
-                                },
-                            }}
-                        />
-                    ))}
-                </Box>
                 <Box sx={{ marginTop: 2 }}>
                     {props.user.gameLibrary.includes(props.game.id) ? (
                         <Button

@@ -7,8 +7,8 @@ import com.example.gamehubbackend.repositories.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
@@ -33,8 +33,8 @@ public class NoteService {
                 noteDTO.title(),
                 noteDTO.content(),
                 noteDTO.category(),
-                noteDTO.created(),
-                noteDTO.updated()
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
         return noteRepository.save(noteToSave);
     }
@@ -47,7 +47,7 @@ public class NoteService {
                 .withContent(noteDTO.content())
                 .withCategory(noteDTO.category())
                 .withCreated(noteDTO.created())
-                .withUpdated(noteDTO.updated());
+                .withUpdated(LocalDateTime.now());
 
         return noteRepository.save(noteToUpdate);
     }

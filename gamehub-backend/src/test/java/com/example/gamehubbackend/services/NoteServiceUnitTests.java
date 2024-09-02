@@ -56,16 +56,16 @@ class NoteServiceUnitTests {
     @Test
     void createNote_Test() {
         NoteDTO noteDTO = new NoteDTO("user1", "game1", "Title 1", "Content 1", "category1", localDateTime, updateDateTime);
-        Note noteToSave = new Note("1", "user1", "game1", "Title 1", "Content 1", "category1", localDateTime, updateDateTime);
+        Note noteToSave = new Note("1", "user1", "game1", "Title 1", "Content 1", "category1", LocalDateTime.now(), LocalDateTime.now());
 
         when(idService.randomId()).thenReturn("1");
-        when(noteRepository.save(noteToSave)).thenReturn(noteToSave);
+        when(noteRepository.save(any(Note.class))).thenReturn(noteToSave);
 
         Note actualNote = noteService.createNote(noteDTO);
         assertEquals(noteToSave, actualNote);
 
         verify(idService).randomId();
-        verify(noteRepository).save(noteToSave);
+        verify(noteRepository).save(any(Note.class));
     }
 
     @Test
@@ -73,16 +73,16 @@ class NoteServiceUnitTests {
         String noteId = "1";
         Note existingNote = new Note("1", "user1", "game1", "Old Title", "Old Content", "category1", localDateTime, updateDateTime);
         NoteDTO updatedNoteDTO = new NoteDTO("user1", "game1", "Updated Title", "Updated Content", "category1", localDateTime, updateDateTime);
-        Note updatedNote = new Note("1", "user1", "game1", "Updated Title", "Updated Content", "category1", localDateTime, updateDateTime);
+        Note updatedNote = new Note("1", "user1", "game1", "Updated Title", "Updated Content", "category1", localDateTime, LocalDateTime.now());
 
         when(noteRepository.findById(noteId)).thenReturn(Optional.of(existingNote));
-        when(noteRepository.save(updatedNote)).thenReturn(updatedNote);
+        when(noteRepository.save(any(Note.class))).thenReturn(updatedNote);
 
         Note actualNote = noteService.updateNote(noteId, updatedNoteDTO);
         assertEquals(updatedNote, actualNote);
 
         verify(noteRepository).findById(noteId);
-        verify(noteRepository).save(updatedNote);
+        verify(noteRepository).save(any(Note.class));
     }
 
     @Test

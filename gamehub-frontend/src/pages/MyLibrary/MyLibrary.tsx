@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import GameCard from "../../components/GameCard/GameCard.tsx";
 import { Game, User } from "../../types.ts";
 

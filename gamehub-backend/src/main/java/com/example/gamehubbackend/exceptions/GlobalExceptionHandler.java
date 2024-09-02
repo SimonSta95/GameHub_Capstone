@@ -29,4 +29,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND.value()
         );
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public  CustomErrorMessage handleNoteNotFoundException(NoteNotFoundException e) {
+        return new CustomErrorMessage(
+                e.getMessage(),
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value()
+        );
+    }
 }

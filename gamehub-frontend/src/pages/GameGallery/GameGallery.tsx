@@ -17,7 +17,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
     const platforms = Array.from(new Set(props.games.flatMap(game => game.platforms)));
 
     const filteredGames = props.games.filter(game =>
-        game.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        game.title?.toLowerCase().includes(searchQuery?.toLowerCase()) &&
         (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
     );
 

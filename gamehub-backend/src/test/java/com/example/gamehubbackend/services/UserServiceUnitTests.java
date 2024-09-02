@@ -1,6 +1,7 @@
 package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
+import com.example.gamehubbackend.models.AddGameDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.repositories.UserRepository;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,5 +158,56 @@ class UserServiceUnitTests {
         verify(userRepository, never()).save(updatedUser);
         assertEquals("No user found with id: 1",thrown.getMessage());
 
+    }
+
+    @Test
+    void addGameToLibrary_Test(){
+        String id = "1";
+
+        User existingUser = new User("1", "TestUser1", "1", "link", "USER",
+                new ArrayList<>(List.of("Game 1", "Game 2")), localDateTime, localDateTime);
+
+        AddGameDTO gameToAddDTO = new AddGameDTO("1", "Game 3");
+
+        User updatedUser = new User("1", "TestUser1", "1", "link", "USER",
+                new ArrayList<>(List.of("Game 1", "Game 2", "Game 3")), localDateTime, localDateTime);
+
+        when(userRepository.findByGitHubId(id)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(existingUser)).thenReturn(updatedUser);
+
+        User actualUser = userService.addGameToLibrary(gameToAddDTO.userId(), gameToAddDTO.gameId());
+
+        User expectedUser = new User("1", "TestUser1", "1", "link", "USER",
+                List.of("Game 1", "Game 2", "Game 3"), localDateTime, localDateTime);
+
+        verify(userRepository).findByGitHubId(id);
+        verify(userRepository).save(existingUser);
+        assertEquals(expectedUser, actualUser);
+
+    }
+
+    @Test
+    void deleteGameFromLibrary_Test(){
+        String id = "1";
+
+        User existingUser = new User("1", "TestUser1", "1", "link", "USER",
+                new ArrayList<>(List.of("Game 1", "Game 2")), localDateTime, localDateTime);
+
+        AddGameDTO gameToDeleteDTO = new AddGameDTO("1", "Game 2");
+
+        User updatedUser = new User("1", "TestUser1", "1", "link", "USER",
+                new ArrayList<>(List.of("Game 1")), localDateTime, localDateTime);
+
+        when(userRepository.findByGitHubId(id)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(existingUser)).thenReturn(updatedUser);
+
+        User actualUser = userService.addGameToLibrary(gameToDeleteDTO.userId(), gameToDeleteDTO.gameId());
+
+        User expectedUser = new User("1", "TestUser1", "1", "link", "USER",
+                List.of("Game 1"), localDateTime, localDateTime);
+
+        verify(userRepository).findByGitHubId(id);
+        verify(userRepository).save(existingUser);
+        assertEquals(expectedUser, actualUser);
     }
 }

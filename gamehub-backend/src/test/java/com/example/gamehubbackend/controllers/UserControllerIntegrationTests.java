@@ -197,4 +197,66 @@ class UserControllerIntegrationTests {
                 .andExpect(content().json("[]"));
     }
 
+    @Test
+    @WithMockUser
+    @DirtiesContext
+    void addGameToLibrary() throws Exception {
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of(), localDateTime, updateDateTime));
+
+        mockMvc.perform(put("/api/users/addGame")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                """
+                    {
+                        "userId": "1",
+                        "gameId": "Game 1"
+                    }
+                """
+                ))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        {
+                            "id": "1",
+                            "username": "TestUser1",
+                            "gitHubId": "1",
+                            "role": "USER",
+                            "gameLibrary": ["Game 1"],
+                            "creationDate": "2020-01-01T01:00:00"
+                        }
+                        """
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    @DirtiesContext
+    void deleteGameFromLibrary() throws Exception {
+        userRepository.save(new User("1", "TestUser1", "1","link", "USER", List.of("Game 1"), localDateTime, updateDateTime));
+
+        mockMvc.perform(put("/api/users/deleteGame")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                    {
+                                        "userId": "1",
+                                        "gameId": "Game 1"
+                                    }
+                                """
+                        ))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        {
+                            "id": "1",
+                            "username": "TestUser1",
+                            "gitHubId": "1",
+                            "role": "USER",
+                            "gameLibrary": [],
+                            "creationDate": "2020-01-01T01:00:00"
+                        }
+                        """
+                ));
+    }
+
 }

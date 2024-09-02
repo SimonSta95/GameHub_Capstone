@@ -21,10 +21,6 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public List<Game> getAllGamesById(List<String> gameIds) {
-        return gameRepository.findAllById(gameIds);
-    }
-
     public Game getGameById(String id) {
 
         return gameRepository.findById(id).orElseThrow(() -> new GameNotFoundException("No Game found with id: " + id));

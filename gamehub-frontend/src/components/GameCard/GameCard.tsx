@@ -12,7 +12,6 @@ type GameCardProps = {
 
 export default function GameCard(props: Readonly<GameCardProps>) {
 
-    // Define platform colors
     const platformColors: Record<string, string> = {
         'PC': '#0078d4',
         'PlayStation 3': '#003b5c',

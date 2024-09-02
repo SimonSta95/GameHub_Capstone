@@ -10,13 +10,13 @@ export default function Breadcrumbs() {
             sx={{
                 display: 'flex',
                 justifyContent: 'flex-start',
-                padding: '8px 16px', // Reduced padding for a more compact bar
-                backgroundColor: 'rgba(240, 240, 240, 0.8)',  // Soft gray background
+                padding: '8px 16px',
+                backgroundColor: 'rgba(240, 240, 240, 0.8)',
                 borderRadius: '8px',
-                marginBottom: '8px',  // Reduced bottom margin
+                marginBottom: '8px',
             }}
         >
-            <MuiBreadcrumbs aria-label="breadcrumb" sx={{ fontSize: '0.875rem' }}>  {/* Reduced font size */}
+            <MuiBreadcrumbs aria-label="breadcrumb" sx={{ fontSize: '0.875rem' }}>
                 <Link
                     underline="hover"
                     color="inherit"
@@ -24,8 +24,8 @@ export default function Breadcrumbs() {
                     to="/"
                     sx={{
                         fontWeight: '500',
-                        color: '#6c757d',  // Subtle gray color for the breadcrumb links
-                        "&:hover": { color: '#495057' } // Darker gray on hover
+                        color: '#6c757d',
+                        "&:hover": { color: '#495057' }
                     }}
                 >
                     Home
@@ -40,8 +40,8 @@ export default function Breadcrumbs() {
                             key={to}
                             color="textPrimary"
                             sx={{
-                                fontWeight: 'bold',  // Make the last breadcrumb bold
-                                color: '#495057',  // Darker gray for the active (last) breadcrumb
+                                fontWeight: 'bold',
+                                color: '#495057',
                             }}
                         >
                             {value.charAt(0).toUpperCase() + value.slice(1)}
@@ -55,8 +55,8 @@ export default function Breadcrumbs() {
                             to={to}
                             sx={{
                                 fontWeight: '500',
-                                color: '#6c757d',  // Same subtle gray for intermediate links
-                                "&:hover": { color: '#495057' },  // Hover effect for links
+                                color: '#6c757d',
+                                "&:hover": { color: '#495057' },
                             }}
                         >
                             {value.charAt(0).toUpperCase() + value.slice(1)}

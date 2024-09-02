@@ -9,6 +9,7 @@ import GameGallery from "./pages/GameGallery/GameGallery.tsx";
 import GameDetail from "./pages/GameDetail/GameDetail.tsx";
 import Header from "./components/Header/Header.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
+import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -90,6 +91,7 @@ function App() {
             <Header user={user} onLogin={login} onLogout={logout} />
             <main>
                 <Routes>
+
                     <Route path="/" element={<LandingPage user={user} onLogin={login}/>} />
                     <Route path="/games" element={<GameGallery games={data}
                                                                user={user}
@@ -97,6 +99,11 @@ function App() {
                                                                deleteGameFromLibrary={deleteGameFromLibrary}
                     />}/>
                     <Route path="/games/:id" element={<GameDetail />} />
+                    <Route path="/myLibrary" element={<MyLibrary games={data}
+                                                                 user={user}
+                                                                 addGameToLibrary={addGameToLibrary}
+                                                                 deleteGameFromLibrary={deleteGameFromLibrary}
+                    />} />
                 </Routes>
             </main>
             <Footer />

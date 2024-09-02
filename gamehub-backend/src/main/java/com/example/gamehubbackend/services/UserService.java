@@ -45,11 +45,31 @@ public class UserService {
     }
 
     public User updateUser(String id, UserDTO userDTO) {
+
         User user = getUserById(id)
                 .withUsername(userDTO.username())
                 .withRole(userDTO.role())
                 .withGameLibrary(userDTO.gameLibrary())
                 .withLastUpdateDate(LocalDateTime.now());
+
+        return userRepository.save(user);
+    }
+
+    public User addGameToLibrary(String userId,String gameId) {
+        User user = getUserByGitHubId(userId);
+
+        if(!user.gameLibrary().contains(gameId)) {
+
+            user.gameLibrary().add(gameId);
+        }
+
+        return userRepository.save(user);
+    }
+
+    public User removeGameFromLibrary(String userId,String gameId) {
+        User user = getUserByGitHubId(userId);
+
+        user.gameLibrary().remove(gameId);
 
         return userRepository.save(user);
     }

@@ -1,18 +1,20 @@
-
-import {Game, User} from "../../types.ts";
+import {Box} from "@mui/material";
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import {Box} from '@mui/material';
+import {Game, User} from "../../types.ts";
 
-type GameGalleryProps = {
-    games: Game[]
-    user: User
-    addGameToLibrary: (gameId: string) => void
+
+type MyLibraryProps = {
+    user: User,
+    games: Game[],
+    addGameToLibrary: (gameId: string) => void,
     deleteGameFromLibrary: (gameId: string) => void
 }
 
-export default function GameGallery(props: Readonly<GameGalleryProps>) {
+export default function MyLibrary(props: Readonly<MyLibraryProps>) {
 
-    return (
+    const library = props.games.filter((game) => props.user.gameLibrary.includes(game.id));
+
+    return(
         <Box
             sx={{
                 maxWidth: '1200px',
@@ -28,7 +30,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     gap: '16px',
                 }}
             >
-                {props.games.map((game) => (
+                {library.map((game) => (
                     <Box
                         key={game.id}
                         sx={{
@@ -49,5 +51,5 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 ))}
             </Box>
         </Box>
-    );
+    )
 }

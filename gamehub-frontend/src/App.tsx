@@ -2,13 +2,14 @@ import './App.css'
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
-import {Game, User} from "./types.ts";
+import {Game, GameLibraryOptions, User} from "./types.ts";
 import {CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
 import GameDetail from "./pages/GameDetail/GameDetail.tsx";
 import Header from "./components/Header/Header.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
+import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -44,12 +45,36 @@ function App() {
     }
 
     const fetchGames = () => {
-        axios.get("api/games")
+        axios.get("/api/games")
             .then((response) => {
                 setData(response.data)
             })
             .catch((error) => {
                 alert(error)
+            })
+    }
+
+    const addGameToLibrary = (gameId: string) => {
+        const dto: GameLibraryOptions  = {
+            userId: user?.gitHubId,
+            gameId: gameId
+        }
+
+        axios.put("/api/users/addGame", dto)
+            .then(() => {
+                loadUser()
+            })
+    }
+
+    const deleteGameFromLibrary = (gameId: string) => {
+        const dto: GameLibraryOptions  = {
+            userId: user?.gitHubId,
+            gameId: gameId
+        }
+
+        axios.put("/api/users/deleteGame", dto)
+            .then(() => {
+                loadUser()
             })
     }
 
@@ -66,9 +91,19 @@ function App() {
             <Header user={user} onLogin={login} onLogout={logout} />
             <main>
                 <Routes>
+
                     <Route path="/" element={<LandingPage user={user} onLogin={login}/>} />
-                    <Route path="/games" element={<GameGallery games={data} />} />
+                    <Route path="/games" element={<GameGallery games={data}
+                                                               user={user}
+                                                               addGameToLibrary={addGameToLibrary}
+                                                               deleteGameFromLibrary={deleteGameFromLibrary}
+                    />}/>
                     <Route path="/games/:id" element={<GameDetail />} />
+                    <Route path="/my-library" element={<MyLibrary games={data}
+                                                                 user={user}
+                                                                 addGameToLibrary={addGameToLibrary}
+                                                                 deleteGameFromLibrary={deleteGameFromLibrary}
+                    />} />
                 </Routes>
             </main>
             <Footer />

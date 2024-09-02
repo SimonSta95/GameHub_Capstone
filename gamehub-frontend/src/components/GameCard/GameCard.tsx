@@ -82,29 +82,28 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                     >
                         {props.game.title}
                     </Typography>
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                        {props.game.platforms.map((platform) => (
+                            <Chip
+                                key={platform}
+                                label={platform}
+                                variant="outlined"
+                                sx={{
+                                    textTransform: "capitalize",
+                                    fontWeight: 500,
+                                    fontSize: "0.75rem",
+                                    borderRadius: "12px",
+                                    color: "primary.main",
+                                    borderColor: "primary.light",
+                                    "&:hover": {
+                                        backgroundColor: "primary.light",
+                                        color: "primary.contrastText",
+                                    },
+                                }}
+                            />
+                        ))}
+                    </Box>
                 </Link>
-
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                    {props.game.platforms.map((platform) => (
-                        <Chip
-                            key={platform}
-                            label={platform}
-                            variant="outlined"
-                            sx={{
-                                textTransform: "capitalize",
-                                fontWeight: 500,
-                                fontSize: "0.75rem",
-                                borderRadius: "12px",
-                                color: "primary.main",
-                                borderColor: "primary.light",
-                                "&:hover": {
-                                    backgroundColor: "primary.light",
-                                    color: "primary.contrastText",
-                                },
-                            }}
-                        />
-                    ))}
-                </Box>
                 <Box sx={{ marginTop: 2 }}>
                     {props.user.gameLibrary.includes(props.game.id) ? (
                         <Button

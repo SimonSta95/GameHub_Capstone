@@ -19,6 +19,15 @@ export type Game = {
     coverImage: string
 }
 
+export type Note = {
+    id: string;
+    userId: string;
+    gameId: string;
+    title: string;
+    content: string;
+    category: string;
+};
+
 export type GameLibraryOptions = {
     userId: string
     gameId: string

@@ -1,10 +1,15 @@
-import {Game} from "../../types.ts";
+import {Game, User} from "../../types.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import {Box, Button, Card, CardContent, Chip, CircularProgress, Typography} from "@mui/material";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import GameNotes from "./components/GameNotes.tsx";
 
-export default function GameDetail(){
+type GameDetailProps = {
+    user: User
+}
+
+export default function GameDetail(props: Readonly<GameDetailProps>){
     const [game, setGame] = useState<Game | undefined | null>(null)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -176,7 +181,9 @@ export default function GameDetail(){
                     </CardContent>
                 </Card>
             </Box>
+            <GameNotes game={game} user={props.user} />
         </Box>
+
     );
 }
 

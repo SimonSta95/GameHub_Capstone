@@ -1,4 +1,4 @@
-import {Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from '@mui/material';
+import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
 import { Game, User } from "../../types.ts";
 import { useState } from "react";
@@ -70,6 +70,8 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                     gap: '16px',
+                    justifyContent: 'start',
+                    gridAutoFlow: 'row dense',
                 }}
             >
                 {filteredGames.length === 0 ? (

@@ -32,7 +32,9 @@ public class NoteService {
                 noteDTO.gameId(),
                 noteDTO.title(),
                 noteDTO.content(),
-                noteDTO.category()
+                noteDTO.category(),
+                noteDTO.created(),
+                noteDTO.updated()
         );
         return noteRepository.save(noteToSave);
     }
@@ -43,7 +45,9 @@ public class NoteService {
                 .withGameId(noteDTO.gameId())
                 .withTitle(noteDTO.title())
                 .withContent(noteDTO.content())
-                .withCategory(noteDTO.category());
+                .withCategory(noteDTO.category())
+                .withCreated(noteDTO.created())
+                .withUpdated(noteDTO.updated());
 
         return noteRepository.save(noteToUpdate);
     }

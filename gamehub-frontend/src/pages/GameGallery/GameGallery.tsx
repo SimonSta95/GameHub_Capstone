@@ -1,4 +1,4 @@
-import {Box, TextField, Typography} from '@mui/material';
+import {Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography} from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
 import { Game, User } from "../../types.ts";
 import { useState } from "react";
@@ -12,10 +12,13 @@ type GameGalleryProps = {
 
 export default function GameGallery(props: Readonly<GameGalleryProps>) {
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedPlatform, setSelectedPlatform] = useState<string>('');
 
-    // Filter games based on the search query
+    const platforms = Array.from(new Set(props.games.flatMap(game => game.platforms)));
+
     const filteredGames = props.games.filter(game =>
-        game.title.toLowerCase().includes(searchQuery.toLowerCase())
+        game.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
     );
 
     return (
@@ -43,13 +46,29 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                         backgroundColor: 'white',
                     }}
                 />
+
+                <FormControl fullWidth sx={{ marginBottom: '16px' }}>
+                    <InputLabel>Platform</InputLabel>
+                    <Select
+                        value={selectedPlatform}
+                        onChange={(e) => setSelectedPlatform(e.target.value)}
+                        label="Platform"
+                        sx={{ borderRadius: '4px', backgroundColor: 'white' }}
+                    >
+                        <MenuItem value="">All Platforms</MenuItem>
+                        {platforms.map(platform => (
+                            <MenuItem key={platform} value={platform}>
+                                {platform}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
             </Box>
 
             <Box
                 sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                     gap: '16px',
                 }}
             >
@@ -62,11 +81,9 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                         <Box
                             key={game.id}
                             sx={{
-                                flex: '1 1 calc(25% - 16px)',
-                                maxWidth: 'calc(25% - 16px)',
-                                minWidth: '280px',
-                                boxSizing: 'border-box',
-                                height: 'auto',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                height: '100%',
                             }}
                         >
                             <GameCard

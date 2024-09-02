@@ -10,6 +10,7 @@ import GameDetail from "./pages/GameDetail/GameDetail.tsx";
 import Header from "./components/Header/Header.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
+import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null | undefined>(undefined)
@@ -89,6 +90,7 @@ function App() {
     return (
         <div className={"grid"}>
             <Header user={user} onLogin={login} onLogout={logout} />
+            <Breadcrumbs/>
             <main>
                 <Routes>
 

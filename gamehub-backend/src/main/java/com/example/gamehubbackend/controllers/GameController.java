@@ -25,6 +25,11 @@ public class GameController {
         return gameService.getGameById(id);
     }
 
+    @GetMapping("/library")
+    public List<Game> getGamesByLibrary(@RequestBody List<String> ids) {
+        return gameService.getAllGamesById(ids);
+    }
+
     @PostMapping
     public Game addGame(@RequestBody GameDTO game) {
         return gameService.addGame(game);

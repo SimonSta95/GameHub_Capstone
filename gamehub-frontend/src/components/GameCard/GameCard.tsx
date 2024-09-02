@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardMedia, CardContent, Typography, Box, Chip, Button } from "@mui/material";
 import {AddCircle, RemoveCircle} from "@mui/icons-material";
-import {Game, User} from "../../../../types.ts";
+import {Game, User} from "../../types.ts";
 
 type GameCardProps = {
     user: User

@@ -1,6 +1,6 @@
 
 import {Game, User} from "../../types.ts";
-import GameCard from "./components/GameCard/GameCard.tsx";
+import GameCard from "../../components/GameCard/GameCard.tsx";
 import {Box} from '@mui/material';
 
 type GameGalleryProps = {

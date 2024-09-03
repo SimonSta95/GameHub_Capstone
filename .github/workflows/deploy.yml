@@ -49,7 +49,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: app.jar
+          name: GameHub.jar
           path: backend/target/GameHub.jar # must match the finalName in the pom.xml
 
   push-to-docker-hub:

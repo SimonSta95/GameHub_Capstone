@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
 
       - name: Build Frontend
-        working-directory: frontend
+        working-directory: gamehub-frontend
         run: |
           npm install
           npm run build

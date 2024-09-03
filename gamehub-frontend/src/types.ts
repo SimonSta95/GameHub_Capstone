@@ -11,7 +11,7 @@ export type Game = {
     id: string,
     title: string,
     genre: string,
-    releaseDate: Date,
+    releaseDate: string,
     platforms: string[],
     developer: string,
     publisher: string,

@@ -3,9 +3,11 @@ import {
     Box,
     Button,
     Card,
-    CardContent, Chip,
+    CardContent,
+    Chip,
     CircularProgress,
-    IconButton, MenuItem,
+    IconButton,
+    MenuItem,
     Select,
     TextField,
     Typography,
@@ -26,9 +28,11 @@ type GameNotesProps = {
     user: User
 }
 
+type ChipColor = "default" | "primary" | "secondary"
+
 const categories = ["Note", "Goal"]
 
-const categoryColors: { [key: string]: 'primary' | 'secondary' } = {
+const categoryColors: { [key: string]: ChipColor} = {
     Note: 'primary',
     Goal: 'secondary'
 };

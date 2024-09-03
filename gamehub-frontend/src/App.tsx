@@ -100,7 +100,7 @@ function App() {
                                                                addGameToLibrary={addGameToLibrary}
                                                                deleteGameFromLibrary={deleteGameFromLibrary}
                     />}/>
-                    <Route path="/games/:id" element={<GameDetail />} />
+                    <Route path="/games/:id" element={<GameDetail user={user}/>} />
                     <Route path="/my-library" element={<MyLibrary games={data}
                                                                  user={user}
                                                                  addGameToLibrary={addGameToLibrary}

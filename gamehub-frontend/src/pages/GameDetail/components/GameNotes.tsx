@@ -237,7 +237,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                     displayEmpty
                 >
                     <MenuItem value="" disabled>
-                        <em>Category</em> {/* This is the placeholder */}
+                        <em>Category</em>
                     </MenuItem>
                     {categories.map(category => (
                         <MenuItem key={category} value={category}>

@@ -12,8 +12,17 @@ import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
 
+const defaultUser: User = {
+    id: "0",
+    username: "defaulUser",
+    gitHubId: "0",
+    avatarUrl: "",
+    role: "USER",
+    gameLibrary: [],
+}
+
 function App() {
-    const [user, setUser] = useState<User | null | undefined>(undefined)
+    const [user, setUser] = useState<User>(defaultUser)
     const [data, setData] = useState<Game[]>([])
 
     useEffect(() => {
@@ -27,7 +36,7 @@ function App() {
                 setUser(response.data)
             })
             .catch(() => {
-                setUser(null)
+                setUser(defaultUser)
             })
     }
 
@@ -57,7 +66,7 @@ function App() {
 
     const addGameToLibrary = (gameId: string) => {
         const dto: GameLibraryOptions  = {
-            userId: user?.gitHubId,
+            userId: user.gitHubId,
             gameId: gameId
         }
 
@@ -69,7 +78,7 @@ function App() {
 
     const deleteGameFromLibrary = (gameId: string) => {
         const dto: GameLibraryOptions  = {
-            userId: user?.gitHubId,
+            userId: user?.gitHubId ?? '',
             gameId: gameId
         }
 

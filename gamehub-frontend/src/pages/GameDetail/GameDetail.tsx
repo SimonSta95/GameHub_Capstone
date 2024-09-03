@@ -62,6 +62,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>){
         );
     }
 
+    console.log(game)
     return (
         <Box sx={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 16px' }}>
             {/* Back to Gallery Button */}
@@ -104,8 +105,8 @@ export default function GameDetail(props: Readonly<GameDetailProps>){
                 gap: '32px',
                 marginTop: '32px',
                 justifyContent: 'space-between',
-                alignItems: 'stretch',  // Ensure both columns are the same height
-                flexWrap: 'wrap'         // Allow stacking on smaller screens
+                alignItems: 'stretch',
+                flexWrap: 'wrap'
             }}>
                 {/* Left Column: Game Description & Platforms */}
                 <Card
@@ -155,7 +156,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>){
                 <Card
                     sx={{
                         flex: '1',
-                        maxWidth: '350px',  // Optional: Limit max width for smaller details
+                        maxWidth: '350px',
                         borderRadius: '12px',
                         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
                         display: 'flex',

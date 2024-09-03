@@ -12,17 +12,8 @@ import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
 
-const defaultUser: User = {
-    id: "0",
-    username: "defaulUser",
-    gitHubId: "0",
-    avatarUrl: "",
-    role: "USER",
-    gameLibrary: [],
-}
-
 function App() {
-    const [user, setUser] = useState<User>(defaultUser)
+    const [user, setUser] = useState<User | null>(null)
     const [data, setData] = useState<Game[]>([])
 
     useEffect(() => {
@@ -36,7 +27,7 @@ function App() {
                 setUser(response.data)
             })
             .catch(() => {
-                setUser(defaultUser)
+                setUser(null)
             })
     }
 
@@ -65,6 +56,7 @@ function App() {
     }
 
     const addGameToLibrary = (gameId: string) => {
+        if (!user) return;
         const dto: GameLibraryOptions  = {
             userId: user.gitHubId,
             gameId: gameId
@@ -77,6 +69,7 @@ function App() {
     }
 
     const deleteGameFromLibrary = (gameId: string) => {
+        if (!user) return;
         const dto: GameLibraryOptions  = {
             userId: user?.gitHubId ?? '',
             gameId: gameId

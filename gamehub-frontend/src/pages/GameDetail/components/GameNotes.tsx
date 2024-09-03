@@ -8,7 +8,11 @@ import {
     IconButton, MenuItem,
     Select,
     TextField,
-    Typography
+    Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -24,7 +28,7 @@ type GameNotesProps = {
 
 const categories = ["Note", "Goal"]
 
-const categoryColors: { [key: string]: string } = {
+const categoryColors: { [key: string]: 'primary' | 'secondary' } = {
     Note: 'primary',
     Goal: 'secondary'
 };
@@ -48,6 +52,8 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             created: ""
         }
     );
+    const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+    const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchNotes = async () => {
@@ -93,13 +99,28 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         }
     };
 
-    const handleDeleteNote = async (noteId: string) => {
-        try {
-            await axios.delete(`/api/notes/${noteId}`);
-            setNotes(notes.filter(note => note.id !== noteId));
-        } catch (error) {
-            console.error("Failed to delete note:", error);
+    const handleDeleteNote = (noteId: string) => {
+        setNoteToDelete(noteId);
+        setConfirmDeleteOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (noteToDelete) {
+            try {
+                await axios.delete(`/api/notes/${noteToDelete}`);
+                setNotes(notes.filter(note => note.id !== noteToDelete));
+            } catch (error) {
+                console.error("Failed to delete note:", error);
+            } finally {
+                setConfirmDeleteOpen(false);
+                setNoteToDelete(null);
+            }
         }
+    };
+
+    const handleCancelDelete = () => {
+        setConfirmDeleteOpen(false);
+        setNoteToDelete(null);
     };
 
     const handleEditNote = (note: Note) => {
@@ -156,6 +177,26 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             <Typography variant="h5" sx={{ fontWeight: 600, marginBottom: 2 }}>
                 Notes for this Game
             </Typography>
+
+            {/* Confirmation Dialog */}
+            <Dialog
+                open={confirmDeleteOpen}
+                onClose={handleCancelDelete}
+            >
+                <DialogTitle>Confirm Delete</DialogTitle>
+                <DialogContent>
+                    <Typography>Are you sure you want to delete this note?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="secondary"
+                            sx={{ color: 'white', backgroundColor: '#d32f2f', '&:hover': { backgroundColor: '#b71c1c' } }}>
+                        Delete
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
             {/* Display existing notes */}
             <Box sx={{ marginBottom: 2 }}>

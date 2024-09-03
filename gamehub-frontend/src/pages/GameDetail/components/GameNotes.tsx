@@ -1,9 +1,9 @@
-import {Game, Note, User} from "../../../types.ts";
+import {editNote, Game, Note, User} from "../../../types.ts";
 import {
     Box,
     Button,
     Card,
-    CardContent,
+    CardContent, Chip,
     CircularProgress,
     IconButton, MenuItem,
     Select,
@@ -24,6 +24,11 @@ type GameNotesProps = {
 
 const categories = ["Note", "Goal"]
 
+const categoryColors: { [key: string]: string } = {
+    Note: 'primary',
+    Goal: 'secondary'
+};
+
 export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(true);
@@ -35,7 +40,14 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     });
     const [noteLoading, setNoteLoading] = useState(false);
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
-    const [editNote, setEditNote] = useState();
+    const [editNote, setEditNote] = useState<editNote>(
+        {
+            title: "",
+            content: "",
+            category: "",
+            created: ""
+        }
+    );
 
     useEffect(() => {
         const fetchNotes = async () => {
@@ -95,7 +107,8 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         setEditNote({
             title: note.title,
             content: note.content,
-            category: note.category
+            category: note.category,
+            created: note.created
         });
     };
 
@@ -105,6 +118,8 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                 ...editNote,
                 userId: props.user.gitHubId,
                 gameId: props.game.id,
+                created: editNote.created
+
             };
             const response = await axios.put(`/api/notes/${noteId}`, updatedNote);
             setNotes(notes.map(note => (note.id === noteId ? response.data : note)));
@@ -162,7 +177,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                                     />
                                     <Select
                                         value={editNote.category}
-                                        onChange={(e) => setEditNote(prev => ({ ...prev, category: e.target.value as string }))}
+                                        onChange={(e) => setEditNote(prev => ({ ...prev, category: e.target.value }))}
                                         fullWidth
                                         sx={{ mb: 2 }}
                                     >
@@ -197,9 +212,11 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                                     <Typography variant="h6" sx={{ fontWeight: 600 }}>
                                         {note.title}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        <strong>Category:</strong> {note.category}
-                                    </Typography>
+                                    <Chip
+                                        label={note.category}
+                                        color={categoryColors[note.category] || "default"}
+                                        sx={{ marginTop: 1 }}
+                                    />
                                     <Typography variant="body2" sx={{ marginTop: 1 }}>
                                         {note.content}
                                     </Typography>

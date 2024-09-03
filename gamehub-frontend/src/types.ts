@@ -26,7 +26,15 @@ export type Note = {
     title: string;
     content: string;
     category: string;
+    created: string;
 };
+
+export type editNote = {
+    title: string;
+    content: string;
+    category: string;
+    created: string;
+}
 
 export type GameLibraryOptions = {
     userId: string

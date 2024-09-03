@@ -25,7 +25,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 
 type GameNotesProps = {
     game: Game,
-    user: User
+    user: User | null
 }
 
 type ChipColor = "default" | "primary" | "secondary"
@@ -63,7 +63,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         const fetchNotes = async () => {
             try {
                 const response = await axios.get<Note[]>("/api/notes");
-                const filteredNotes = response.data.filter(note => note.gameId === props.game.id && note.userId === props.user.gitHubId);
+                const filteredNotes = response.data.filter(note => note.gameId === props.game.id && note.userId === props.user?.gitHubId);
                 setNotes(filteredNotes);
             } catch (error) {
                 console.error("Error fetching notes:", error);
@@ -74,10 +74,10 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         };
 
         fetchNotes();
-    }, [props.game.id, props.user.gitHubId]);
+    }, [props.game.id, props.user?.gitHubId]);
 
     const handleCreateNote = async () => {
-        if (!props.user.gitHubId) {
+        if (!props.user?.gitHubId) {
             console.error('User ID is not available.');
             return;
         }
@@ -141,7 +141,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         try {
             const updatedNote = {
                 ...editNote,
-                userId: props.user.gitHubId,
+                userId: props.user?.gitHubId,
                 gameId: props.game.id,
                 created: editNote.created
 

@@ -3,14 +3,14 @@ import GameCard from "../../components/GameCard/GameCard.tsx";
 import { Game, User } from "../../types.ts";
 
 type MyLibraryProps = {
-    user: User;
+    user: User | null;
     games: Game[];
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
 };
 
 export default function MyLibrary(props: Readonly<MyLibraryProps>) {
-    const library = props.games.filter((game) => props.user.gameLibrary.includes(game.id));
+    const library = props.games.filter((game) => props.user?.gameLibrary.includes(game.id));
 
     return (
         <Box

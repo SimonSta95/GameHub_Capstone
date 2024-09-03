@@ -4,7 +4,7 @@ import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { Game, User } from "../../types.ts";
 
 type GameCardProps = {
-    user: User;
+    user: User | null;
     game: Game;
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
@@ -120,7 +120,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                     </Box>
                 </Link>
                 <Box sx={{ marginTop: 2 }}>
-                    {props.user.gameLibrary.includes(props.game.id) ? (
+                    {props.user?.gameLibrary.includes(props.game.id) ? (
                         <Button
                             variant="contained"
                             startIcon={<RemoveCircle />}

@@ -5,7 +5,7 @@ import { useState } from "react";
 
 type GameGalleryProps = {
     games: Game[];
-    user: User;
+    user: User | null;
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
 };

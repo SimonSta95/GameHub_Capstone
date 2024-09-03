@@ -6,7 +6,7 @@ import axios from "axios";
 import GameNotes from "./components/GameNotes.tsx";
 
 type GameDetailProps = {
-    user: User
+    user: User | null
 }
 
 export default function GameDetail(props: Readonly<GameDetailProps>){

@@ -102,13 +102,13 @@ class NoteControllerIntegrationTests {
                           "gameId": "game1",
                           "title": "New Note",
                           "content": "Note content",
-                          "category": "General",
-                          "created": "2020-01-01T01:00:00",
-                          "updated": "2020-01-01T02:00:00"
+                          "category": "General"
                         }
                         """
                 ))
-                .andExpect(jsonPath("$.id").exists());
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.created").isNotEmpty())
+                .andExpect(jsonPath("$.updated").isNotEmpty());
     }
 
     @Test
@@ -127,8 +127,7 @@ class NoteControllerIntegrationTests {
                                   "title": "Updated Title",
                                   "content": "Updated content",
                                   "category": "General",
-                                  "created": "2020-01-01T01:00:00",
-                                  "updated": "2020-01-01T02:00:00"
+                                  "created": "2020-01-01T01:00:00"
                                 }
                                 """
                         ))
@@ -141,12 +140,12 @@ class NoteControllerIntegrationTests {
                           "gameId": "game1",
                           "title": "Updated Title",
                           "content": "Updated content",
-                          "category": "General",
-                          "created": "2020-01-01T01:00:00",
-                          "updated": "2020-01-01T02:00:00"
+                          "category": "General"
                         }
                         """
-                ));
+                ))
+                .andExpect(jsonPath("$.created").isNotEmpty())
+                .andExpect(jsonPath("$.updated").isNotEmpty());
     }
 
     @Test

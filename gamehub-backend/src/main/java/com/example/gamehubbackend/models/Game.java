@@ -14,8 +14,6 @@ public record Game(
         String genre,
         LocalDate releaseDate,
         List<String> platforms,
-        String developer,
-        String publisher,
         String description,
         String coverImage
 ) {}

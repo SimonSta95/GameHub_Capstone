@@ -3,7 +3,6 @@ package com.example.gamehubbackend.models;
 import lombok.With;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @With
@@ -11,9 +10,9 @@ import java.util.List;
 public record Game(
         String id,
         String title,
-        String genre,
-        LocalDate releaseDate,
+        List<String> genre,
+        String releaseDate,
         List<String> platforms,
-        String description,
+        //String description,
         String coverImage
 ) {}

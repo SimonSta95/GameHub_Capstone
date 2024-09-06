@@ -34,9 +34,6 @@ public class GameService {
                 gameDTO.genre(),
                 gameDTO.releaseDate(),
                 gameDTO.platforms(),
-                gameDTO.developer(),
-                gameDTO.publisher(),
-                gameDTO.description(),
                 gameDTO.coverImage()
         );
         return gameRepository.save(gameToSave);
@@ -49,9 +46,6 @@ public class GameService {
                 .withGenre(updateGame.genre())
                 .withReleaseDate(updateGame.releaseDate())
                 .withPlatforms(updateGame.platforms())
-                .withDeveloper(updateGame.developer())
-                .withPublisher(updateGame.publisher())
-                .withDescription(updateGame.description())
                 .withCoverImage(updateGame.coverImage());
 
         return gameRepository.save(game);

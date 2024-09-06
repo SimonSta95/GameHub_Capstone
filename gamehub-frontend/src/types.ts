@@ -20,6 +20,7 @@ export type Game = {
 }
 
 export type GameAPIResponse = {
+    count: number
     next: string,
     pervious: string,
     games: GameAPI[],

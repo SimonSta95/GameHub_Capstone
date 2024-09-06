@@ -25,9 +25,10 @@ public class RawgService {
     }
 
     @Cacheable("games")
-    public RawgGameList loadAllGames() {
+    public RawgGameList loadAllGames(String page) {
+
         RawgGameResponse body = restClient.get()
-                .uri("api/games?page_size=500&page=1&key=" + apiKey)
+                .uri("api/games?page_size=40&page=" + (page != null ? page : 1) +"&key=" + apiKey)
                 .retrieve()
                 .body(RawgGameResponse.class);
 
@@ -36,6 +37,7 @@ public class RawgService {
         }
 
         return new RawgGameList(
+                body.count(),
                 body.next(),
                 body.previous(),
                 body.results()

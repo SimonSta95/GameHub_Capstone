@@ -18,7 +18,7 @@ function App() {
 
     useEffect(() => {
         loadUser()
-        fetchGames()
+        fetchGames(1)
     }, []);
 
     const loadUser = () => {
@@ -45,8 +45,8 @@ function App() {
         window.open(host + '/logout', '_self')
     }
 
-    const fetchGames = () => {
-        axios.get("/api/games/fetch")
+    const fetchGames = (page: number) => {
+        axios.get("/api/games/fetch?page=" + page)
             .then((response) => {
                 setData(response.data)
             })
@@ -101,6 +101,7 @@ function App() {
                                                                user={user}
                                                                addGameToLibrary={addGameToLibrary}
                                                                deleteGameFromLibrary={deleteGameFromLibrary}
+                                                               fetchGames={fetchGames}
                     />}/>
                     <Route path="/games/:id" element={<GameDetail user={user}/>} />
                     <Route path="/my-library" element={<MyLibrary games={data}

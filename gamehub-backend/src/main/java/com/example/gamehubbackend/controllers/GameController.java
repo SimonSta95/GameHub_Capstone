@@ -50,8 +50,8 @@ public class GameController {
     // EXTERNAL API ENDPOINTS
 
     @GetMapping("/fetch")
-    public RawgGameList loadAllGames() {
-        return rawgService.loadAllGames();
+    public RawgGameList loadAllGames(@RequestParam(required = false) String page) {
+        return rawgService.loadAllGames(page);
     }
 
     @GetMapping("/fetch/{id}")

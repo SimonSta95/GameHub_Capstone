@@ -31,6 +31,10 @@ public class RawgService {
                 .retrieve()
                 .body(RawgGameResponse.class);
 
+        if (body == null) {
+            return null;
+        }
+
         return new RawgGameList(
                 body.next(),
                 body.previous(),

@@ -1,6 +1,7 @@
 package com.example.gamehubbackend.controllers;
 
 import com.example.gamehubbackend.models.Game;
+import com.example.gamehubbackend.models.rawg.RawgGameDetail;
 import com.example.gamehubbackend.models.rawg.RawgGameList;
 import com.example.gamehubbackend.services.GameService;
 import com.example.gamehubbackend.services.rawg.RawgService;
@@ -51,5 +52,10 @@ public class GameController {
     @GetMapping("/fetch")
     public RawgGameList loadAllGames() {
         return rawgService.loadAllGames();
+    }
+
+    @GetMapping("/fetch/{id}")
+    public RawgGameDetail loadGameById(@PathVariable String id) {
+        return rawgService.loadGameDetail(id);
     }
 }

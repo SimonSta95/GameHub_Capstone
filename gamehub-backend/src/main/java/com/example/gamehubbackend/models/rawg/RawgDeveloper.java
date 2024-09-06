@@ -1,6 +1,6 @@
 package com.example.gamehubbackend.models.rawg;
 
-public record RawgPlatform(
+public record RawgDeveloper(
         String name
-) {
-}
+)
+{ }

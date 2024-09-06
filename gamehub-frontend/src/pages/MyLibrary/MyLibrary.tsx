@@ -1,16 +1,16 @@
 import {Box, Typography} from "@mui/material";
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import { Game, User } from "../../types.ts";
+import {GameAPIResponse, User} from "../../types.ts";
 
 type MyLibraryProps = {
     user: User | null;
-    games: Game[];
+    games: GameAPIResponse | null
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
 };
 
 export default function MyLibrary(props: Readonly<MyLibraryProps>) {
-    const library = props.games.filter((game) => props.user?.gameLibrary.includes(game.id));
+    const library = props.games?.games.filter((game) => props.user?.gameLibrary.includes(game.id));
 
     return (
         <Box
@@ -29,12 +29,12 @@ export default function MyLibrary(props: Readonly<MyLibraryProps>) {
                     gridAutoFlow: 'row dense',
                 }}
             >
-                {library.length === 0 ? (
+                {library?.length === 0 ? (
                     <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                         No games found in your library.
                     </Typography>
                 ) : (
-                    library.map((game) => (
+                    library?.map((game) => (
                         <Box
                             key={game.id}
                             sx={{

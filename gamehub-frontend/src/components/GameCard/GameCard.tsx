@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { Card, CardMedia, CardContent, Typography, Box, Chip, Button } from "@mui/material";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { Game, User } from "../../types.ts";
+import {Card, CardMedia, CardContent, Typography, Box, Chip, Button} from "@mui/material";
+import {AddCircle, RemoveCircle} from "@mui/icons-material";
+import {GameAPI, User} from "../../types.ts";
 
 type GameCardProps = {
     user: User | null;
-    game: Game;
+    game: GameAPI;
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
 };
@@ -33,6 +33,9 @@ export default function GameCard(props: Readonly<GameCardProps>) {
     const handleDeleteGame = () => {
         props.deleteGameFromLibrary(props.game.id);
     };
+
+    const displayedPlatforms = props.game.platforms.slice(0, 6);
+    const extraPlatformsCount = props.game.platforms.length - 6;
 
     return (
         <Card
@@ -96,8 +99,9 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                     >
                         {props.game.title}
                     </Typography>
+
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                        {props.game.platforms.map((platform) => (
+                        {displayedPlatforms.map((platform) => (
                             <Chip
                                 key={platform}
                                 label={platform}
@@ -117,8 +121,29 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                                 }}
                             />
                         ))}
+
+                        {extraPlatformsCount > 0 && (
+                            <Chip
+                                label={`+${extraPlatformsCount} more`}
+                                variant="outlined"
+                                sx={{
+                                    textTransform: "capitalize",
+                                    fontWeight: 500,
+                                    fontSize: "0.75rem",
+                                    borderRadius: "12px",
+                                    backgroundColor: 'transparent',
+                                    color: '#808080',
+                                    borderColor: '#808080',
+                                    "&:hover": {
+                                        backgroundColor: 'transparent',
+                                        borderColor: '#80808080',
+                                    },
+                                }}
+                            />
+                        )}
                     </Box>
                 </Link>
+
                 <Box sx={{ marginTop: 2 }}>
                     {props.user?.gameLibrary.includes(props.game.id) ? (
                         <Button

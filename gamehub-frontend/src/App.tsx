@@ -2,7 +2,7 @@ import './App.css'
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
-import {Game, GameLibraryOptions, User} from "./types.ts";
+import {GameAPIResponse, GameLibraryOptions, User} from "./types.ts";
 import {CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
@@ -14,7 +14,7 @@ import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null)
-    const [data, setData] = useState<Game[]>([])
+    const [data, setData] = useState<GameAPIResponse | null>(null)
 
     useEffect(() => {
         loadUser()
@@ -46,7 +46,7 @@ function App() {
     }
 
     const fetchGames = () => {
-        axios.get("/api/games")
+        axios.get("/api/games/fetch")
             .then((response) => {
                 setData(response.data)
             })
@@ -81,7 +81,7 @@ function App() {
             })
     }
 
-    if (data.length === 0 && user !== null) {
+    if (!data && user !== null) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <CircularProgress />

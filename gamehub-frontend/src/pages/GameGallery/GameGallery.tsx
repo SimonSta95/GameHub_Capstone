@@ -1,10 +1,10 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import { Game, User } from "../../types.ts";
+import {GameAPIResponse, User} from "../../types.ts";
 import { useState } from "react";
 
 type GameGalleryProps = {
-    games: Game[];
+    games: GameAPIResponse | null
     user: User | null;
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
@@ -14,9 +14,9 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedPlatform, setSelectedPlatform] = useState<string>('');
 
-    const platforms = Array.from(new Set(props.games.flatMap(game => game.platforms)));
+    const platforms = Array.from(new Set(props.games?.games.flatMap(game => game.platforms)));
 
-    const filteredGames = props.games.filter(game =>
+    const filteredGames = props.games?.games.filter(game =>
         game.title?.toLowerCase().includes(searchQuery?.toLowerCase()) &&
         (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
     );
@@ -74,12 +74,12 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     gridAutoFlow: 'row dense',
                 }}
             >
-                {filteredGames.length === 0 ? (
+                {filteredGames?.length === 0 ? (
                     <Typography variant="h6" sx={{ color: 'text.secondary' }}>
                         No games found.
                     </Typography>
                 ) : (
-                    filteredGames.map((game) => (
+                    filteredGames?.map((game) => (
                         <Box
                             key={game.id}
                             sx={{

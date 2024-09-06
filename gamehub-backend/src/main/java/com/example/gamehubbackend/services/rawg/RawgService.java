@@ -27,7 +27,7 @@ public class RawgService {
     @Cacheable("games")
     public RawgGameList loadAllGames() {
         RawgGameResponse body = restClient.get()
-                .uri("api/games?key=" + apiKey)
+                .uri("api/games?page_size=500&page=1&key=" + apiKey)
                 .retrieve()
                 .body(RawgGameResponse.class);
 

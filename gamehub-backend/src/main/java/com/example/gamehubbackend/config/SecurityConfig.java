@@ -1,4 +1,4 @@
-package com.example.gamehubbackend.security;
+package com.example.gamehubbackend.config;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
 import com.example.gamehubbackend.models.User;

@@ -10,6 +10,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+
 @Service
 public class RawgService {
 
@@ -25,34 +29,42 @@ public class RawgService {
     }
 
     @Cacheable("games")
-    public RawgGameList loadAllGames() {
+    public RawgGameList loadAllGames(String page, String search) {
+        String uri = "api/games?page_size=40&page=" + (page != null ? page : 1) +
+                "&key=" + apiKey;
+
+        if (search != null && !search.trim().isEmpty()) {
+            uri += "&search=" + URLEncoder.encode(search, StandardCharsets.UTF_8);
+        }
+
         RawgGameResponse body = restClient.get()
-                .uri("api/games?page_size=500&page=1&key=" + apiKey)
+                .uri(uri)
                 .retrieve()
                 .body(RawgGameResponse.class);
 
         if (body == null) {
-            return null;
+            return new RawgGameList(0, null, null, Collections.emptyList());
         }
 
         return new RawgGameList(
+                body.count(),
                 body.next(),
                 body.previous(),
                 body.results()
-                .stream()
-                .map(game -> new Game(
-                        String.valueOf(game.id()),
-                        game.name(),
-                        game.genres().stream()
-                                .map(RawgGenre::name)
-                                .toList(),
-                        game.released(),
-                        game.platforms().stream()
-                                .map(wrapper -> wrapper.platform().name())
-                                .toList(),
-                        game.background_image()
-                ))
-                .toList());
+                        .stream()
+                        .map(game -> new Game(
+                                String.valueOf(game.id()),
+                                game.name(),
+                                game.genres().stream()
+                                        .map(RawgGenre::name)
+                                        .toList(),
+                                game.released(),
+                                game.platforms().stream()
+                                        .map(wrapper -> wrapper.platform().name())
+                                        .toList(),
+                                game.background_image()
+                        ))
+                        .toList());
     }
 
     @Cacheable("gameDetail")

@@ -43,12 +43,12 @@ public class UserController {
 
     @PutMapping("/addGame")
     public User addGameToLibrary(@RequestBody AddGameDTO gameToAdd) {
-        return userService.addGameToLibrary(gameToAdd.userId(), gameToAdd.gameId());
+        return userService.addGameToLibrary(gameToAdd.userId(), gameToAdd.game());
     }
 
     @PutMapping("/deleteGame")
     public User deleteGameFromLibrary(@RequestBody AddGameDTO gameToDelete) {
-        return userService.removeGameFromLibrary(gameToDelete.userId(), gameToDelete.gameId());
+        return userService.removeGameFromLibrary(gameToDelete.userId(), gameToDelete.game());
     }
 
     @DeleteMapping("/{id}")

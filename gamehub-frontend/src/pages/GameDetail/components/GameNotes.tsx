@@ -1,4 +1,4 @@
-import {editNote, Game, Note, User} from "../../../types.ts";
+import { editNote, GameDetailAPIResponse, Note, User } from "../../../types.ts";
 import {
     Box,
     Button,
@@ -24,15 +24,15 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 type GameNotesProps = {
-    game: Game,
-    user: User | null
+    game: GameDetailAPIResponse;
+    user: User | null;
 }
 
-type ChipColor = "default" | "primary" | "secondary"
+type ChipColor = "default" | "primary" | "secondary";
 
-const categories = ["Note", "Goal"]
+const categories = ["Note", "Goal"];
 
-const categoryColors: { [key: string]: ChipColor} = {
+const categoryColors: { [key: string]: ChipColor } = {
     Note: 'primary',
     Goal: 'secondary'
 };
@@ -44,18 +44,16 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [newNote, setNewNote] = useState<{ title: string; content: string; category: string }>({
         title: "",
         content: "",
-        category: ""
+        category: "Note" // Default to "Note"
     });
     const [noteLoading, setNoteLoading] = useState(false);
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
-    const [editNote, setEditNote] = useState<editNote>(
-        {
-            title: "",
-            content: "",
-            category: "",
-            created: ""
-        }
-    );
+    const [editNote, setEditNote] = useState<editNote>({
+        title: "",
+        content: "",
+        category: "",
+        created: ""
+    });
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
@@ -63,7 +61,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         const fetchNotes = async () => {
             try {
                 const response = await axios.get<Note[]>("/api/notes");
-                const filteredNotes = response.data.filter(note => note.gameId === props.game.id && note.userId === props.user?.gitHubId);
+                const filteredNotes = response.data.filter(note => note.gameId === props.game.id.toString() && note.userId === props.user?.gitHubId);
                 setNotes(filteredNotes);
             } catch (error) {
                 console.error("Error fetching notes:", error);
@@ -95,7 +93,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                 category: newNote.category,
             });
             setNotes([...notes, response.data]);
-            setNewNote({ title: "", content: "", category: "Note" });
+            setNewNote({ title: "", content: "", category: "Note" }); // Reset new note form
         } catch (error) {
             console.error("Failed to create note:", error);
         } finally {
@@ -144,7 +142,6 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
                 userId: props.user?.gitHubId,
                 gameId: props.game.id,
                 created: editNote.created
-
             };
             const response = await axios.put(`/api/notes/${noteId}`, updatedNote);
             setNotes(notes.map(note => (note.id === noteId ? response.data : note)));

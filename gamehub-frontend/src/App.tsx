@@ -2,7 +2,7 @@ import './App.css'
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
-import {AddDeleteLibrary, GameAPI, GameAPIResponse, User} from "./types.ts";
+import {UserGameLibraryAction, GameAPI, GameAPIResponse, User} from "./types.ts";
 import {CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
@@ -57,7 +57,7 @@ function App() {
 
     const addGameToLibrary = (game: GameAPI) => {
         if (!user) return;
-        const dto: AddDeleteLibrary  = {
+        const dto: UserGameLibraryAction  = {
             userId: user.gitHubId,
             game: game
         }
@@ -70,7 +70,7 @@ function App() {
 
     const deleteGameFromLibrary = (game: GameAPI) => {
         if (!user) return;
-        const dto: AddDeleteLibrary  = {
+        const dto: UserGameLibraryAction  = {
             userId: user?.gitHubId ?? '',
             game: game
         }

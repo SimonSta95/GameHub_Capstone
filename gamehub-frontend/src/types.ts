@@ -35,7 +35,7 @@ export type GameAPI = {
     coverImage: string
 }
 
-export type AddDeleteLibrary = {
+export type UserGameLibraryAction = {
     userId: string,
     game: GameAPI
 }

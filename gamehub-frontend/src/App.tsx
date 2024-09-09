@@ -18,7 +18,7 @@ function App() {
 
     useEffect(() => {
         loadUser()
-        fetchGames(1)
+        fetchGames(1,"")
     }, []);
 
     const loadUser = () => {
@@ -45,15 +45,15 @@ function App() {
         window.open(host + '/logout', '_self')
     }
 
-    const fetchGames = (page: number) => {
-        axios.get("/api/games/fetch?page=" + page)
+    const fetchGames = (page: number, searchQuery: string) => {
+        axios.get(`/api/games/fetch?page=${page}&search=${encodeURIComponent(searchQuery)}`)
             .then((response) => {
-                setData(response.data)
+                setData(response.data);
             })
             .catch((error) => {
-                alert(error)
-            })
-    }
+                alert(error);
+            });
+    };
 
     const addGameToLibrary = (gameId: string) => {
         if (!user) return;

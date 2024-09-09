@@ -1,12 +1,12 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography, Button, CircularProgress } from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
 import { GameAPIResponse, User } from "../../types.ts";
-import { useState } from "react";
+import { useState} from "react";
 
 type GameGalleryProps = {
     games: GameAPIResponse | null;
     user: User | null;
-    fetchGames: (page: number) => void;
+    fetchGames: (page: number, searchQuery: string) => void;
     addGameToLibrary: (gameId: string) => void;
     deleteGameFromLibrary: (gameId: string) => void;
 };
@@ -19,7 +19,6 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
 
     const gamesPerPage = 40;
 
-    // Handle filtering on the client side (this will not trigger a new fetch)
     const filteredGames = props.games?.games.filter(game =>
         game.title?.toLowerCase().includes(searchQuery?.toLowerCase()) &&
         (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
@@ -27,17 +26,36 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
 
     const handlePageChange = (newPage: number) => {
         if (newPage !== currentPage) {
-            setLoading(true); // Show loading while fetching new page
+            setLoading(true);
             setCurrentPage(newPage);
-            props.fetchGames(newPage); // Only fetch when page changes
+            try {
+                props.fetchGames(newPage, searchQuery);
+            } catch (error) {
+                console.error('Failed to fetch games:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+    };
+
+    const handleSearchSubmit = () => {
+        setLoading(true);
+        setCurrentPage(1); // Reset to page 1 on search
+        try {
+            props.fetchGames(1, searchQuery); // Fetch games based on search query
+        } catch (error) {
+            console.error('Failed to fetch games:', error);
+        } finally {
             setLoading(false);
         }
     };
 
-    // Calculate displayed games for the current page
-    const displayedGames = filteredGames?.slice(0, gamesPerPage); // Always limit to first 40
+    const displayedGames = filteredGames?.slice(0, gamesPerPage);
 
-    // Extracted content display logic into an independent statement
     const renderGameCards = () => {
         if (!displayedGames || displayedGames.length === 0) {
             return (
@@ -84,7 +102,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     variant="outlined"
                     placeholder="Search games..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleSearchChange} // Only update searchQuery state, don't fetch games
                     sx={{
                         marginBottom: '16px',
                         borderRadius: '4px',
@@ -101,7 +119,6 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                         sx={{ borderRadius: '4px', backgroundColor: 'white' }}
                     >
                         <MenuItem value="">All Platforms</MenuItem>
-                        {/* Render platform options */}
                         {Array.from(new Set(props.games?.games.flatMap(game => game.platforms))).map(platform => (
                             <MenuItem key={platform} value={platform}>
                                 {platform}
@@ -109,6 +126,15 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                         ))}
                     </Select>
                 </FormControl>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSearchSubmit} // Trigger search request on click
+                    disabled={loading} // Disable button if loading
+                >
+                    {loading ? <CircularProgress size={24} /> : "Search"}
+                </Button>
             </Box>
 
             <Box
@@ -123,11 +149,10 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 {loading ? (
                     <CircularProgress />
                 ) : (
-                    renderGameCards()  // Use the extracted function to render games
+                    renderGameCards()
                 )}
             </Box>
 
-            {/* Pagination buttons */}
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
                 <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                     Previous
@@ -136,7 +161,8 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     Page {currentPage}
                 </Typography>
                 <Button
-                    disabled={!!props.games?.count && currentPage * gamesPerPage >= props.games.count}
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={!props.games?.count || currentPage * gamesPerPage >= props.games.count}
                 >
                     Next
                 </Button>

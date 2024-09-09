@@ -1,5 +1,6 @@
 package com.example.gamehubbackend.controllers;
 
+import com.example.gamehubbackend.models.FrontendGame;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -32,12 +33,17 @@ class AuthControllerTest {
     @Test
     @DirtiesContext
     void getLoggedInUser() throws Exception {
+        // Create FrontendGame objects
+        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser", "1","link", "USER", List.of("Game 1", "Game 2"), localDate, createdDate));
+        // Save user with FrontendGame objects in the gameLibrary
+        userRepository.save(new User("1", "TestUser", "1", "link", "USER", List.of(game1, game2), localDate, createdDate));
 
+        // Perform the request and validate the response
         mockMvc.perform(get("/api/auth/me")
-                .with(oidcLogin().idToken(token-> token.subject("1"))
-                        .userInfoToken(token -> token.claim("login", "TestUser"))))
+                        .with(oidcLogin().idToken(token -> token.subject("1"))
+                                .userInfoToken(token -> token.claim("login", "TestUser"))))
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
                                             {
@@ -45,14 +51,23 @@ class AuthControllerTest {
                                               "username": "TestUser",
                                               "gitHubId": "1",
                                               "role": "USER",
-                                              "gameLibrary": ["Game 1", "Game 2"]
+                                              "gameLibrary": [
+                                                {
+                                                  "id": "game1",
+                                                  "title": "Game 1",
+                                                  "platforms": ["Platform1"],
+                                                  "coverImage": "coverImage1"
+                                                },
+                                                {
+                                                  "id": "game2",
+                                                  "title": "Game 2",
+                                                  "platforms": ["Platform2"],
+                                                  "coverImage": "coverImage2"
+                                                }
+                                              ]
                                             }
                                           """))
                 .andExpect(jsonPath("$.creationDate").exists())
                 .andExpect(jsonPath("$.lastUpdateDate").exists());
-
-
     }
-
-
 }

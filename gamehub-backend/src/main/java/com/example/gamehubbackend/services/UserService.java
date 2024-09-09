@@ -1,6 +1,7 @@
 package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
+import com.example.gamehubbackend.models.FrontendGame;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.repositories.UserRepository;
@@ -55,21 +56,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User addGameToLibrary(String userId,String gameId) {
+    public User addGameToLibrary(String userId, FrontendGame game) {
         User user = getUserByGitHubId(userId);
 
-        if(!user.gameLibrary().contains(gameId)) {
+        if(!user.gameLibrary().contains(game)) {
 
-            user.gameLibrary().add(gameId);
+            user.gameLibrary().add(game);
         }
 
         return userRepository.save(user);
     }
 
-    public User removeGameFromLibrary(String userId,String gameId) {
+    public User removeGameFromLibrary(String userId,FrontendGame game) {
         User user = getUserByGitHubId(userId);
 
-        user.gameLibrary().remove(gameId);
+        user.gameLibrary().remove(game);
 
         return userRepository.save(user);
     }

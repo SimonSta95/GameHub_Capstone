@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -38,18 +40,20 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
-//                        .requestMatchers("/api/games").authenticated()
-//                        .requestMatchers("/api/games/**").authenticated()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/users/register").permitAll()  // Allow registration without authentication
+                        .requestMatchers("/api/games/**").authenticated()    // Require authentication for games
+                        .anyRequest().permitAll()                            // Allow other requests
                 )
+                .httpBasic()
+                .and()
+                .oauth2Login(o -> o.defaultSuccessUrl(appUrl))  // Enable OAuth2 Login
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .oauth2Login(o -> o.defaultSuccessUrl(appUrl))
                 .logout(l -> l.logoutSuccessUrl(appUrl));
+
         return http.build();
     }
 
@@ -66,6 +70,7 @@ public class SecurityConfig {
                 gitHubUser = userService.saveUser(new UserDTO(
                         user.getAttributes().get("login").toString(),
                         user.getName(),
+                        "",
                         user.getAttributes().get("avatar_url").toString(),
                         "USER",
                         new ArrayList<>(),
@@ -80,5 +85,10 @@ public class SecurityConfig {
                     "id"
             );
         };
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();  // Use BCrypt for hashing passwords
     }
 }

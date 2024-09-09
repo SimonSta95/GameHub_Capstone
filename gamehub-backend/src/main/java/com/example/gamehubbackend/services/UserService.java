@@ -6,6 +6,7 @@ import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final IdService idService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUser() {
         return userRepository.findAll();
@@ -34,6 +36,7 @@ public class UserService {
         User userToSave = new User(
                 idService.randomId(),
                 userDTO.username(),
+                passwordEncoder.encode(userDTO.password()),
                 userDTO.gitHubId(),
                 userDTO.avatarUrl(),
                 userDTO.role(),
@@ -41,7 +44,6 @@ public class UserService {
                 userDTO.creationDate(),
                 userDTO.lastUpdateDate()
         );
-
         return userRepository.save(userToSave);
     }
 

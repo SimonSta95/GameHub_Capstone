@@ -1,16 +1,16 @@
 import {Box, Typography} from "@mui/material";
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import {GameAPIResponse, User} from "../../types.ts";
+import {GameAPI, GameAPIResponse, User} from "../../types.ts";
 
 type MyLibraryProps = {
     user: User | null;
     games: GameAPIResponse | null
-    addGameToLibrary: (gameId: string) => void;
-    deleteGameFromLibrary: (gameId: string) => void;
+    addGameToLibrary: (game: GameAPI) => void;
+    deleteGameFromLibrary: (game: GameAPI) => void;
 };
 
 export default function MyLibrary(props: Readonly<MyLibraryProps>) {
-    const library = props.games?.games.filter((game) => props.user?.gameLibrary.includes(game.id));
+    const library: GameAPI[] = props.user?.gameLibrary || [];
 
     return (
         <Box

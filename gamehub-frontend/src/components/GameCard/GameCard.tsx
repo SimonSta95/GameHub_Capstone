@@ -6,8 +6,8 @@ import {GameAPI, User} from "../../types.ts";
 type GameCardProps = {
     user: User | null;
     game: GameAPI;
-    addGameToLibrary: (gameId: string) => void;
-    deleteGameFromLibrary: (gameId: string) => void;
+    addGameToLibrary: (game: GameAPI) => void;
+    deleteGameFromLibrary: (game: GameAPI) => void;
 };
 
 export default function GameCard(props: Readonly<GameCardProps>) {
@@ -27,15 +27,16 @@ export default function GameCard(props: Readonly<GameCardProps>) {
     };
 
     const handleAddGame = () => {
-        props.addGameToLibrary(props.game.id);
+        props.addGameToLibrary(props.game);
     };
 
     const handleDeleteGame = () => {
-        props.deleteGameFromLibrary(props.game.id);
+        props.deleteGameFromLibrary(props.game);
     };
 
-    const displayedPlatforms = props.game.platforms.slice(0, 6);
-    const extraPlatformsCount = props.game.platforms.length - 6;
+    const isInLibrary = props.user?.gameLibrary.some(gameInLibrary => gameInLibrary.id === props.game.id);
+    const displayedPlatforms = props.game.platforms.slice(0, 5);
+    const extraPlatformsCount = props.game.platforms.length - 5;
 
     return (
         <Card
@@ -145,7 +146,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                 </Link>
 
                 <Box sx={{ marginTop: 2 }}>
-                    {props.user?.gameLibrary.includes(props.game.id) ? (
+                    {isInLibrary ? (
                         <Button
                             variant="contained"
                             startIcon={<RemoveCircle />}

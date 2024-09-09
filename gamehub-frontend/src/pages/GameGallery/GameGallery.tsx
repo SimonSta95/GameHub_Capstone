@@ -1,14 +1,14 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography, Button, CircularProgress } from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import { GameAPIResponse, User } from "../../types.ts";
+import {GameAPI, GameAPIResponse, User} from "../../types.ts";
 import { useState} from "react";
 
 type GameGalleryProps = {
     games: GameAPIResponse | null;
     user: User | null;
     fetchGames: (page: number, searchQuery: string) => void;
-    addGameToLibrary: (gameId: string) => void;
-    deleteGameFromLibrary: (gameId: string) => void;
+    addGameToLibrary: (game: GameAPI) => void;
+    deleteGameFromLibrary: (game: GameAPI) => void;
 };
 
 export default function GameGallery(props: Readonly<GameGalleryProps>) {
@@ -102,7 +102,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                     variant="outlined"
                     placeholder="Search games..."
                     value={searchQuery}
-                    onChange={handleSearchChange} // Only update searchQuery state, don't fetch games
+                    onChange={handleSearchChange}
                     sx={{
                         marginBottom: '16px',
                         borderRadius: '4px',
@@ -130,8 +130,8 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleSearchSubmit} // Trigger search request on click
-                    disabled={loading} // Disable button if loading
+                    onClick={handleSearchSubmit}
+                    disabled={loading}
                 >
                     {loading ? <CircularProgress size={24} /> : "Search"}
                 </Button>

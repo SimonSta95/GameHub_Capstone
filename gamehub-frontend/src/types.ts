@@ -4,7 +4,7 @@ export type User = {
     gitHubId: string,
     avatarUrl: string,
     role: string,
-    gameLibrary: string[],
+    gameLibrary: GameAPI[],
 }
 
 export type Game = {
@@ -33,6 +33,11 @@ export type GameAPI = {
     releaseDate: string,
     platforms: string[],
     coverImage: string
+}
+
+export type AddDeleteLibrary = {
+    userId: string,
+    game: GameAPI
 }
 
 export type GameDetailAPIResponse = {
@@ -80,9 +85,4 @@ export type editNote = {
     content: string;
     category: string;
     created: string;
-}
-
-export type GameLibraryOptions = {
-    userId: string
-    gameId: string
 }

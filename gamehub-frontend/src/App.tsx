@@ -2,7 +2,7 @@ import './App.css'
 import axios from "axios"
 import Footer from "./components/Footer/Footer.tsx";
 import {useEffect, useState} from "react";
-import {GameAPIResponse, GameLibraryOptions, User} from "./types.ts";
+import {AddDeleteLibrary, GameAPI, GameAPIResponse, User} from "./types.ts";
 import {CircularProgress} from "@mui/material";
 import {Route, Routes} from "react-router-dom";
 import GameGallery from "./pages/GameGallery/GameGallery.tsx";
@@ -55,11 +55,11 @@ function App() {
             });
     };
 
-    const addGameToLibrary = (gameId: string) => {
+    const addGameToLibrary = (game: GameAPI) => {
         if (!user) return;
-        const dto: GameLibraryOptions  = {
+        const dto: AddDeleteLibrary  = {
             userId: user.gitHubId,
-            gameId: gameId
+            game: game
         }
 
         axios.put("/api/users/addGame", dto)
@@ -68,11 +68,11 @@ function App() {
             })
     }
 
-    const deleteGameFromLibrary = (gameId: string) => {
+    const deleteGameFromLibrary = (game: GameAPI) => {
         if (!user) return;
-        const dto: GameLibraryOptions  = {
+        const dto: AddDeleteLibrary  = {
             userId: user?.gitHubId ?? '',
-            gameId: gameId
+            game: game
         }
 
         axios.put("/api/users/deleteGame", dto)

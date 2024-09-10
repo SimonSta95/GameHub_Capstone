@@ -41,7 +41,7 @@ public class UserService {
         return new UserResponse(
                 user.id(),
                 user.gitHubId(),
-                user.avatarUrl(),
+                user.username(),
                 user.avatarUrl(),
                 user.role(),
                 user.gameLibrary()

@@ -47,7 +47,7 @@ class UserControllerIntegrationTests {
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
         FrontendGame game3 = new FrontendGame("game3", "Game 3", List.of("Platform3"), "coverImage3");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2, game3), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "Test","1", "link", "USER", List.of(game1, game2, game3), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/1"))
                 .andExpect(status().isOk())
@@ -92,7 +92,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/g/1"))
                 .andExpect(status().isOk())
@@ -191,7 +191,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -244,7 +244,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isOk());
@@ -258,7 +258,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void addGameToLibrary() throws Exception {
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/addGame")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -303,7 +303,7 @@ class UserControllerIntegrationTests {
     void deleteGameFromLibrary() throws Exception {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/deleteGame")
                         .contentType(MediaType.APPLICATION_JSON)

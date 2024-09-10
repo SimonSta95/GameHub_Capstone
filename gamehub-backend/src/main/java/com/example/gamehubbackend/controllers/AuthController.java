@@ -1,9 +1,10 @@
 package com.example.gamehubbackend.controllers;
 
-import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,18 @@ public class AuthController {
     private final UserService userService;
 
     @GetMapping("/me")
-    public User getCurrentUser(@AuthenticationPrincipal OAuth2User user) {
-        return userService.getUserByGitHubId(user.getName());
+    public UserResponse getCurrentUser(@AuthenticationPrincipal OAuth2User user) {
+        return userService.getUserByUsername(user.getAttributes().get("login").toString());
+    }
+
+    @PostMapping("/login")
+    public void login() {
+        //only to trigger login
     }
 
     @PostMapping("/register")
-    public User registerUser(@RequestBody UserDTO userDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse registerUser(@RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
     }
 }

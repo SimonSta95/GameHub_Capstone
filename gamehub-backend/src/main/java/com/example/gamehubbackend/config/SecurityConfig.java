@@ -1,21 +1,20 @@
 package com.example.gamehubbackend.config;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
-import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -41,14 +40,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/users/register").permitAll()  // Allow registration without authentication
                         .requestMatchers("/api/games/**").authenticated()    // Require authentication for games
                         .anyRequest().permitAll()                            // Allow other requests
                 )
-                .httpBasic()
-                .and()
+                .httpBasic(Customizer.withDefaults())
                 .oauth2Login(o -> o.defaultSuccessUrl(appUrl))  // Enable OAuth2 Login
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
@@ -63,14 +62,14 @@ public class SecurityConfig {
 
         return request -> {
             OAuth2User user = delegate.loadUser(request);
-            User gitHubUser;
+            UserResponse gitHubUser;
             try {
                 gitHubUser = userService.getUserByGitHubId(user.getName());
             } catch (UserNotFoundException e) {
                 gitHubUser = userService.saveUser(new UserDTO(
                         user.getAttributes().get("login").toString(),
-                        user.getName(),
                         "",
+                        user.getName(),
                         user.getAttributes().get("avatar_url").toString(),
                         "USER",
                         new ArrayList<>(),
@@ -85,10 +84,5 @@ public class SecurityConfig {
                     "id"
             );
         };
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Use BCrypt for hashing passwords
     }
 }

@@ -28,6 +28,7 @@ function App() {
         axios.get("/api/auth/me")
             .then((response) => {
                 setUser(response.data);
+                fetchGames(1,"")
             })
             .catch(() => {
                 setUser(null);

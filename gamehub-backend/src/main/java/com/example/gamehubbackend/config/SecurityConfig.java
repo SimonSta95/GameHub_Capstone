@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -44,10 +43,12 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/api/users/register").permitAll()  // Allow registration without authentication
-                        .requestMatchers("/api/games/**").authenticated()    // Require authentication for games
+                        .requestMatchers("/api/games/**").authenticated()// Require authentication for games
+                        .requestMatchers("/api/auth/me").authenticated()
                         .anyRequest().permitAll()                            // Allow other requests
                 )
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(httpSecurityHttpBasicConfigurer ->
+                        httpSecurityHttpBasicConfigurer.authenticationEntryPoint((request, response, authException) -> response.sendError(401)))
                 .oauth2Login(o -> o.defaultSuccessUrl(appUrl))  // Enable OAuth2 Login
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))

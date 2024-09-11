@@ -11,6 +11,8 @@ import Header from "./components/Header/Header.tsx";
 import LandingPage from "./pages/LandingPage/LandingPage.tsx";
 import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null)
@@ -22,14 +24,16 @@ function App() {
     }, []);
 
     const loadUser = () => {
-        axios.get("api/auth/me")
+
+        axios.get("/api/auth/me")
             .then((response) => {
-                setUser(response.data)
+                setUser(response.data);
             })
             .catch(() => {
-                setUser(null)
-            })
-    }
+                setUser(null);
+            });
+    };
+
 
     const login = () => {
         const host = window.location.host === 'localhost:5173' ?
@@ -47,12 +51,9 @@ function App() {
 
     const fetchGames = (page: number, searchQuery: string) => {
         axios.get(`/api/games/fetch?page=${page}&search=${encodeURIComponent(searchQuery)}`)
-            .then((response) => {
-                setData(response.data);
-            })
-            .catch((error) => {
-                alert(error);
-            });
+    .then((response) => {
+            setData(response.data);
+        })
     };
 
     const addGameToLibrary = (game: GameAPI) => {
@@ -97,6 +98,8 @@ function App() {
                 <Routes>
 
                     <Route path="/" element={<LandingPage user={user} onLogin={login}/>} />
+                    <Route path="/login" element={<LoginPage loadUser={loadUser}/>} />
+                    <Route path="/register" element={<RegisterPage/>} />
                     <Route path="/games" element={<GameGallery games={data}
                                                                user={user}
                                                                addGameToLibrary={addGameToLibrary}
@@ -105,9 +108,9 @@ function App() {
                     />}/>
                     <Route path="/games/:id" element={<GameDetail user={user}/>} />
                     <Route path="/my-library" element={<MyLibrary games={data}
-                                                                 user={user}
-                                                                 addGameToLibrary={addGameToLibrary}
-                                                                 deleteGameFromLibrary={deleteGameFromLibrary}
+                                                                  user={user}
+                                                                  addGameToLibrary={addGameToLibrary}
+                                                                  deleteGameFromLibrary={deleteGameFromLibrary}
                     />} />
                 </Routes>
             </main>

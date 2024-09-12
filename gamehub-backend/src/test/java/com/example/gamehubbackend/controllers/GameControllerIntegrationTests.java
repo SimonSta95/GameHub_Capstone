@@ -54,6 +54,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void getAllGames_When_DbEmpty_ReturnsEmptyList() throws Exception {
 
         mockMvc.perform(get("/api/games"))
@@ -64,6 +65,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void getAllGames_When_DbNotEmpty_ReturnsGames() throws Exception {
 
         gameRepository.save(new Game("1","Super Mario World", List.of("Jump and Run"), "2024-08-26", List.of("NES","SNES"),  "linkToImg"));
@@ -87,6 +89,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void getGameById_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", List.of("Jump and Run"), "2024-08-26", List.of("NES","SNES"), "linkToImg"));
 
@@ -107,6 +110,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void getGameById_Test_IdNotFound() throws Exception {
 
         mockMvc.perform(get("/api/games/1"))
@@ -152,6 +156,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void updateGame_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", List.of("Jump and Run"), "2017-03-03", List.of("NES","SNES"), "linkToImg"));
 
@@ -182,6 +187,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void deleteGame_Test() throws Exception {
         gameRepository.save(new Game("1","Super Mario World", List.of("Jump and Run"), "2017-03-03", List.of("NES","SNES"),"linkToImg"));
 
@@ -199,6 +205,7 @@ class GameControllerIntegrationTests {
     // EXTERNAL API TEST
 
     @Test
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void loadAllGames_Test() throws Exception {
 
 
@@ -355,6 +362,7 @@ class GameControllerIntegrationTests {
     }
 
     @Test
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void loadGameDetails_test() throws Exception {
         mockWebServer.enqueue(new MockResponse()
                 .setBody(

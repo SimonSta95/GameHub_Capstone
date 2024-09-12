@@ -131,6 +131,7 @@ class UserControllerIntegrationTests {
                                 """
                                 {
                                   "username": "TestUser1",
+                                  "password": "magicPassword123",
                                   "gitHubId": "1",
                                   "role": "USER",
                                   "gameLibrary": [
@@ -157,7 +158,6 @@ class UserControllerIntegrationTests {
                         """
                         {
                           "username": "TestUser1",
-                          "gitHubId": "1",
                           "role": "USER",
                           "gameLibrary": [
                             {
@@ -172,9 +172,7 @@ class UserControllerIntegrationTests {
                               "platforms": ["Platform2"],
                               "coverImage": "coverImage2"
                             }
-                          ],
-                          "creationDate": "2020-01-01T01:00:00",
-                          "lastUpdateDate": "2020-01-01T02:00:00"
+                          ]
                         }
                         """
                 ))

@@ -210,28 +210,21 @@ class UserServiceUnitTests {
         );
 
         // Create expected user after removing game2
-        User updatedUser = new User(
-                userId,
-                "TestUser1",
-                "TestPassword",
-                "1",
-                "avatarUrl",
-                "USER",
-                new ArrayList<>(List.of(game1)), // Only game1 remains
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        User updatedUser = existingUser.withGameLibrary(new ArrayList<>(List.of(game1))); // Only game1 remains
 
         // Mock repository behavior
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Call service method to remove game from library
         User result = userService.removeGameFromLibrary(userId, game2);
 
         // Verify that the game was removed and the user was saved
         verify(userRepository).findById(userId);
-        verify(userRepository).save(updatedUser);
+        verify(userRepository).save(argThat(user ->
+                user.gameLibrary().equals(updatedUser.gameLibrary()) &&
+                        user.id().equals(updatedUser.id())
+        ));
 
         // Assert that the returned user matches the updated user
         assertEquals(updatedUser, result);

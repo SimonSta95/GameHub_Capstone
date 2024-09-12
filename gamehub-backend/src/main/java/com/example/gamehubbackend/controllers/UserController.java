@@ -22,11 +22,6 @@ public class UserController {
         return userService.getAllUser();
     }
 
-    @GetMapping("/me")
-    public UserResponse getLoggedInUser() {
-        return userService.getLoggedInUser();
-    }
-
     @GetMapping("/{id}")
     public User getUserById(@PathVariable String id) {
         return userService.getUserById(id);

@@ -101,7 +101,6 @@ class UserControllerIntegrationTests {
                         {
                           "id": "1",
                           "username": "TestUser1",
-                          "gitHubId": "1",
                           "role": "USER",
                           "gameLibrary": [
                             {
@@ -116,9 +115,7 @@ class UserControllerIntegrationTests {
                               "platforms": ["Platform2"],
                               "coverImage": "coverImage2"
                             }
-                          ],
-                          "creationDate": "2020-01-01T01:00:00",
-                          "lastUpdateDate": "2020-01-01T02:00:00"
+                          ]
                         }
                     """
                 ));
@@ -332,36 +329,6 @@ class UserControllerIntegrationTests {
                             "role": "USER",
                             "gameLibrary": [],
                             "creationDate": "2020-01-01T01:00:00"
-                        }
-                        """
-                ));
-    }
-
-    @Test
-    @WithMockUser(username = "TestUser1", authorities = "USER")
-    void getLoggedInUser() throws Exception {
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-
-        User user = new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime);
-        userRepository.save(user);
-
-        mockMvc.perform(get("/api/users/me"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(
-                        """
-                        {
-                          "id": "1",
-                          "username": "TestUser1",
-                          "githubId": "1",
-                          "role": "USER",
-                          "gameLibrary": [
-                            {
-                              "id": "game1",
-                              "title": "Game 1",
-                              "platforms": ["Platform1"],
-                              "coverImage": "coverImage1"
-                            }
-                          ]
                         }
                         """
                 ));

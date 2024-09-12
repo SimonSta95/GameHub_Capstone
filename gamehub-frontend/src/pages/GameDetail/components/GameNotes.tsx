@@ -26,7 +26,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 type GameNotesProps = {
     game: GameDetailAPIResponse;
     user: User | null;
-}
+};
 
 type ChipColor = "default" | "primary" | "secondary";
 
@@ -44,7 +44,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [newNote, setNewNote] = useState<{ title: string; content: string; category: string }>({
         title: "",
         content: "",
-        category: "Note" // Default to "Note"
+        category: "Note"
     });
     const [noteLoading, setNoteLoading] = useState(false);
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
@@ -61,7 +61,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         const fetchNotes = async () => {
             try {
                 const response = await axios.get<Note[]>("/api/notes");
-                const filteredNotes = response.data.filter(note => note.gameId === props.game.id.toString() && note.userId === props.user?.gitHubId);
+                const filteredNotes = response.data.filter(note => note.gameId === props.game.id.toString() && note.userId === props.user?.id);
                 setNotes(filteredNotes);
             } catch (error) {
                 console.error("Error fetching notes:", error);
@@ -72,10 +72,10 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         };
 
         fetchNotes();
-    }, [props.game.id, props.user?.gitHubId]);
+    }, [props.game.id, props.user?.id]);
 
     const handleCreateNote = async () => {
-        if (!props.user?.gitHubId) {
+        if (!props.user?.id) {
             console.error('User ID is not available.');
             return;
         }
@@ -86,7 +86,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         setNoteLoading(true);
         try {
             const response = await axios.post<Note>(`/api/notes`, {
-                userId: props.user.gitHubId,
+                userId: props.user.id,
                 gameId: props.game.id,
                 title: newNote.title,
                 content: newNote.content,
@@ -139,9 +139,8 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         try {
             const updatedNote = {
                 ...editNote,
-                userId: props.user?.gitHubId,
+                userId: props.user?.id,
                 gameId: props.game.id,
-                created: editNote.created
             };
             const response = await axios.put(`/api/notes/${noteId}`, updatedNote);
             setNotes(notes.map(note => (note.id === noteId ? response.data : note)));

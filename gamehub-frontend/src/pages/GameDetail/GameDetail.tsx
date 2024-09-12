@@ -1,10 +1,11 @@
-import {GameDetailAPIResponse, User} from "../../types.ts";
-import {useNavigate, useParams} from "react-router-dom";
-import {Box, Button, Card, CardContent, Chip, CircularProgress, Typography} from "@mui/material";
-import {useEffect, useState} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Box, Button, Card, CardContent, Chip, CircularProgress, Typography, Tabs, Tab, Divider } from "@mui/material";
+import { useEffect, useState, SyntheticEvent } from "react";
 import axios from "axios";
+
 import GameNotes from "./components/GameNotes.tsx";
 import GameReviews from "./components/GameReviews.tsx";
+import { GameDetailAPIResponse, User } from "../../types.ts";
 
 type GameDetailProps = {
     user: User | null;
@@ -14,6 +15,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
     const [game, setGame] = useState<GameDetailAPIResponse | undefined | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [tabIndex, setTabIndex] = useState(0);
     const navigate = useNavigate();
     const params = useParams();
     const id: string | undefined = params.id;
@@ -62,6 +64,10 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
         );
     }
 
+    const handleTabChange = (_event: SyntheticEvent, newValue: number) => {
+        setTabIndex(newValue);
+    };
+
     return (
         <Box sx={{ maxWidth: "1200px", margin: "0 auto", padding: "32px 16px" }}>
             {/* Back to Gallery Button */}
@@ -73,6 +79,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
             >
                 Back to Gallery
             </Button>
+
             {/* Hero Section with Game Cover */}
             <Box
                 sx={{
@@ -88,6 +95,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
                     alignItems: "center",
                     color: "white",
                     overflow: "hidden",
+                    marginBottom: "32px",
                 }}
             >
                 <Box
@@ -107,107 +115,115 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
                 </Box>
             </Box>
 
-            {/* Game Info Section */}
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    gap: "32px",
-                    marginTop: "32px",
-                    justifyContent: "space-between",
-                    alignItems: "stretch",
-                    flexWrap: "wrap",
-                }}
-            >
-                {/* Left Column: Game Description & Platforms */}
-                <Card
-                    sx={{
-                        flex: "1",
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
-                    <CardContent sx={{ flexGrow: 1 }}>
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                fontWeight: 600,
-                                marginBottom: 2,
-                                color: "primary.main",
-                            }}
-                        >
-                            About the Game
-                        </Typography>
-                        <Typography
-                            variant="body1"
-                            sx={{ lineHeight: 1.6, color: "#555" }}
-                            dangerouslySetInnerHTML={{ __html: game.description }}
-                        />
+            {/* Tabs for Game Info, Notes, and Reviews */}
+            <Tabs value={tabIndex} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+                <Tab label="About" />
+                <Tab label="Notes" />
+                <Tab label="Reviews" />
+            </Tabs>
 
-                        <Typography
-                            variant="h5"
+            <Divider sx={{ marginY: 2 }} />
+
+            {/* Tab Content */}
+            {tabIndex === 0 && (
+                <Box>
+                    {/* Game Info Section */}
+                    <Box sx={{ display: "flex", gap: "32px", flexWrap: "wrap" }}>
+                        <Card
                             sx={{
-                                fontWeight: 600,
-                                marginBottom: 2,
-                                color: "primary.main",
+                                flex: "1",
+                                borderRadius: "12px",
+                                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                                display: "flex",
+                                flexDirection: "column",
                             }}
                         >
-                            Platforms
-                        </Typography>
-                        <Box sx={{ display: "flex", gap: 1, marginTop: 2, flexWrap: "wrap" }}>
-                            {game.platforms.map((platformData) => (
-                                <Chip
-                                    key={platformData.platform.name}
-                                    label={platformData.platform.name}
-                                    variant="outlined"
+                            <CardContent>
+                                <Typography
+                                    variant="h5"
                                     sx={{
-                                        textTransform: "capitalize",
-                                        fontWeight: 500,
-                                        fontSize: "0.85rem",
-                                        borderRadius: "12px",
-                                        borderColor: "primary.light",
+                                        fontWeight: 600,
+                                        marginBottom: 2,
                                         color: "primary.main",
                                     }}
+                                >
+                                    About the Game
+                                </Typography>
+                                <Typography
+                                    variant="body1"
+                                    sx={{ lineHeight: 1.6, color: "#555" }}
+                                    dangerouslySetInnerHTML={{ __html: game.description }}
                                 />
-                            ))}
-                        </Box>
-                    </CardContent>
-                </Card>
 
-                {/* Right Column: Additional Info */}
-                <Card
-                    sx={{
-                        flex: "1",
-                        maxWidth: "350px",
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
-                    <CardContent>
-                        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
-                            Game Details
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
-                            <strong>Release Date:</strong> {game.released}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
-                            <strong>Developer:</strong> {game.developers.map((dev) => dev.name).join(", ")}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
-                            <strong>Publisher:</strong> {game.publishers.map((pub) => pub.name).join(", ")}
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
-                            <strong>Genre:</strong> {game.genres.map((genre) => genre.name).join(", ")}
-                        </Typography>
-                    </CardContent>
-                </Card>
-            </Box>
-            <GameNotes game={game} user={props.user} />
-            <GameReviews gameId={game.id.toString()} user={props.user} />
+                                <Typography
+                                    variant="h5"
+                                    sx={{
+                                        fontWeight: 600,
+                                        marginBottom: 2,
+                                        color: "primary.main",
+                                    }}
+                                >
+                                    Platforms
+                                </Typography>
+                                <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                                    {game.platforms.map((platformData) => (
+                                        <Chip
+                                            key={platformData.platform.name}
+                                            label={platformData.platform.name}
+                                            variant="outlined"
+                                            sx={{
+                                                textTransform: "capitalize",
+                                                fontWeight: 500,
+                                                fontSize: "0.85rem",
+                                                borderRadius: "12px",
+                                                borderColor: "primary.light",
+                                                color: "primary.main",
+                                            }}
+                                        />
+                                    ))}
+                                </Box>
+                            </CardContent>
+                        </Card>
+
+                        <Card
+                            sx={{
+                                flex: "1",
+                                maxWidth: "350px",
+                                borderRadius: "12px",
+                                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                                display: "flex",
+                                flexDirection: "column",
+                            }}
+                        >
+                            <CardContent>
+                                <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
+                                    Game Details
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
+                                    <strong>Release Date:</strong> {game.released}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
+                                    <strong>Developer:</strong> {game.developers.map((dev) => dev.name).join(", ")}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
+                                    <strong>Publisher:</strong> {game.publishers.map((pub) => pub.name).join(", ")}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: "#555", marginBottom: 1 }}>
+                                    <strong>Genre:</strong> {game.genres.map((genre) => genre.name).join(", ")}
+                                </Typography>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                </Box>
+            )}
+
+            {tabIndex === 1 && (
+                <GameNotes game={game} user={props.user} />
+            )}
+
+            {tabIndex === 2 && (
+                <GameReviews gameId={game.id.toString()} user={props.user} />
+            )}
         </Box>
     );
 }

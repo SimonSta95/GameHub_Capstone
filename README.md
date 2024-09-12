@@ -5,7 +5,7 @@
 - Add games to their library 🕹️
 - Write reviews and ratings ✍️⭐
 - Track their progress and goals 🎯
-- Explore new games using real-time data fetched from external APIs like **IGDB** 🌐
+- Explore new games using real-time data fetched from external APIs like **RAWG** 🌐
 
 It’s the ultimate tool for any gamer who wants to keep track of their gaming adventures in one place!
 
@@ -15,7 +15,6 @@ It’s the ultimate tool for any gamer who wants to keep track of their gaming a
 - **Game Reviews & Ratings** 📝: Share your thoughts and give star ratings for each game.
 - **Game Search** 🔍: Search for new games by name using IGDB’s extensive database.
 - **Progress Tracking** ⏳: Set goals, track achievements, and monitor completion percentages for each game.
-- **Responsive Design** 📱: A modern and mobile-friendly UI that looks great on any device.
 - **Interactive Dashboard** 📊 (Future): Visualize gaming statistics and completion goals.
 
 ## 🛠️ Tech Stack
@@ -23,7 +22,7 @@ It’s the ultimate tool for any gamer who wants to keep track of their gaming a
 - **Java 22** ☕: Modern Java for fast, reliable performance.
 - **Spring Boot** 🌱: Backend framework for building RESTful APIs and handling business logic.
 - **MongoDB** 🍃: NoSQL database for flexible and scalable data storage.
-- **RestTemplate/WebClient** 📡: For interacting with external APIs like IGDB.
+- **RestTemplate/WebClient** 📡: For interacting with external APIs like RAWG.
 
 ### Frontend
 - **React** ⚛️: Frontend library for building interactive user interfaces.
@@ -38,7 +37,7 @@ It’s the ultimate tool for any gamer who wants to keep track of their gaming a
 - **Render**: Hosts the App, providing automatic deployment on each push to the main branch with zero-downtime updates.
 
 ### External API Integration
-- **IGDB API** 🎮: Fetch detailed game information (names, covers, genres) using **IGDB's** vast database.
+- **RAWG API** 🎮: Fetch detailed game information (names, covers, genres) using **RWAG's** vast database.
     - **Twitch Authentication** 🧩: Used for authentication to access the IGDB API.
 
 ## 📦 Installation

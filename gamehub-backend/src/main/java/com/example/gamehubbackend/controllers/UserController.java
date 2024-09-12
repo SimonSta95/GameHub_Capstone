@@ -3,6 +3,7 @@ package com.example.gamehubbackend.controllers;
 import com.example.gamehubbackend.models.AddGameDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +28,12 @@ public class UserController {
     }
 
     @GetMapping("/g/{gitHubId}")
-    public User getUserByGitHubId(@PathVariable String gitHubId) {
+    public UserResponse getUserByGitHubId(@PathVariable String gitHubId) {
         return userService.getUserByGitHubId(gitHubId);
     }
 
     @PostMapping
-    public User createUser(@RequestBody UserDTO userDTO) {
+    public UserResponse createUser(@RequestBody UserDTO userDTO) {
         return userService.saveUser(userDTO);
     }
 
@@ -55,4 +56,5 @@ public class UserController {
     public void deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
     }
+
 }

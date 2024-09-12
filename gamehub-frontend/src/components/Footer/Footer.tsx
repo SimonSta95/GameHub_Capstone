@@ -7,6 +7,9 @@ export default function Footer() {
         <Box component={"footer"} className={"footer"}>
             <img className={"footer-logo"} src={logo} alt={"logo"}/>
             <Typography variant={"caption"} className={"footer-text"}>
+                This site uses the RAWG API
+            </Typography>
+            <Typography variant={"caption"} className={"footer-text"}>
                 © {new Date().getFullYear()} Simon Staß. All rights reserved.
             </Typography>
         </Box>

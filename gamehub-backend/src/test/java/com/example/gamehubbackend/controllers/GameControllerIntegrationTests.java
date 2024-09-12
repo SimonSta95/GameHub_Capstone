@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -120,6 +121,7 @@ class GameControllerIntegrationTests {
 
     @Test
     @DirtiesContext
+    @WithMockUser(username = "TestUser", roles = {"USER"})
     void addGame_Test() throws Exception {
 
         mockMvc.perform(post("/api/games")

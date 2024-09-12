@@ -11,6 +11,7 @@ import java.util.List;
 public record User(
    String id,
    String username,
+   String password,
    String gitHubId,
    String avatarUrl,
    String role,

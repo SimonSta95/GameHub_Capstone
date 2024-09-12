@@ -8,6 +8,7 @@ import java.util.List;
 @With
 public record UserDTO(
         String username,
+        String password,
         String gitHubId,
         String avatarUrl,
         String role,

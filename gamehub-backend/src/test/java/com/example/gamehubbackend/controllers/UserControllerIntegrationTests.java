@@ -47,7 +47,7 @@ class UserControllerIntegrationTests {
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
         FrontendGame game3 = new FrontendGame("game3", "Game 3", List.of("Platform3"), "coverImage3");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2, game3), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "Test","1", "link", "USER", List.of(game1, game2, game3), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/1"))
                 .andExpect(status().isOk())
@@ -92,7 +92,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(get("/api/users/g/1"))
                 .andExpect(status().isOk())
@@ -101,7 +101,6 @@ class UserControllerIntegrationTests {
                         {
                           "id": "1",
                           "username": "TestUser1",
-                          "gitHubId": "1",
                           "role": "USER",
                           "gameLibrary": [
                             {
@@ -116,9 +115,7 @@ class UserControllerIntegrationTests {
                               "platforms": ["Platform2"],
                               "coverImage": "coverImage2"
                             }
-                          ],
-                          "creationDate": "2020-01-01T01:00:00",
-                          "lastUpdateDate": "2020-01-01T02:00:00"
+                          ]
                         }
                     """
                 ));
@@ -191,7 +188,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -244,7 +241,7 @@ class UserControllerIntegrationTests {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
         FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isOk());
@@ -258,7 +255,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void addGameToLibrary() throws Exception {
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/addGame")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -303,7 +300,7 @@ class UserControllerIntegrationTests {
     void deleteGameFromLibrary() throws Exception {
         FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
-        userRepository.save(new User("1", "TestUser1", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
+        userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
 
         mockMvc.perform(put("/api/users/deleteGame")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -335,6 +332,166 @@ class UserControllerIntegrationTests {
                         }
                         """
                 ));
+    }
+
+    @Test
+    @WithMockUser
+    void getUserByIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/users/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    void getUserByGitHubIdNotFound() throws Exception {
+        mockMvc.perform(get("/api/users/g/999"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockUser
+    @DirtiesContext
+    void addDuplicateGameToLibrary() throws Exception {
+        userRepository.save(new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(), localDateTime, updateDateTime));
+
+        // Add the game once
+        mockMvc.perform(put("/api/users/addGame")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                {
+                                    "userId": "1",
+                                    "game": {
+                                        "id": "game1",
+                                        "title": "Game 1",
+                                        "platforms": ["Platform1"],
+                                        "coverImage": "coverImage1"
+                                    }
+                                }
+                                """
+                        ))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        {
+                            "id": "1",
+                            "username": "TestUser1",
+                            "gitHubId": "1",
+                            "role": "USER",
+                            "gameLibrary": [
+                              {
+                                "id": "game1",
+                                "title": "Game 1",
+                                "platforms": ["Platform1"],
+                                "coverImage": "coverImage1"
+                              }
+                            ],
+                            "creationDate": "2020-01-01T01:00:00"
+                        }
+                        """
+                ));
+
+        // Attempt to add the same game again
+        mockMvc.perform(put("/api/users/addGame")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                {
+                                    "userId": "1",
+                                    "game": {
+                                        "id": "game1",
+                                        "title": "Game 1",
+                                        "platforms": ["Platform1"],
+                                        "coverImage": "coverImage1"
+                                    }
+                                }
+                                """
+                        ))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        {
+                            "id": "1",
+                            "username": "TestUser1",
+                            "gitHubId": "1",
+                            "role": "USER",
+                            "gameLibrary": [
+                              {
+                                "id": "game1",
+                                "title": "Game 1",
+                                "platforms": ["Platform1"],
+                                "coverImage": "coverImage1"
+                              }
+                            ],
+                            "creationDate": "2020-01-01T01:00:00"
+                        }
+                        """
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    @DirtiesContext
+    void deleteNonExistentGameFromLibrary() throws Exception {
+        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
+
+        userRepository.save(new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
+
+        mockMvc.perform(put("/api/users/deleteGame")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                {
+                                    "userId": "1",
+                                    "game": {
+                                        "id": "nonExistentGame",
+                                        "title": "Non-Existent Game",
+                                        "platforms": ["Platform1"],
+                                        "coverImage": "coverImage1"
+                                    }
+                                }
+                                """
+                        ))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        """
+                        {
+                            "id": "1",
+                            "username": "TestUser1",
+                            "gitHubId": "1",
+                            "role": "USER",
+                            "gameLibrary": [
+                              {
+                                "id": "game1",
+                                "title": "Game 1",
+                                "platforms": ["Platform1"],
+                                "coverImage": "coverImage1"
+                              }
+                            ],
+                            "creationDate": "2020-01-01T01:00:00"
+                        }
+                        """
+                ));
+    }
+
+    @Test
+    @WithMockUser
+    void addUserWithInvalidData() throws Exception {
+        mockMvc.perform(post("/api/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                """
+                                {
+                                  "username": "",
+                                  "gitHubId": "1",
+                                  "role": "INVALID_ROLE",
+                                  "gameLibrary": [],
+                                  "creationDate": "invalid-date",
+                                  "lastUpdateDate": "invalid-date"
+                                }
+                                """
+                        ))
+                .andExpect(status().isBadRequest());
     }
 
 }

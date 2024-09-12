@@ -4,6 +4,7 @@ import {Box, Button, Card, CardContent, Chip, CircularProgress, Typography} from
 import {useEffect, useState} from "react";
 import axios from "axios";
 import GameNotes from "./components/GameNotes.tsx";
+import GameReviews from "./components/GameReviews.tsx";
 
 type GameDetailProps = {
     user: User | null;
@@ -206,6 +207,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
                 </Card>
             </Box>
             <GameNotes game={game} user={props.user} />
+            <GameReviews gameId={game.id.toString()} user={props.user} />
         </Box>
     );
 }

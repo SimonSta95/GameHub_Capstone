@@ -86,3 +86,13 @@ export type editNote = {
     category: string;
     created: string;
 }
+
+export type Review = {
+    id: string;
+    userId: string;
+    gameId: string;
+    username: string;
+    rating: number;
+    content: string;
+    date: string;
+};

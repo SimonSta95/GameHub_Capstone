@@ -13,6 +13,7 @@ import MyLibrary from "./pages/MyLibrary/MyLibrary.tsx";
 import Breadcrumbs from "./components/Breadcrumbs/Breadcrumbs.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
+import UserProfile from "./pages/UserProfile/UserProfile.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null)
@@ -113,6 +114,7 @@ function App() {
                                                                   addGameToLibrary={addGameToLibrary}
                                                                   deleteGameFromLibrary={deleteGameFromLibrary}
                     />} />
+                    <Route path="/user/:id" element={<UserProfile user={user}/>} />
                 </Routes>
             </main>
             <Footer />

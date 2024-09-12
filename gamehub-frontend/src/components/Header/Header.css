@@ -3,11 +3,13 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #ffffff;
+    background-color: #f8f9fa; /* Slightly off-white for a softer look */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible; /* Allow overflow for the tooltip */
+    position: relative; /* Ensure relative positioning for child elements */
+    height: 80px; /* Increase height if needed to accommodate tooltip */
 }
 
 .logo-link {
@@ -28,7 +30,7 @@
 
 .nav-link {
     text-decoration: none;
-    color: #0d1b2a;
+    color: #0d1b2a; /* Dark color for readability */
     font-size: 1rem;
     font-weight: bold;
 }
@@ -41,14 +43,33 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    position: relative; /* Required for tooltip positioning */
 }
 
-.username {
-    font-size: 1rem;
+.username-tooltip {
+    display: none; /* Hide by default */
+    position: absolute;
+    top: 100%; /* Position below the avatar */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    z-index: 1000; /* Ensure tooltip is above other elements */
+    margin-top: 8px; /* Increase space between avatar and tooltip */
+    min-width: 120px; /* Ensure the tooltip has a minimum width */
+    text-align: center; /* Center text within tooltip */
+}
+
+.user-info:hover .username-tooltip {
+    display: block; /* Show on hover */
 }
 
 .auth-button {
-    background-color: #0d1b2a;
+    background-color: #0d1b2a; /* Blue color for the button */
     border: none;
     color: white;
     padding: 6px 12px;
@@ -56,12 +77,14 @@
     cursor: pointer;
     font-size: 0.875rem;
     margin-left: 10px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif; /* Consistent font */
 }
 
 .auth-button:hover {
-    background-color: #415a77;
+    background-color: #0d1b2a; /* Darker shade on hover */
 }
 
 .avatar {
-    border: solid #0d1b2a 2px;
+    border: solid #0d1b2a 2px; /* Dark border for the avatar */
 }

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,20 +42,16 @@ public class ReviewService {
     }
 
     public void updateReview(ReviewDTO updatedReview, String reviewId) {
-        Optional<Review> existingReview = Optional.ofNullable(reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review with ID " + reviewId + " not found.")));
-        if (existingReview.isPresent()) {
-            Review review = new Review(
-                    reviewId,
-                    updatedReview.userId(),
-                    updatedReview.gameId(),
-                    updatedReview.username(),
-                    updatedReview.rating(),
-                    updatedReview.content(),
-                    updatedReview.date()
-            );
-            reviewRepository.save(review);
-        } else {
-            throw new ReviewNotFoundException("Review with ID " + reviewId + " not found.");
-        }
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review with ID " + reviewId + " not found."))
+                .withId(reviewId)
+                .withUserId(updatedReview.userId())
+                .withGameId(updatedReview.gameId())
+                .withUsername(updatedReview.username())
+                .withRating(updatedReview.rating())
+                .withContent(updatedReview.content())
+                .withDate(updatedReview.date());
+
+        reviewRepository.save(review);
+
     }
 }

@@ -52,12 +52,12 @@ class ReviewServiceUnitTest {
         Review reviewToSave = new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
 
         when(idService.randomId()).thenReturn("1");
-        when(reviewRepository.save(any(Review.class))).thenReturn(reviewToSave);
+        when(reviewRepository.save(reviewToSave)).thenReturn(reviewToSave);
 
         reviewService.addReview(reviewDTO);
 
         verify(idService).randomId();
-        verify(reviewRepository).save(any(Review.class));
+        verify(reviewRepository).save(reviewToSave);
     }
 
     @Test
@@ -68,11 +68,11 @@ class ReviewServiceUnitTest {
         Review updatedReview = new Review(reviewId, "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
-        when(reviewRepository.save(any(Review.class))).thenReturn(updatedReview);
+        when(reviewRepository.save(updatedReview)).thenReturn(updatedReview);
 
         reviewService.updateReview(updatedReviewDTO, reviewId);
         verify(reviewRepository).findById(reviewId);
-        verify(reviewRepository).save(any(Review.class));
+        verify(reviewRepository).save(updatedReview);
     }
 
     @Test

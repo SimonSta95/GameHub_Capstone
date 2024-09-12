@@ -57,4 +57,14 @@ public class GlobalExceptionHandler {
         });
         return errors;
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public CustomErrorMessage handleReviwNotFoundException(ReviewNotFoundException e) {
+        return new CustomErrorMessage(
+                e.getMessage(),
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value()
+        );
+    }
 }

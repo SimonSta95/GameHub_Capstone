@@ -30,7 +30,7 @@
 
 .nav-link {
     text-decoration: none;
-    color: #0d1b2a; /* Dark color for readability */
+    color: #1b263b; /* Dark color for readability */
     font-size: 1rem;
     font-weight: bold;
 }
@@ -69,7 +69,7 @@
 }
 
 .auth-button {
-    background-color: #0d1b2a; /* Blue color for the button */
+    background-color: #1b263b; /* Blue color for the button */
     border: none;
     color: white;
     padding: 6px 12px;
@@ -82,9 +82,9 @@
 }
 
 .auth-button:hover {
-    background-color: #0d1b2a; /* Darker shade on hover */
+    background-color: #1b263b; /* Darker shade on hover */
 }
 
 .avatar {
-    border: solid #0d1b2a 2px; /* Dark border for the avatar */
+    border: solid #1b263b 2px; /* Dark border for the avatar */
 }

@@ -72,6 +72,7 @@ export type Publisher = {
 
 export type Note = {
     id: string;
+    name: string;
     userId: string;
     gameId: string;
     title: string;

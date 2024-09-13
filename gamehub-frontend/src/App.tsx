@@ -114,7 +114,7 @@ function App() {
                                                                   addGameToLibrary={addGameToLibrary}
                                                                   deleteGameFromLibrary={deleteGameFromLibrary}
                     />} />
-                    <Route path="/user/:id" element={<UserProfile user={user}/>} />
+                    <Route path="/user/:id" element={<UserProfile/>} />
                 </Routes>
             </main>
             <Footer />

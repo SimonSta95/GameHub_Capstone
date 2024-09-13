@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Document("notes")
 public record Note(
         String id,
+        String name,
         String userId,
         String gameId,
         String title,

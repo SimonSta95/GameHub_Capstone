@@ -21,12 +21,17 @@ public class ReviewService {
     }
 
     public List<Review> getReviewsByGameId(String gameId) {
-        return reviewRepository.findByGameId(gameId);
+        return reviewRepository.findByGameId(gameId).orElseThrow(() -> new ReviewNotFoundException("No notes found for id: " + gameId));
+    }
+
+    public List<Review> getReviewsByUserId(String userId) {
+        return reviewRepository.findByUserId(userId).orElseThrow(() -> new ReviewNotFoundException("No notes found for id: " + userId));
     }
 
     public void addReview(ReviewDTO review) {
         Review reviewToAdd = new Review(
                 idService.randomId(),
+                review.name(),
                 review.userId(),
                 review.gameId(),
                 review.username(),
@@ -44,6 +49,7 @@ public class ReviewService {
     public void updateReview(ReviewDTO updatedReview, String reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new ReviewNotFoundException("Review with ID " + reviewId + " not found."))
                 .withId(reviewId)
+                .withName(updatedReview.name())
                 .withUserId(updatedReview.userId())
                 .withGameId(updatedReview.gameId())
                 .withUsername(updatedReview.username())

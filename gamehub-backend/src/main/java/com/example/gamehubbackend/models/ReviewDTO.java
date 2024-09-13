@@ -2,6 +2,7 @@ package com.example.gamehubbackend.models;
 
 
 public record ReviewDTO(
+        String name,
         String userId,
         String gameId,
         String username,

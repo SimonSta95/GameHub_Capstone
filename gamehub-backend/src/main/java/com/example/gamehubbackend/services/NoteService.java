@@ -25,9 +25,14 @@ public class NoteService {
         return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id));
     }
 
+    public List<Note> getNoteByUser(String id) {
+        return noteRepository.findByUserId(id).orElseThrow(() -> new NoteNotFoundException("No notes found for id: " + id));
+    }
+
     public Note createNote(NoteDTO noteDTO) {
         Note noteToSave = new Note(
                 idService.randomId(),
+                noteDTO.name(),
                 noteDTO.userId(),
                 noteDTO.gameId(),
                 noteDTO.title(),
@@ -41,6 +46,7 @@ public class NoteService {
 
     public Note updateNote(String id, NoteDTO noteDTO) {
         Note noteToUpdate = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
+                .withName(noteDTO.name())
                 .withUserId(noteDTO.userId())
                 .withGameId(noteDTO.gameId())
                 .withTitle(noteDTO.title())

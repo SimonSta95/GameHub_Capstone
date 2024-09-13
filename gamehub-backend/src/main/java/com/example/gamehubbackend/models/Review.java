@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("reviews")
 public record Review(
         String id,
+        String name,
         String userId,
         String gameId,
         String username,

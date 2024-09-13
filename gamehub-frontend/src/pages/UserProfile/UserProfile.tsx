@@ -1,12 +1,55 @@
 import { Box, Typography, Avatar, Divider, Chip, Card, CardContent } from "@mui/material";
-import { User } from "../../types";
-import { Link } from "react-router-dom";
+import { Note, Review, User } from "../../types";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import ProfileNotes from "./components/ProfileNotes.tsx";
+import GameReviews from "./components/ProfileReviews.tsx";
 
-type UserProfileProps = {
-    user: User | null;
-};
 
-export default function UserProfile({ user }: Readonly<UserProfileProps>) {
+export default function UserProfile() {
+    const [user, setUser] = useState<User | null>(null);
+    const [notes, setNotes] = useState<Note[]>([]);
+    const [reviews, setReviews] = useState<Review[]>([])
+
+    const params = useParams();
+
+    const fetchUser = () => {
+        axios.get(`/api/users/${params.id}`)
+            .then((response) => {
+                setUser(response.data);
+            })
+            .catch(() => {
+                setUser(null)
+            })
+    }
+
+    const fetchNotes = () => {
+        axios.get(`/api/notes/user/${params.id}`)
+            .then((response) => {
+                setNotes(response.data);
+            })
+            .catch(() => {
+                setNotes([])
+            })
+    }
+
+    const fetchReviews = () => {
+        axios.get(`/api/reviews/user/${params.id}`)
+            .then((response) => {
+                setReviews(response.data);
+            })
+            .catch(() => {
+                setReviews([])
+            })
+    }
+
+    useEffect(() => {
+        fetchUser();
+        fetchNotes();
+        fetchReviews();
+    }, [params.id]);
+
     if (!user) {
         return (
             <Box sx={{ textAlign: 'center', padding: '24px' }}>
@@ -36,7 +79,7 @@ export default function UserProfile({ user }: Readonly<UserProfileProps>) {
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    background: 'linear-gradient(135deg, #0078d4, #00bfae)',
+                    background: '#1b263b',
                     padding: '24px',
                     borderRadius: '12px',
                     color: 'white',
@@ -176,6 +219,14 @@ export default function UserProfile({ user }: Readonly<UserProfileProps>) {
                     </Box>
                 )}
             </Box>
+            <Divider sx={{ marginBottom: '16px', borderColor: '#1b263b' }} />
+            {/* User Notes Section */}
+            <ProfileNotes notes={notes} />
+            <Divider sx={{ marginBottom: '16px', borderColor: '#1b263b' }} />
+
+            {/* User Review Section */}
+            <GameReviews reviews={reviews} />
+
         </Box>
     );
 }

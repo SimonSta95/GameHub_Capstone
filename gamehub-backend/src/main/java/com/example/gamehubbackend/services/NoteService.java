@@ -25,6 +25,10 @@ public class NoteService {
         return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id));
     }
 
+    public List<Note> getNoteByUser(String id) {
+        return noteRepository.findByUserId(id).orElseThrow(() -> new NoteNotFoundException("No notes found for id: " + id));
+    }
+
     public Note createNote(NoteDTO noteDTO) {
         Note noteToSave = new Note(
                 idService.randomId(),

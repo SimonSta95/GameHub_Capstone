@@ -39,7 +39,7 @@ class ReviewServiceUnitTest {
                 new Review("1", "user1", gameId, "username1", 4.5, "Great game!", "2020-01-01")
         );
 
-        when(reviewRepository.findByGameId(gameId)).thenReturn(reviews);
+        when(reviewRepository.findByGameId(gameId)).thenReturn(Optional.of(reviews));
 
         List<Review> actualReviews = reviewService.getReviewsByGameId(gameId);
         assertEquals(reviews, actualReviews);

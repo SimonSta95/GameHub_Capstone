@@ -222,7 +222,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
             )}
 
             {tabIndex === 2 && (
-                <GameReviews gameId={game.id.toString()} user={props.user} />
+                <GameReviews game={game} user={props.user} />
             )}
         </Box>
     );

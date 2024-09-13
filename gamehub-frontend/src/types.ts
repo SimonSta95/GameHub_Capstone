@@ -82,6 +82,7 @@ export type Note = {
 };
 
 export type editNote = {
+    name: string;
     title: string;
     content: string;
     category: string;
@@ -90,6 +91,7 @@ export type editNote = {
 
 export type Review = {
     id: string;
+    name: string;
     userId: string;
     gameId: string;
     username: string;

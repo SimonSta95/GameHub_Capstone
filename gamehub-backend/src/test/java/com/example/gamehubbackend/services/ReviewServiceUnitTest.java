@@ -21,8 +21,8 @@ class ReviewServiceUnitTest {
     @Test
     void getAllReviews_Test() {
         List<Review> reviews = List.of(
-                new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"),
-                new Review("2", "user2", "game2", "username2", 3.5, "Good game", "2020-01-02")
+                new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"),
+                new Review("2", "Test","user2", "game2", "username2", 3.5, "Good game", "2020-01-02")
         );
 
         when(reviewRepository.findAll()).thenReturn(reviews);
@@ -36,7 +36,7 @@ class ReviewServiceUnitTest {
     void getReviewsByGameId_Test() {
         String gameId = "game1";
         List<Review> reviews = List.of(
-                new Review("1", "user1", gameId, "username1", 4.5, "Great game!", "2020-01-01")
+                new Review("1", "Test","user1", gameId, "username1", 4.5, "Great game!", "2020-01-01")
         );
 
         when(reviewRepository.findByGameId(gameId)).thenReturn(Optional.of(reviews));
@@ -48,8 +48,8 @@ class ReviewServiceUnitTest {
 
     @Test
     void addReview_Test() {
-        ReviewDTO reviewDTO = new ReviewDTO("user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
-        Review reviewToSave = new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
+        ReviewDTO reviewDTO = new ReviewDTO("Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
+        Review reviewToSave = new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
 
         when(idService.randomId()).thenReturn("1");
         when(reviewRepository.save(reviewToSave)).thenReturn(reviewToSave);
@@ -63,9 +63,9 @@ class ReviewServiceUnitTest {
     @Test
     void updateReview_Test() {
         String reviewId = "1";
-        Review existingReview = new Review(reviewId, "user1", "game1", "username1", 4.0, "Good game", "2020-01-01");
-        ReviewDTO updatedReviewDTO = new ReviewDTO("user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
-        Review updatedReview = new Review(reviewId, "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
+        Review existingReview = new Review(reviewId, "Test","user1", "game1", "username1", 4.0, "Good game", "2020-01-01");
+        ReviewDTO updatedReviewDTO = new ReviewDTO("Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
+        Review updatedReview = new Review(reviewId, "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.of(existingReview));
         when(reviewRepository.save(updatedReview)).thenReturn(updatedReview);
@@ -78,7 +78,7 @@ class ReviewServiceUnitTest {
     @Test
     void updateReview_ReviewNotFound_Test() {
         String reviewId = "1";
-        ReviewDTO updatedReviewDTO = new ReviewDTO("user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
+        ReviewDTO updatedReviewDTO = new ReviewDTO("Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01");
 
         when(reviewRepository.findById(reviewId)).thenReturn(Optional.empty());
 

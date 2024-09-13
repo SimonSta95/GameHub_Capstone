@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
-import {Card, CardMedia, CardContent, Typography, Box, Chip, Button} from "@mui/material";
-import {AddCircle, RemoveCircle} from "@mui/icons-material";
-import {GameAPI, User} from "../../types.ts";
+import { Card, CardMedia, CardContent, Typography, Box, Chip, Button } from "@mui/material";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { GameAPI, User } from "../../types.ts";
+import {useToaster} from "../../ToasterContext.tsx";
+
 
 type GameCardProps = {
     user: User | null;
@@ -11,6 +13,7 @@ type GameCardProps = {
 };
 
 export default function GameCard(props: Readonly<GameCardProps>) {
+    const { show } = useToaster(); // Use the useToaster hook
 
     const platformColors: Record<string, string> = {
         'PC': '#0078d4',
@@ -28,10 +31,12 @@ export default function GameCard(props: Readonly<GameCardProps>) {
 
     const handleAddGame = () => {
         props.addGameToLibrary(props.game);
+        show(`Added ${props.game.title} to library!`, 'success');
     };
 
     const handleDeleteGame = () => {
         props.deleteGameFromLibrary(props.game);
+        show(`Removed ${props.game.title} from library!`, 'success');
     };
 
     const isInLibrary = props.user?.gameLibrary.some(gameInLibrary => gameInLibrary.id === props.game.id);

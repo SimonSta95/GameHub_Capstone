@@ -2,6 +2,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography, 
 import GameCard from "../../components/GameCard/GameCard.tsx";
 import {GameAPI, GameAPIResponse, User} from "../../types.ts";
 import { useState} from "react";
+import {useToaster} from "../../ToasterContext.tsx";
 
 type GameGalleryProps = {
     games: GameAPIResponse | null;
@@ -19,6 +20,8 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
 
     const gamesPerPage = 40;
 
+    const { show } = useToaster(); // Use the useToaster hook
+
     const filteredGames = props.games?.games.filter(game =>
         game.title?.toLowerCase().includes(searchQuery?.toLowerCase()) &&
         (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
@@ -32,6 +35,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 props.fetchGames(newPage, searchQuery);
             } catch (error) {
                 console.error('Failed to fetch games:', error);
+                show("Failed to fetch games", "error");
             } finally {
                 setLoading(false);
             }
@@ -49,6 +53,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
             props.fetchGames(1, searchQuery); // Fetch games based on search query
         } catch (error) {
             console.error('Failed to fetch games:', error);
+            show("Failed to fetch games","error")
         } finally {
             setLoading(false);
         }

@@ -1,6 +1,6 @@
 package com.example.gamehubbackend.controllers;
 
-import com.example.gamehubbackend.models.FrontendGame;
+import com.example.gamehubbackend.models.GameFromFrontendDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.repositories.UserRepository;
@@ -40,8 +40,8 @@ class AuthControllerTest {
     @DirtiesContext
     @WithMockUser(username = "TestUser", authorities = {"USER"})
     void getLoggedInUser() throws Exception {
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         userRepository.save(new User("1", "TestUser", "Test", "githubId123", "avatarLink", "USER", List.of(game1, game2), localDate, createdDate));
 

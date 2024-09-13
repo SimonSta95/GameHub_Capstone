@@ -1,7 +1,7 @@
 package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
-import com.example.gamehubbackend.models.FrontendGame;
+import com.example.gamehubbackend.models.GameFromFrontendDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
@@ -30,8 +30,8 @@ class UserServiceUnitTests {
 
     @Test
     void getAllUsers_Test(){
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         List<User> users = List.of(
                 new User("1","TestUser1", "Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime),
@@ -58,7 +58,7 @@ class UserServiceUnitTests {
 
     @Test
     void getUserById_Test(){
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
         User user = new User("1","TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, localDateTime);
 
         when(userRepository.findById("1")).thenReturn(Optional.of(user));
@@ -79,7 +79,7 @@ class UserServiceUnitTests {
 
     @Test
     void getUserByGitHubId_Test(){
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
         User user = new User("1","TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, localDateTime);
 
         UserResponse expected = new UserResponse("1","1","TestUser1","link","USER",List.of(game1));
@@ -102,8 +102,8 @@ class UserServiceUnitTests {
 
     @Test
     void createUser_Test(){
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         UserDTO userDTO = new UserDTO("TestUser1","Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime);
         User userToSave = new User("1","TestUser1", "encodedPassword", "1","link", "USER", List.of(game1, game2), localDateTime, localDateTime); // Set the encoded password
@@ -131,8 +131,8 @@ class UserServiceUnitTests {
     @Test
     void updateUser_Test_Success(){
         String id = "1";
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         User existingUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime);
         UserDTO updateUserDTO = new UserDTO("TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, updateDateTime);
@@ -155,7 +155,7 @@ class UserServiceUnitTests {
     @Test
     void updateUser_Test_Failure(){
         String id = "1";
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
         UserDTO userDTO = new UserDTO("TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, updateDateTime);
 
@@ -174,8 +174,8 @@ class UserServiceUnitTests {
     @Test
     void addGameToLibrary_Test() {
         String id = "1";
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         User existingUser = new User("1", "TestUser1", "Test", "1", "link", "USER", new ArrayList<>(List.of(game1)), localDateTime, localDateTime);
         User updatedUser = new User("1", "TestUser1", "Test", "1", "link", "USER", new ArrayList<>(List.of(game1, game2)), localDateTime, localDateTime);
@@ -193,8 +193,8 @@ class UserServiceUnitTests {
     @Test
     void deleteGameFromLibrary_Test() {
         String userId = "1";
-        FrontendGame game1 = new FrontendGame("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        FrontendGame game2 = new FrontendGame("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         // Mocking an existing user with both games in their library
         User existingUser = new User(

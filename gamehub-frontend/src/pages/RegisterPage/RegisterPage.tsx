@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
 import {Link, useNavigate} from 'react-router-dom';
+import {useToaster} from "../../ToasterContext.tsx";
 
 export default function RegisterPage() {
     const [username, setUsername] = useState<string>("");
@@ -10,6 +11,8 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+
+    const { show } = useToaster();
 
     const register = () => {
         if (password !== confirmedPassword) {
@@ -31,6 +34,7 @@ export default function RegisterPage() {
             .catch(e => {
                 setPassword("");
                 console.error(e);
+                show("Something went wrong!","error")
             })
             .finally(() => setLoading(false));
     }

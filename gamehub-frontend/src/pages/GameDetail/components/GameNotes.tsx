@@ -22,6 +22,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Cancel';
+import {useToaster} from "../../../ToasterContext.tsx";
+
 
 type GameNotesProps = {
     game: GameDetailAPIResponse;
@@ -58,6 +60,8 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
     const [noteToDelete, setNoteToDelete] = useState<string | null>(null);
 
+    const { show } = useToaster(); // Use the useToaster hook
+
     useEffect(() => {
         const fetchNotes = async () => {
             try {
@@ -67,6 +71,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             } catch (error) {
                 console.error("Error fetching notes:", error);
                 setError('Failed to fetch notes.');
+                show('Failed to fetch notes.', 'error'); // Show error toast
             } finally {
                 setLoading(false);
             }
@@ -96,8 +101,10 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             });
             setNotes([...notes, response.data]);
             setNewNote({ title: "", content: "", category: "Note" }); // Reset new note form
+            show('Note added successfully!', 'success'); // Show success toast
         } catch (error) {
             console.error("Failed to create note:", error);
+            show('Failed to add note.', 'error'); // Show error toast
         } finally {
             setNoteLoading(false);
         }
@@ -113,8 +120,10 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             try {
                 await axios.delete(`/api/notes/${noteToDelete}`);
                 setNotes(notes.filter(note => note.id !== noteToDelete));
+                show('Note deleted successfully!', 'success'); // Show success toast
             } catch (error) {
                 console.error("Failed to delete note:", error);
+                show('Failed to delete note.', 'error'); // Show error toast
             } finally {
                 setConfirmDeleteOpen(false);
                 setNoteToDelete(null);
@@ -148,8 +157,10 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             const response = await axios.put(`/api/notes/${noteId}`, updatedNote);
             setNotes(notes.map(note => (note.id === noteId ? response.data : note)));
             setEditingNoteId(null);
+            show('Note updated successfully!', 'success'); // Show success toast
         } catch (error) {
             console.error("Failed to update note:", error);
+            show('Failed to update note.', 'error'); // Show error toast
         }
     };
 

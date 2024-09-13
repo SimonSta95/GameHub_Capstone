@@ -3,9 +3,11 @@ import { Box, Button, Card, CardContent, Chip, CircularProgress, Typography, Tab
 import { useEffect, useState, SyntheticEvent } from "react";
 import axios from "axios";
 
+
 import GameNotes from "./components/GameNotes.tsx";
 import GameReviews from "./components/GameReviews.tsx";
 import { GameDetailAPIResponse, User } from "../../types.ts";
+import {useToaster} from "../../ToasterContext.tsx";
 
 type GameDetailProps = {
     user: User | null;
@@ -20,15 +22,19 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
     const params = useParams();
     const id: string | undefined = params.id;
 
+    const { show } = useToaster(); // Use the useToaster hook
+
     const fetchGame = async () => {
         try {
             const response = await axios.get(`/api/games/fetch/${id}`);
             setGame(response.data);
             setLoading(false);
+            show('Game details loaded successfully!', 'success'); // Show success toast
         } catch (error) {
             console.error(error);
             setError("Failed to fetch game details.");
             setLoading(false);
+            show('Failed to load game details.', 'error'); // Show error toast
         }
     };
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Rating, TextField, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
-import {User, Review, GameDetailAPIResponse} from "../../../types.ts";
+import { User, Review, GameDetailAPIResponse } from "../../../types.ts";
 
 type GameReviewsProps = {
     game: GameDetailAPIResponse;
@@ -13,6 +13,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
     const [newReview, setNewReview] = useState<string>("");
     const [newRating, setNewRating] = useState<number | null>(null);
     const [averageRating, setAverageRating] = useState<number | null>(null);
+    const [reviewCount, setReviewCount] = useState<number>(0); // State for review count
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [editReviewId, setEditReviewId] = useState<string | null>(null);
@@ -38,13 +39,16 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
             const average = fetchedReviews.length > 0 ? totalRating / fetchedReviews.length : 0;
             setAverageRating(average);
 
+            // Set review count
+            setReviewCount(fetchedReviews.length);
+
             // Find the user's review if it exists
             const userReview = fetchedReviews.find((review: Review) => review.userId === user?.id) || null;
             setUserReview(userReview);
 
             setLoading(false);
         } catch (error) {
-            console.log(error)
+            console.error("Failed to fetch reviews:", error);
             setError("Failed to fetch reviews.");
             setLoading(false);
         }
@@ -54,6 +58,8 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
     const handleSubmitReview = async () => {
         if (!user) {
             setError("You must be logged in to add a review.");
+            setSnackbarMessage("Please log in to add a review.");
+            setSnackbarOpen(true);
             return;
         }
         if (editReviewId && editReviewRating === null) {
@@ -100,8 +106,9 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
             }
             fetchReviews(); // Refresh reviews
         } catch (error) {
-            console.log(error)
+            console.error("Failed to submit review:", error);
             setError("Failed to submit review.");
+            setSnackbarMessage("There was an error submitting your review.");
         } finally {
             setSubmitting(false);
             setSnackbarOpen(true);
@@ -139,8 +146,9 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 setReviewToDelete(null);
                 setSnackbarMessage("Review deleted successfully!");
             } catch (error) {
-                console.log(error)
+                console.error("Failed to delete review:", error);
                 setError("Failed to delete review.");
+                setSnackbarMessage("There was an error deleting the review.");
             } finally {
                 setDeleting(false);
                 setSnackbarOpen(true);
@@ -173,6 +181,11 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                     {error}
                 </Typography>
             )}
+
+            {/* Review Count */}
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                {reviewCount} {reviewCount === 1 ? "Review" : "Reviews"}
+            </Typography>
 
             {/* Average Rating */}
             {averageRating !== null && (
@@ -281,7 +294,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 autoHideDuration={6000}
                 onClose={() => setSnackbarOpen(false)}
             >
-                <Alert onClose={() => setSnackbarOpen(false)} severity="success">
+                <Alert onClose={() => setSnackbarOpen(false)} severity={error ? "error" : "success"}>
                     {snackbarMessage}
                 </Alert>
             </Snackbar>

@@ -15,7 +15,7 @@ public record User(
    String gitHubId,
    String avatarUrl,
    String role,
-   List<FrontendGame> gameLibrary,
+   List<GameFromFrontendDTO> gameLibrary,
    LocalDateTime creationDate,
    LocalDateTime lastUpdateDate
 ) {}

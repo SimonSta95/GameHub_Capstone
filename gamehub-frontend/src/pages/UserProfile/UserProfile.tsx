@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProfileNotes from "./components/ProfileNotes.tsx";
 import GameReviews from "./components/ProfileReviews.tsx";
+import {useToaster} from "../../ToasterContext.tsx";
 
 
 export default function UserProfile() {
@@ -14,12 +15,15 @@ export default function UserProfile() {
 
     const params = useParams();
 
+    const { show } = useToaster();
+
     const fetchUser = () => {
         axios.get(`/api/users/${params.id}`)
             .then((response) => {
                 setUser(response.data);
             })
             .catch(() => {
+                show("Failed to fetch User", "error")
                 setUser(null)
             })
     }
@@ -30,6 +34,7 @@ export default function UserProfile() {
                 setNotes(response.data);
             })
             .catch(() => {
+                show("Failed to fetch Notes", "error")
                 setNotes([])
             })
     }
@@ -40,6 +45,7 @@ export default function UserProfile() {
                 setReviews(response.data);
             })
             .catch(() => {
+                show("Failed to fetch Reviews", "error")
                 setReviews([])
             })
     }

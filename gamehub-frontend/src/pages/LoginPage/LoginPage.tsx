@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
 import {Link, useNavigate} from 'react-router-dom';
+import {useToaster} from "../../ToasterContext.tsx";
 
 type loginPageProps = {
     loadUser: () => void;
@@ -12,6 +13,7 @@ export default function LoginPage(props: Readonly<loginPageProps>) {
     const [password, setPassword] = useState<string>("");
     const [loading, setLoading] = useState(false);
 
+    const { show } = useToaster();
     const navigate = useNavigate();
 
     const login = () => {
@@ -26,12 +28,13 @@ export default function LoginPage(props: Readonly<loginPageProps>) {
                 setPassword("");
                 setUsername("");
                 props.loadUser();
-                navigate("/")
+                navigate("/");
 
             })
             .catch(e => {
                 setPassword("");
                 console.error(e);
+                show("Something went wrong!","error")
             })
             .finally(() => setLoading(false));
     }

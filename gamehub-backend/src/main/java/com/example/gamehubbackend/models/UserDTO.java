@@ -12,7 +12,7 @@ public record UserDTO(
         String gitHubId,
         String avatarUrl,
         String role,
-        List<FrontendGame> gameLibrary,
+        List<GameFromFrontendDTO> gameLibrary,
         LocalDateTime creationDate,
         LocalDateTime lastUpdateDate
 ) {}

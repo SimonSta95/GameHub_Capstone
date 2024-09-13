@@ -49,6 +49,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [noteLoading, setNoteLoading] = useState(false);
     const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
     const [editNote, setEditNote] = useState<editNote>({
+        name: props.game.name,
         title: "",
         content: "",
         category: "",
@@ -87,6 +88,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
         try {
             const response = await axios.post<Note>(`/api/notes`, {
                 userId: props.user.id,
+                name: props.game.name,
                 gameId: props.game.id,
                 title: newNote.title,
                 content: newNote.content,
@@ -128,6 +130,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const handleEditNote = (note: Note) => {
         setEditingNoteId(note.id);
         setEditNote({
+            name: props.game.name,
             title: note.title,
             content: note.content,
             category: note.category,

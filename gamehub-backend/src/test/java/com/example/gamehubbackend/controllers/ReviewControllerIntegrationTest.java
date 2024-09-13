@@ -36,7 +36,7 @@ class ReviewControllerIntegrationTest {
     @WithMockUser
     @DirtiesContext
     void getReviewsByGameId() throws Exception {
-        reviewRepository.save(new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
+        reviewRepository.save(new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
 
         mockMvc.perform(get("/api/reviews/game1"))
                 .andExpect(status().isOk())
@@ -45,6 +45,7 @@ class ReviewControllerIntegrationTest {
                         [
                             {
                                 "id": "1",
+                                "name": "Test",
                                 "userId": "user1",
                                 "gameId": "game1",
                                 "username": "username1",
@@ -109,13 +110,14 @@ class ReviewControllerIntegrationTest {
     @WithMockUser
     @DirtiesContext
     void updateReview() throws Exception {
-        reviewRepository.save(new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
+        reviewRepository.save(new Review("1","Test", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
 
         mockMvc.perform(put("/api/reviews/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 """
                                 {
+                                  "name": "Test",
                                   "userId": "user1",
                                   "gameId": "game1",
                                   "username": "username1",
@@ -133,6 +135,7 @@ class ReviewControllerIntegrationTest {
                         """
                         [
                             {
+                                "name": "Test",
                                 "userId": "user1",
                                 "gameId": "game1",
                                 "username": "username1",
@@ -149,7 +152,7 @@ class ReviewControllerIntegrationTest {
     @WithMockUser
     @DirtiesContext
     void deleteReview() throws Exception {
-        reviewRepository.save(new Review("1", "user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
+        reviewRepository.save(new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
 
         mockMvc.perform(delete("/api/reviews/1"))
                 .andExpect(status().isOk());

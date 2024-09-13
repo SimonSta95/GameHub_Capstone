@@ -20,10 +20,13 @@ export default function Header(props: Readonly<HeaderProps>) {
             <nav className="nav">
                 {props.user && <Link to="/games" className="nav-link">Games</Link>}
                 {props.user && <Link to="/my-library" className="nav-link">My Library</Link>}
+
                 {props.user ? (
                     <div className="user-info">
-                        <Avatar className="avatar" alt={props.user.username} src={props.user.avatarUrl} />
-                        <span className="username">{props.user.username}</span>
+                        <Link to={`/user/${props.user.id}`} className="user-link">
+                            <Avatar className="avatar" alt={props.user.username} src={props.user.avatarUrl} />
+                        </Link>
+                        <div className="username-tooltip">{props.user.username}</div>
                         <button className="auth-button" onClick={props.onLogout}>Logout</button>
                     </div>
                 ) : (

@@ -40,7 +40,7 @@ class NoteControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void getNoteById() throws Exception {
-        noteRepository.save(new Note("1", "user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
+        noteRepository.save(new Note("1", "Test","user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
 
         mockMvc.perform(get("/api/notes/1"))
                 .andExpect(status().isOk())
@@ -115,7 +115,7 @@ class NoteControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void updateNote() throws Exception {
-        noteRepository.save(new Note("1", "user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
+        noteRepository.save(new Note("1", "Test","user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
 
         mockMvc.perform(put("/api/notes/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -152,7 +152,7 @@ class NoteControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void deleteNote() throws Exception {
-        noteRepository.save(new Note("1", "user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
+        noteRepository.save(new Note("1", "Test","user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
 
         mockMvc.perform(delete("/api/notes/1"))
                 .andExpect(status().isOk());

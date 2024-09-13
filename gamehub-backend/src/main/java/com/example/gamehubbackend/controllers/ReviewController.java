@@ -25,6 +25,11 @@ public class ReviewController {
         return reviewService.getReviewsByGameId(gameId);
     }
 
+    @GetMapping("/user/{userId}")
+    public List<Review> getReviewsByUserId(@PathVariable String userId) {
+        return reviewService.getReviewsByUserId(userId);
+    }
+
     @PostMapping
     public void addReview(@RequestBody ReviewDTO review) {
         reviewService.addReview(review);

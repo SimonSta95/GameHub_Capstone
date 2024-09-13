@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Rating, TextField, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
-import { User, Review } from "../../../types.ts";
+import {User, Review, GameDetailAPIResponse} from "../../../types.ts";
 
 type GameReviewsProps = {
-    gameId: string;
+    game: GameDetailAPIResponse;
     user: User | null;
 };
 
-export default function GameReviews({ gameId, user }: Readonly<GameReviewsProps>) {
+export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [newReview, setNewReview] = useState<string>("");
     const [newRating, setNewRating] = useState<number | null>(null);
@@ -29,7 +29,7 @@ export default function GameReviews({ gameId, user }: Readonly<GameReviewsProps>
     // Fetch reviews and user review for the game
     const fetchReviews = async () => {
         try {
-            const response = await axios.get(`/api/reviews/${gameId}`);
+            const response = await axios.get(`/api/reviews/${game.id}`);
             const fetchedReviews = response.data;
             setReviews(fetchedReviews);
 
@@ -74,7 +74,8 @@ export default function GameReviews({ gameId, user }: Readonly<GameReviewsProps>
                 // Update existing review
                 await axios.put(`/api/reviews/${editReviewId}`, {
                     userId: user.id,
-                    gameId: gameId,
+                    name: game.name,
+                    gameId: game.id,
                     username: user.username,
                     rating: editReviewRating,
                     content: editReviewContent,
@@ -86,7 +87,8 @@ export default function GameReviews({ gameId, user }: Readonly<GameReviewsProps>
                 // Add new review
                 await axios.post(`/api/reviews`, {
                     userId: user.id,
-                    gameId: gameId,
+                    name: game.name,
+                    gameId: game.id,
                     username: user.username,
                     rating: newRating,
                     content: newReview,
@@ -154,7 +156,7 @@ export default function GameReviews({ gameId, user }: Readonly<GameReviewsProps>
 
     useEffect(() => {
         fetchReviews();
-    }, [gameId]);
+    }, [game.id]);
 
     if (loading) {
         return <CircularProgress />;

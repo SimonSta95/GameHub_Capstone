@@ -93,7 +93,7 @@ class AuthControllerTest {
                         .content(objectMapper.writeValueAsString(userDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username").value("NewUser"))
-                .andExpect(jsonPath("$.githubId").value("githubId123")); // Adjust to match the field name
+                .andExpect(jsonPath("$.githubId").value("githubId123")); // Adjust to match the field gameTitle
     }
 
     @Test

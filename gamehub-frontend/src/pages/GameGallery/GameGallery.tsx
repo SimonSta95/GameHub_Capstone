@@ -1,8 +1,8 @@
 import { Box, FormControl, InputLabel, MenuItem, Select, TextField, Typography, Button, CircularProgress } from '@mui/material';
 import GameCard from "../../components/GameCard/GameCard.tsx";
-import {GameAPI, GameAPIResponse, User} from "../../types.ts";
-import { useState} from "react";
-import {useToaster} from "../../ToasterContext.tsx";
+import { GameAPI, GameAPIResponse, User } from "../../types.ts";
+import { useState } from "react";
+import { useToaster } from "../../ToasterContext.tsx";
 
 type GameGalleryProps = {
     games: GameAPIResponse | null;
@@ -13,54 +13,60 @@ type GameGalleryProps = {
 };
 
 export default function GameGallery(props: Readonly<GameGalleryProps>) {
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedPlatform, setSelectedPlatform] = useState<string>('');
-    const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const gamesPerPage = 40;
 
-    const { show } = useToaster(); // Use the useToaster hook
+    const { show } = useToaster();
 
+    // Filter games based on search query and selected platform
     const filteredGames = props.games?.games.filter(game =>
         game.title?.toLowerCase().includes(searchQuery?.toLowerCase()) &&
         (selectedPlatform === '' || game.platforms.includes(selectedPlatform))
     );
 
+    // Handle page change
     const handlePageChange = (newPage: number) => {
         if (newPage !== currentPage) {
             setLoading(true);
             setCurrentPage(newPage);
             try {
-                props.fetchGames(newPage, searchQuery);
+                props.fetchGames(newPage, searchQuery); // Fetch games for the new page
             } catch (error) {
                 console.error('Failed to fetch games:', error);
-                show("Failed to fetch games", "error");
+                show("Failed to fetch games", "error"); // Show error toast
             } finally {
                 setLoading(false);
             }
         }
     };
 
+    // Handle search input change
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
 
+    // Handle search form submission
     const handleSearchSubmit = () => {
         setLoading(true);
-        setCurrentPage(1); // Reset to page 1 on search
+        setCurrentPage(1); // Reset to page 1 on new search
         try {
-            props.fetchGames(1, searchQuery); // Fetch games based on search query
+            props.fetchGames(1, searchQuery); // Fetch games based on new search query
         } catch (error) {
             console.error('Failed to fetch games:', error);
-            show("Failed to fetch games","error")
+            show("Failed to fetch games", "error"); // Show error toast
         } finally {
             setLoading(false);
         }
     };
 
+    // Slice filtered games to show only the number per page
     const displayedGames = filteredGames?.slice(0, gamesPerPage);
 
+    // Render game cards or a message if no games are found
     const renderGameCards = () => {
         if (!displayedGames || displayedGames.length === 0) {
             return (
@@ -97,6 +103,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 padding: '16px',
             }}
         >
+            {/* Search and filter controls */}
             <Box
                 sx={{
                     marginBottom: '16px',
@@ -142,6 +149,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 </Button>
             </Box>
 
+            {/* Display game cards in a grid layout */}
             <Box
                 sx={{
                     display: 'grid',
@@ -158,6 +166,7 @@ export default function GameGallery(props: Readonly<GameGalleryProps>) {
                 )}
             </Box>
 
+            {/* Pagination controls */}
             <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
                 <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                     Previous

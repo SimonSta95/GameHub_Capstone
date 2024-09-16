@@ -3,27 +3,28 @@ import { Box, Button, Card, CardContent, Chip, CircularProgress, Typography, Tab
 import { useEffect, useState, SyntheticEvent } from "react";
 import axios from "axios";
 
-
 import GameNotes from "./components/GameNotes.tsx";
 import GameReviews from "./components/GameReviews.tsx";
 import { GameDetailAPIResponse, User } from "../../types.ts";
-import {useToaster} from "../../ToasterContext.tsx";
+import { useToaster } from "../../ToasterContext.tsx";
 
 type GameDetailProps = {
     user: User | null;
 };
 
 export default function GameDetail(props: Readonly<GameDetailProps>) {
-    const [game, setGame] = useState<GameDetailAPIResponse | undefined | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [game, setGame] = useState<GameDetailAPIResponse | undefined | null>(null); // Game details
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
-    const [tabIndex, setTabIndex] = useState(0);
+    const [tabIndex, setTabIndex] = useState<number>(0);
+
     const navigate = useNavigate();
     const params = useParams();
     const id: string | undefined = params.id;
 
-    const { show } = useToaster(); // Use the useToaster hook
+    const { show } = useToaster();
 
+    // Fetch game details from the API
     const fetchGame = async () => {
         try {
             const response = await axios.get(`/api/games/fetch/${id}`);
@@ -38,12 +39,14 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
         }
     };
 
+    // Fetch game details when component mounts or ID changes
     useEffect(() => {
         if (id) {
             fetchGame();
         }
     }, [id]);
 
+    // Show spinner while loading
     if (loading) {
         return (
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
@@ -52,6 +55,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
         );
     }
 
+    // Show error message if there is an error
     if (error) {
         return (
             <Box sx={{ textAlign: "center", padding: "24px" }}>
@@ -62,6 +66,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
         );
     }
 
+    // Show message if no game details are found
     if (!game) {
         return (
             <Box sx={{ textAlign: "center", padding: "24px" }}>
@@ -70,13 +75,14 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
         );
     }
 
+    // Handle tab change
     const handleTabChange = (_event: SyntheticEvent, newValue: number) => {
         setTabIndex(newValue);
     };
 
     return (
         <Box sx={{ maxWidth: "1200px", margin: "0 auto", padding: "32px 16px" }}>
-            {/* Back to Gallery Button */}
+            {/* Button to navigate back to the gallery */}
             <Button
                 onClick={() => navigate("/games")}
                 variant="outlined"
@@ -121,7 +127,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
                 </Box>
             </Box>
 
-            {/* Tabs for Game Info, Notes, and Reviews */}
+            {/* Tabs for different sections of the game details */}
             <Tabs value={tabIndex} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
                 <Tab label="About" />
                 <Tab label="Notes" />
@@ -223,6 +229,7 @@ export default function GameDetail(props: Readonly<GameDetailProps>) {
                 </Box>
             )}
 
+            {/* Conditionally render the GameNotes and GameReviews components based on selected tab */}
             {tabIndex === 1 && (
                 <GameNotes game={game} user={props.user} />
             )}

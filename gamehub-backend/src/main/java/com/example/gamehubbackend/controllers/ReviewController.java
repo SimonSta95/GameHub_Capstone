@@ -13,33 +13,66 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewController {
 
-    private final ReviewService reviewService;
+    private final ReviewService reviewService;  // Service for handling review operations
 
+    /**
+     * Get all reviews.
+     *
+     * @return List of all reviews
+     */
     @GetMapping
     public List<Review> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
+    /**
+     * Get reviews by game ID.
+     *
+     * @param gameId the ID of the game
+     * @return List of reviews for the specified game
+     */
     @GetMapping("/{gameId}")
     public List<Review> getReviewsByGameId(@PathVariable String gameId) {
         return reviewService.getReviewsByGameId(gameId);
     }
 
+    /**
+     * Get reviews by user ID.
+     *
+     * @param userId the ID of the user
+     * @return List of reviews submitted by the specified user
+     */
     @GetMapping("/user/{userId}")
     public List<Review> getReviewsByUserId(@PathVariable String userId) {
         return reviewService.getReviewsByUserId(userId);
     }
 
+    /**
+     * Add a new review.
+     *
+     * @param review the data transfer object containing review details
+     */
     @PostMapping
     public void addReview(@RequestBody ReviewDTO review) {
         reviewService.addReview(review);
     }
 
+    /**
+     * Update an existing review.
+     *
+     * @param review the data transfer object containing updated review details
+     * @param reviewId the ID of the review to be updated
+     */
     @PutMapping("/{reviewId}")
     public void updateReview(@RequestBody ReviewDTO review, @PathVariable String reviewId) {
         reviewService.updateReview(review, reviewId);
     }
 
+    /**
+     * Delete a review by its ID.
+     *
+     * @param reviewId the ID of the review to be deleted
+     */
     @DeleteMapping("/{reviewId}")
     public void deleteReview(@PathVariable String reviewId) {
         reviewService.deleteReview(reviewId);

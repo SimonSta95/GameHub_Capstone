@@ -1,23 +1,24 @@
 import { FormEvent, useState } from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
-import {Link, useNavigate} from 'react-router-dom';
-import {useToaster} from "../../ToasterContext.tsx";
+import { Link, useNavigate } from 'react-router-dom';
+import { useToaster } from "../../ToasterContext.tsx";
 
-type loginPageProps = {
+type LoginPageProps = {
     loadUser: () => void;
-}
+};
 
-export default function LoginPage(props: Readonly<loginPageProps>) {
+export default function LoginPage(props: Readonly<LoginPageProps>) {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const { show } = useToaster();
     const navigate = useNavigate();
 
+    // Function to handle login process
     const login = () => {
-        setLoading(true);
+        setLoading(true); // Start loading spinner
         axios.post("api/auth/login", {}, {
             auth: {
                 username: username,
@@ -25,24 +26,26 @@ export default function LoginPage(props: Readonly<loginPageProps>) {
             }
         })
             .then(() => {
+                // On successful login
                 setPassword("");
                 setUsername("");
                 props.loadUser();
                 navigate("/");
-
             })
             .catch(e => {
+                // On login error
                 setPassword("");
                 console.error(e);
-                show("Something went wrong!","error")
+                show("Something went wrong!", "error"); // Show error notification
             })
             .finally(() => setLoading(false));
-    }
+    };
 
+    // Function to handle form submission
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent default form submission
         login();
-    }
+    };
 
     return (
         <Box

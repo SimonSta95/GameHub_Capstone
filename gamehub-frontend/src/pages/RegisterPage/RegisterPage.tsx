@@ -1,22 +1,24 @@
 import { FormEvent, useState } from "react";
 import axios from "axios";
 import { Box, Button, TextField, Typography, CircularProgress } from '@mui/material';
-import {Link, useNavigate} from 'react-router-dom';
-import {useToaster} from "../../ToasterContext.tsx";
+import { Link, useNavigate } from 'react-router-dom';
+import { useToaster } from "../../ToasterContext.tsx";
 
 export default function RegisterPage() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmedPassword, setConfirmedPassword] = useState<string>("");
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
-
     const { show } = useToaster();
 
+    // Function to handle user registration
     const register = () => {
+        // Check if passwords match
         if (password !== confirmedPassword) {
             console.error("Passwords do not match");
+            show("Passwords do not match", "error");
             return;
         }
 
@@ -26,23 +28,26 @@ export default function RegisterPage() {
             password: password,
         })
             .then(() => {
+                // Clear input fields and navigate to home
                 setPassword("");
                 setUsername("");
                 setConfirmedPassword("");
-                navigate("/")
+                navigate("/");
             })
             .catch(e => {
+                // Clear password fields and show error message
                 setPassword("");
                 console.error(e);
-                show("Something went wrong!","error")
+                show("Something went wrong!", "error");
             })
             .finally(() => setLoading(false));
-    }
+    };
 
+    // Function to handle form submission
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        event.preventDefault(); // Prevent default form submission
         register();
-    }
+    };
 
     return (
         <Box
@@ -104,7 +109,7 @@ export default function RegisterPage() {
                     variant="contained"
                     color="primary"
                     sx={{ marginTop: '16px' }}
-                    disabled={loading}
+                    disabled={loading} // Disable button while loading
                 >
                     {loading ? <CircularProgress size={24} /> : 'Register'}
                 </Button>

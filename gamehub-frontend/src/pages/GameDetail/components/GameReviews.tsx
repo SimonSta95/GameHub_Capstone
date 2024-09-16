@@ -13,21 +13,21 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
     const [newReview, setNewReview] = useState<string>("");
     const [newRating, setNewRating] = useState<number | null>(null);
     const [averageRating, setAverageRating] = useState<number | null>(null);
-    const [reviewCount, setReviewCount] = useState<number>(0); // State for review count
-    const [loading, setLoading] = useState(true);
+    const [reviewCount, setReviewCount] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [editReviewId, setEditReviewId] = useState<string | null>(null);
     const [editReviewContent, setEditReviewContent] = useState<string>("");
     const [editReviewRating, setEditReviewRating] = useState<number | null>(null);
-    const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
+    const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
-    const [submitting, setSubmitting] = useState(false);
-    const [deleting, setDeleting] = useState(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [deleting, setDeleting] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
     const [userReview, setUserReview] = useState<Review | null>(null);
 
-    // Fetch reviews and user review for the game
+    // Fetch reviews and calculate average rating
     const fetchReviews = async () => {
         try {
             const response = await axios.get(`/api/reviews/${game.id}`);
@@ -42,7 +42,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
             // Set review count
             setReviewCount(fetchedReviews.length);
 
-            // Find the user's review if it exists
+            // Find user's review if it exists
             const userReview = fetchedReviews.find((review: Review) => review.userId === user?.id) || null;
             setUserReview(userReview);
 
@@ -54,7 +54,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
         }
     };
 
-    // Add or update a review
+    // Handle submitting a new or edited review
     const handleSubmitReview = async () => {
         if (!user) {
             setError("You must be logged in to add a review.");
@@ -80,7 +80,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 // Update existing review
                 await axios.put(`/api/reviews/${editReviewId}`, {
                     userId: user.id,
-                    name: game.name,
+                    gameTitle: game.name,
                     gameId: game.id,
                     username: user.username,
                     rating: editReviewRating,
@@ -93,7 +93,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 // Add new review
                 await axios.post(`/api/reviews`, {
                     userId: user.id,
-                    name: game.name,
+                    gameTitle: game.name,
                     gameId: game.id,
                     username: user.username,
                     rating: newRating,
@@ -115,27 +115,27 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
         }
     };
 
-    // Handle edit review
+    // Handle starting the edit process for a review
     const handleEdit = (review: Review) => {
         setEditReviewId(review.id);
         setEditReviewContent(review.content);
         setEditReviewRating(review.rating);
     };
 
-    // Cancel edit review
+    // Cancel editing a review
     const handleCancelEdit = () => {
         setEditReviewId(null);
         setEditReviewContent("");
         setEditReviewRating(null);
     };
 
-    // Handle delete review
+    // Handle requesting to delete a review
     const handleDelete = (reviewId: string) => {
         setReviewToDelete(reviewId);
         setConfirmDeleteDialogOpen(true);
     };
 
-    // Confirm delete review
+    // Confirm and delete the selected review
     const confirmDelete = async () => {
         if (reviewToDelete) {
             setDeleting(true);
@@ -156,16 +156,18 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
         }
     };
 
-    // Cancel delete review
+    // Cancel the delete action
     const cancelDelete = () => {
         setConfirmDeleteDialogOpen(false);
         setReviewToDelete(null);
     };
 
+    // Fetch reviews when the component mounts or game ID changes
     useEffect(() => {
         fetchReviews();
     }, [game.id]);
 
+    // Show a spinner while reviews are being fetched
     if (loading) {
         return <CircularProgress />;
     }

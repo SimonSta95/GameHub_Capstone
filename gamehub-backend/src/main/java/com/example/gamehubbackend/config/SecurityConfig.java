@@ -49,7 +49,6 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)  // Disable CORS configuration for simplicity
                 .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection for API endpoints
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/users/register").permitAll()  // Allow public access to registration endpoint
                         .requestMatchers("/api/games/**").authenticated()  // Require authentication for game-related endpoints
                         .requestMatchers("/api/auth/me").authenticated()  // Require authentication for user info endpoint
                         .anyRequest().permitAll()  // Allow all other requests without authentication

@@ -17,12 +17,14 @@ export default function Header(props: Readonly<HeaderProps>) {
                 <img className="logo" src={logo} alt="GameHub Logo" />
             </Link>
 
-            <nav className="nav">
+            <nav className="nav"> {/* Navigation bar */}
+                {/* Conditionally render navigation links if user is logged in */}
                 {props.user && <Link to="/games" className="nav-link">Games</Link>}
                 {props.user && <Link to="/my-library" className="nav-link">My Library</Link>}
 
+                {/* Conditional rendering based on user authentication */}
                 {props.user ? (
-                    <div className="user-info">
+                    <div className="user-info"> {/* Container for user info */}
                         <Link to={`/user/${props.user.id}`} className="user-link">
                             <Avatar className="avatar" alt={props.user.username} src={props.user.avatarUrl} />
                         </Link>

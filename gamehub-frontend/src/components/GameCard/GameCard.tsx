@@ -4,7 +4,6 @@ import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { GameAPI, User } from "../../types.ts";
 import {useToaster} from "../../ToasterContext.tsx";
 
-
 type GameCardProps = {
     user: User | null;
     game: GameAPI;
@@ -13,7 +12,7 @@ type GameCardProps = {
 };
 
 export default function GameCard(props: Readonly<GameCardProps>) {
-    const { show } = useToaster(); // Use the useToaster hook
+    const { show } = useToaster(); // Use the useToaster hook for notifications
 
     const platformColors: Record<string, string> = {
         'PC': '#0078d4',
@@ -31,17 +30,17 @@ export default function GameCard(props: Readonly<GameCardProps>) {
 
     const handleAddGame = () => {
         props.addGameToLibrary(props.game);
-        show(`Added ${props.game.title} to library!`, 'success');
+        show(`Added ${props.game.title} to library!`, 'success'); // Show success notification
     };
 
     const handleDeleteGame = () => {
         props.deleteGameFromLibrary(props.game);
-        show(`Removed ${props.game.title} from library!`, 'success');
+        show(`Removed ${props.game.title} from library!`, 'success'); // Show success notification
     };
 
-    const isInLibrary = props.user?.gameLibrary.some(gameInLibrary => gameInLibrary.id === props.game.id);
-    const displayedPlatforms = props.game.platforms.slice(0, 5);
-    const extraPlatformsCount = props.game.platforms.length - 5;
+    const isInLibrary = props.user?.gameLibrary.some(gameInLibrary => gameInLibrary.id === props.game.id); // Check if the game is in the library
+    const displayedPlatforms = props.game.platforms.slice(0, 5); // Display up to 5 platforms
+    const extraPlatformsCount = props.game.platforms.length - 5; // Count of additional platforms
 
     return (
         <Card
@@ -63,6 +62,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                 },
             }}
         >
+            {/* Game cover image */}
             <Link to={`/games/${props.game.id}`} style={{ textDecoration: "none" }}>
                 <CardMedia
                     component="img"
@@ -106,6 +106,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                         {props.game.title}
                     </Typography>
 
+                    {/* Display platform chips */}
                     <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
                         {displayedPlatforms.map((platform) => (
                             <Chip
@@ -128,6 +129,7 @@ export default function GameCard(props: Readonly<GameCardProps>) {
                             />
                         ))}
 
+                        {/* Display additional platforms count */}
                         {extraPlatformsCount > 0 && (
                             <Chip
                                 label={`+${extraPlatformsCount} more`}

@@ -11,54 +11,95 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor  // Automatically injects final fields through constructor injection
 public class NoteService {
 
-    private final NoteRepository noteRepository;
-    private final IdService idService;
+    private final NoteRepository noteRepository;  // Repository for note operations
+    private final IdService idService;  // Service to generate unique IDs
 
+    /**
+     * Retrieves all notes from the repository.
+     *
+     * @return List of all notes
+     */
     public List<Note> getAllNotes() {
-        return noteRepository.findAll();
+        return noteRepository.findAll();  // Fetch all notes from the repository
     }
 
+    /**
+     * Retrieves a specific note by its ID.
+     *
+     * @param id the ID of the note to retrieve
+     * @return the Note object if found
+     * @throws NoteNotFoundException if no note is found with the given ID
+     */
     public Note getNoteById(String id) {
-        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id));
+        return noteRepository.findById(id)  // Find the note by ID
+                .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id));  // Throw exception if not found
     }
 
+    /**
+     * Retrieves all notes by a specific user ID.
+     *
+     * @param id the user ID
+     * @return List of notes associated with the user
+     * @throws NoteNotFoundException if no notes are found for the given user ID
+     */
     public List<Note> getNoteByUser(String id) {
-        return noteRepository.findByUserId(id).orElseThrow(() -> new NoteNotFoundException("No notes found for id: " + id));
+        return noteRepository.findByUserId(id)  // Find notes by user ID
+                .orElseThrow(() -> new NoteNotFoundException("No notes found for id: " + id));  // Throw exception if no notes found
     }
 
+    /**
+     * Creates a new note based on the provided NoteDTO.
+     *
+     * @param noteDTO the data transfer object containing note details
+     * @return the newly created Note object
+     */
     public Note createNote(NoteDTO noteDTO) {
         Note noteToSave = new Note(
-                idService.randomId(),
-                noteDTO.name(),
+                idService.randomId(),  // Generate a unique ID for the note
+                noteDTO.gameTitle(),
                 noteDTO.userId(),
                 noteDTO.gameId(),
                 noteDTO.title(),
                 noteDTO.content(),
                 noteDTO.category(),
-                LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),  // Set the creation timestamp to the current time
+                LocalDateTime.now()  // Set the updated timestamp to the current time
         );
         return noteRepository.save(noteToSave);
     }
 
+    /**
+     * Updates an existing note based on its ID and provided NoteDTO.
+     *
+     * @param id      the ID of the note to update
+     * @param noteDTO the data transfer object containing updated note details
+     * @return the updated Note object
+     * @throws NoteNotFoundException if no note is found with the given ID
+     */
     public Note updateNote(String id, NoteDTO noteDTO) {
-        Note noteToUpdate = noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
-                .withName(noteDTO.name())
+        Note noteToUpdate = noteRepository.findById(id)  // Find the note by ID
+                .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
+                .withGameTitle(noteDTO.gameTitle())
                 .withUserId(noteDTO.userId())
                 .withGameId(noteDTO.gameId())
                 .withTitle(noteDTO.title())
                 .withContent(noteDTO.content())
                 .withCategory(noteDTO.category())
                 .withCreated(noteDTO.created())
-                .withUpdated(LocalDateTime.now());
+                .withUpdated(LocalDateTime.now());  // Update the last modified timestamp to now
 
         return noteRepository.save(noteToUpdate);
     }
 
+    /**
+     * Deletes a note by its ID.
+     *
+     * @param id the ID of the note to delete
+     */
     public void deleteNote(String id) {
-        noteRepository.deleteById(id);
+        noteRepository.deleteById(id);  // Delete the note from the repository by its ID
     }
 }

@@ -45,7 +45,7 @@ class ReviewControllerIntegrationTest {
                         [
                             {
                                 "id": "1",
-                                "name": "Test",
+                                "gameTitle": "Test",
                                 "userId": "user1",
                                 "gameId": "game1",
                                 "username": "username1",
@@ -117,7 +117,7 @@ class ReviewControllerIntegrationTest {
                         .content(
                                 """
                                 {
-                                  "name": "Test",
+                                  "gameTitle": "Test",
                                   "userId": "user1",
                                   "gameId": "game1",
                                   "username": "username1",
@@ -135,7 +135,7 @@ class ReviewControllerIntegrationTest {
                         """
                         [
                             {
-                                "name": "Test",
+                                "gameTitle": "Test",
                                 "userId": "user1",
                                 "gameId": "game1",
                                 "username": "username1",

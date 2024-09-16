@@ -8,6 +8,6 @@ public record UserResponse(
         String username,
         String avatarUrl,
         String role,
-        List<FrontendGame> gameLibrary
+        List<GameFromFrontendDTO> gameLibrary
 ) {
 }

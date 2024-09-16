@@ -21,7 +21,7 @@ export default function GameReviews({ reviews }: Readonly<GameReviewsProps>) {
                         <Card key={review.id} sx={{ marginBottom: 2 }}>
                             <CardContent>
                                 <Typography variant="body1">
-                                    <strong>{review.name}</strong>
+                                    <strong>{review.gameTitle}</strong>
                                 </Typography>
                                 <Typography variant="body1">
                                     <strong>{review.username}</strong> on {review.date}:

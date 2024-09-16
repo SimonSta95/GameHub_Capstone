@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Document("notes")
 public record Note(
         String id,
-        String name,
+        String gameTitle,
         String userId,
         String gameId,
         String title,
@@ -17,5 +17,4 @@ public record Note(
         String category,
         LocalDateTime created,
         LocalDateTime updated
-) {
-}
+) {}

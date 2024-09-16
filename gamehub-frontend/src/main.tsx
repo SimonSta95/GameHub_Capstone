@@ -5,12 +5,15 @@ import './index.css'
 import {BrowserRouter} from "react-router-dom";
 import {ThemeProvider} from "@mui/material";
 import theme from "./theme/theme.ts";
+import ToasterProvider from "./ToasterContext.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
           <ThemeProvider theme={theme}>
-            <App />
+              <ToasterProvider>
+                <App />
+              </ToasterProvider>
           </ThemeProvider>
       </BrowserRouter>
   </StrictMode>

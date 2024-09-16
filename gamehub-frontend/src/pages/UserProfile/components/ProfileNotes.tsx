@@ -7,13 +7,14 @@ type GameNotesProps = {
 
 type ChipColor = "default" | "primary" | "secondary";
 
+// Define colors for note categories
 const categoryColors: { [key: string]: ChipColor } = {
     Note: 'primary',
     Goal: 'secondary'
 };
 
 export default function ProfileNotes(props: Readonly<GameNotesProps>) {
-    const { notes } = props;
+    const { notes } = props; // Destructure notes from props
 
     return (
         <Box sx={{ marginTop: '32px' }}>
@@ -30,7 +31,7 @@ export default function ProfileNotes(props: Readonly<GameNotesProps>) {
                         <Card key={note.id} sx={{ marginBottom: 2, padding: 2, border: '1px solid #ddd' }}>
                             <CardContent>
                                 <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                                    {note.name}
+                                    {note.gameTitle}
                                 </Typography>
                                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
                                     {note.title}

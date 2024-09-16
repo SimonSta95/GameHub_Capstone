@@ -5,51 +5,55 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ProfileNotes from "./components/ProfileNotes.tsx";
 import GameReviews from "./components/ProfileReviews.tsx";
-
+import { useToaster } from "../../ToasterContext.tsx";
 
 export default function UserProfile() {
     const [user, setUser] = useState<User | null>(null);
     const [notes, setNotes] = useState<Note[]>([]);
-    const [reviews, setReviews] = useState<Review[]>([])
+    const [reviews, setReviews] = useState<Review[]>([]);
 
+    // Get the user ID from URL parameters
     const params = useParams();
+    const { show } = useToaster();
 
+    // Fetch user data from the API
     const fetchUser = () => {
         axios.get(`/api/users/${params.id}`)
-            .then((response) => {
-                setUser(response.data);
-            })
+            .then(response => setUser(response.data))
             .catch(() => {
-                setUser(null)
-            })
-    }
+                show("Failed to fetch User", "error");
+                setUser(null);
+            });
+    };
 
+    // Fetch notes related to the user
     const fetchNotes = () => {
         axios.get(`/api/notes/user/${params.id}`)
-            .then((response) => {
-                setNotes(response.data);
-            })
+            .then(response => setNotes(response.data))
             .catch(() => {
-                setNotes([])
-            })
-    }
+                show("Failed to fetch Notes", "error");
+                setNotes([]);
+            });
+    };
 
+    // Fetch reviews written by the user
     const fetchReviews = () => {
         axios.get(`/api/reviews/user/${params.id}`)
-            .then((response) => {
-                setReviews(response.data);
-            })
+            .then(response => setReviews(response.data))
             .catch(() => {
-                setReviews([])
-            })
-    }
+                show("Failed to fetch Reviews", "error");
+                setReviews([]);
+            });
+    };
 
+    // Fetch data when the component mounts or the user ID changes
     useEffect(() => {
         fetchUser();
         fetchNotes();
         fetchReviews();
     }, [params.id]);
 
+    // Display a message if the user is not found
     if (!user) {
         return (
             <Box sx={{ textAlign: 'center', padding: '24px' }}>
@@ -58,6 +62,7 @@ export default function UserProfile() {
         );
     }
 
+    // Define colors for different platforms
     const platformColors: Record<string, string> = {
         'PC': '#0078d4',
         'PlayStation 3': '#003b5c',
@@ -219,14 +224,16 @@ export default function UserProfile() {
                     </Box>
                 )}
             </Box>
+
             <Divider sx={{ marginBottom: '16px', borderColor: '#1b263b' }} />
+
             {/* User Notes Section */}
             <ProfileNotes notes={notes} />
+
             <Divider sx={{ marginBottom: '16px', borderColor: '#1b263b' }} />
 
             {/* User Review Section */}
             <GameReviews reviews={reviews} />
-
         </Box>
     );
 }

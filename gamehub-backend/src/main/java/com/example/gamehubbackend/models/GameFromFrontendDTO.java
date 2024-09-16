@@ -2,7 +2,7 @@ package com.example.gamehubbackend.models;
 
 import java.util.List;
 
-public record FrontendGame(
+public record GameFromFrontendDTO(
         String id,
         String title,
         List<String> platforms,

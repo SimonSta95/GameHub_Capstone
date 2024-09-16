@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, CircularProgress, Rating, TextField, Typography, Dialog, DialogActions, DialogContent, DialogTitle, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
-import {User, Review, GameDetailAPIResponse} from "../../../types.ts";
+import { User, Review, GameDetailAPIResponse } from "../../../types.ts";
 
 type GameReviewsProps = {
     game: GameDetailAPIResponse;
@@ -13,20 +13,21 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
     const [newReview, setNewReview] = useState<string>("");
     const [newRating, setNewRating] = useState<number | null>(null);
     const [averageRating, setAverageRating] = useState<number | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [reviewCount, setReviewCount] = useState<number>(0);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     const [editReviewId, setEditReviewId] = useState<string | null>(null);
     const [editReviewContent, setEditReviewContent] = useState<string>("");
     const [editReviewRating, setEditReviewRating] = useState<number | null>(null);
-    const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState(false);
+    const [confirmDeleteDialogOpen, setConfirmDeleteDialogOpen] = useState<boolean>(false);
     const [reviewToDelete, setReviewToDelete] = useState<string | null>(null);
-    const [submitting, setSubmitting] = useState(false);
-    const [deleting, setDeleting] = useState(false);
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const [deleting, setDeleting] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState<string>("");
     const [userReview, setUserReview] = useState<Review | null>(null);
 
-    // Fetch reviews and user review for the game
+    // Fetch reviews and calculate average rating
     const fetchReviews = async () => {
         try {
             const response = await axios.get(`/api/reviews/${game.id}`);
@@ -38,22 +39,27 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
             const average = fetchedReviews.length > 0 ? totalRating / fetchedReviews.length : 0;
             setAverageRating(average);
 
-            // Find the user's review if it exists
+            // Set review count
+            setReviewCount(fetchedReviews.length);
+
+            // Find user's review if it exists
             const userReview = fetchedReviews.find((review: Review) => review.userId === user?.id) || null;
             setUserReview(userReview);
 
             setLoading(false);
         } catch (error) {
-            console.log(error)
+            console.error("Failed to fetch reviews:", error);
             setError("Failed to fetch reviews.");
             setLoading(false);
         }
     };
 
-    // Add or update a review
+    // Handle submitting a new or edited review
     const handleSubmitReview = async () => {
         if (!user) {
             setError("You must be logged in to add a review.");
+            setSnackbarMessage("Please log in to add a review.");
+            setSnackbarOpen(true);
             return;
         }
         if (editReviewId && editReviewRating === null) {
@@ -74,7 +80,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 // Update existing review
                 await axios.put(`/api/reviews/${editReviewId}`, {
                     userId: user.id,
-                    name: game.name,
+                    gameTitle: game.name,
                     gameId: game.id,
                     username: user.username,
                     rating: editReviewRating,
@@ -87,7 +93,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 // Add new review
                 await axios.post(`/api/reviews`, {
                     userId: user.id,
-                    name: game.name,
+                    gameTitle: game.name,
                     gameId: game.id,
                     username: user.username,
                     rating: newRating,
@@ -100,35 +106,36 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
             }
             fetchReviews(); // Refresh reviews
         } catch (error) {
-            console.log(error)
+            console.error("Failed to submit review:", error);
             setError("Failed to submit review.");
+            setSnackbarMessage("There was an error submitting your review.");
         } finally {
             setSubmitting(false);
             setSnackbarOpen(true);
         }
     };
 
-    // Handle edit review
+    // Handle starting the edit process for a review
     const handleEdit = (review: Review) => {
         setEditReviewId(review.id);
         setEditReviewContent(review.content);
         setEditReviewRating(review.rating);
     };
 
-    // Cancel edit review
+    // Cancel editing a review
     const handleCancelEdit = () => {
         setEditReviewId(null);
         setEditReviewContent("");
         setEditReviewRating(null);
     };
 
-    // Handle delete review
+    // Handle requesting to delete a review
     const handleDelete = (reviewId: string) => {
         setReviewToDelete(reviewId);
         setConfirmDeleteDialogOpen(true);
     };
 
-    // Confirm delete review
+    // Confirm and delete the selected review
     const confirmDelete = async () => {
         if (reviewToDelete) {
             setDeleting(true);
@@ -139,8 +146,9 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 setReviewToDelete(null);
                 setSnackbarMessage("Review deleted successfully!");
             } catch (error) {
-                console.log(error)
+                console.error("Failed to delete review:", error);
                 setError("Failed to delete review.");
+                setSnackbarMessage("There was an error deleting the review.");
             } finally {
                 setDeleting(false);
                 setSnackbarOpen(true);
@@ -148,16 +156,18 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
         }
     };
 
-    // Cancel delete review
+    // Cancel the delete action
     const cancelDelete = () => {
         setConfirmDeleteDialogOpen(false);
         setReviewToDelete(null);
     };
 
+    // Fetch reviews when the component mounts or game ID changes
     useEffect(() => {
         fetchReviews();
     }, [game.id]);
 
+    // Show a spinner while reviews are being fetched
     if (loading) {
         return <CircularProgress />;
     }
@@ -173,6 +183,11 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                     {error}
                 </Typography>
             )}
+
+            {/* Review Count */}
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                {reviewCount} {reviewCount === 1 ? "Review" : "Reviews"}
+            </Typography>
 
             {/* Average Rating */}
             {averageRating !== null && (
@@ -281,7 +296,7 @@ export default function GameReviews({ game, user }: Readonly<GameReviewsProps>) 
                 autoHideDuration={6000}
                 onClose={() => setSnackbarOpen(false)}
             >
-                <Alert onClose={() => setSnackbarOpen(false)} severity="success">
+                <Alert onClose={() => setSnackbarOpen(false)} severity={error ? "error" : "success"}>
                     {snackbarMessage}
                 </Alert>
             </Snackbar>

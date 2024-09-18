@@ -56,7 +56,6 @@ class UserControllerIntegrationTests {
                         {
                           "id": "1",
                           "username": "TestUser1",
-                          "gitHubId": "1",
                           "role": "USER",
                           "gameLibrary": [
                             {
@@ -77,9 +76,7 @@ class UserControllerIntegrationTests {
                               "platforms": ["Platform3"],
                               "coverImage": "coverImage3"
                             }
-                          ],
-                          "creationDate": "2020-01-01T01:00:00",
-                          "lastUpdateDate": "2020-01-01T02:00:00"
+                          ]
                         }
                     """
                 ));
@@ -215,7 +212,6 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
                             "gameLibrary": [
                               {
@@ -224,12 +220,10 @@ class UserControllerIntegrationTests {
                                 "platforms": ["Platform1"],
                                 "coverImage": "coverImage1"
                               }
-                            ],
-                            "creationDate": "2020-01-01T01:00:00"
+                            ]
                         }
                         """
-                ))
-                .andExpect(jsonPath("$.lastUpdateDate").exists());
+                ));
     }
 
     @Test
@@ -242,7 +236,7 @@ class UserControllerIntegrationTests {
         userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
         mockMvc.perform(delete("/api/users/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
@@ -276,7 +270,6 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
                             "gameLibrary": [
                               {
@@ -285,8 +278,7 @@ class UserControllerIntegrationTests {
                                 "platforms": ["Platform1"],
                                 "coverImage": "coverImage1"
                               }
-                            ],
-                            "creationDate": "2020-01-01T01:00:00"
+                            ]
                         }
                         """
                 ));
@@ -323,10 +315,8 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
-                            "gameLibrary": [],
-                            "creationDate": "2020-01-01T01:00:00"
+                            "gameLibrary": []
                         }
                         """
                 ));
@@ -374,7 +364,6 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
                             "gameLibrary": [
                               {
@@ -383,8 +372,7 @@ class UserControllerIntegrationTests {
                                 "platforms": ["Platform1"],
                                 "coverImage": "coverImage1"
                               }
-                            ],
-                            "creationDate": "2020-01-01T01:00:00"
+                            ]
                         }
                         """
                 ));
@@ -411,7 +399,6 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
                             "gameLibrary": [
                               {
@@ -420,8 +407,7 @@ class UserControllerIntegrationTests {
                                 "platforms": ["Platform1"],
                                 "coverImage": "coverImage1"
                               }
-                            ],
-                            "creationDate": "2020-01-01T01:00:00"
+                            ]
                         }
                         """
                 ));
@@ -456,7 +442,6 @@ class UserControllerIntegrationTests {
                         {
                             "id": "1",
                             "username": "TestUser1",
-                            "gitHubId": "1",
                             "role": "USER",
                             "gameLibrary": [
                               {
@@ -465,8 +450,7 @@ class UserControllerIntegrationTests {
                                 "platforms": ["Platform1"],
                                 "coverImage": "coverImage1"
                               }
-                            ],
-                            "creationDate": "2020-01-01T01:00:00"
+                            ]
                         }
                         """
                 ));

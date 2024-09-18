@@ -4,6 +4,7 @@ import com.example.gamehubbackend.models.Review;
 import com.example.gamehubbackend.models.ReviewDTO;
 import com.example.gamehubbackend.services.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -72,9 +73,11 @@ public class ReviewController {
      * Delete a review by its ID.
      *
      * @param reviewId the ID of the review to be deleted
+     * @return no content and status 204
      */
     @DeleteMapping("/{reviewId}")
-    public void deleteReview(@PathVariable String reviewId) {
+    public ResponseEntity<Object> deleteReview(@PathVariable String reviewId) {
         reviewService.deleteReview(reviewId);
+        return ResponseEntity.noContent().build();
     }
 }

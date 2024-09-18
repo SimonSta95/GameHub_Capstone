@@ -7,6 +7,7 @@ import com.example.gamehubbackend.services.GameService;
 import com.example.gamehubbackend.services.rawg.RawgService;
 import lombok.RequiredArgsConstructor;
 import com.example.gamehubbackend.models.GameDTO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,10 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GameController {
 
-    private final GameService gameService;  // Service for handling game operations
-    private final RawgService rawgService;  // Service for interacting with external RAWG API
-
-    // MongoDB Endpoints
+    private final GameService gameService;
+    private final RawgService rawgService;
 
     /**
      * Retrieve a list of all games from the database.
@@ -69,10 +68,12 @@ public class GameController {
      * Delete a game from the database.
      *
      * @param id the ID of the game to delete
+     * @return no content and status 204
      */
     @DeleteMapping("/{id}")
-    public void deleteGame(@PathVariable String id) {
+    public ResponseEntity<Object> deleteGame(@PathVariable String id) {
         gameService.deleteGame(id);
+        return ResponseEntity.noContent().build();
     }
 
     // External API Endpoints

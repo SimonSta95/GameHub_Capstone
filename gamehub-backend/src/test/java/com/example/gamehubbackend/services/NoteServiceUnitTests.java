@@ -31,8 +31,8 @@ class NoteServiceUnitTests {
         when(noteRepository.findAll()).thenReturn(notes);
 
         List<Note> actualNotes = noteService.getAllNotes();
-        assertEquals(notes, actualNotes);
         verify(noteRepository).findAll();
+        assertEquals(notes, actualNotes);
     }
 
     @Test
@@ -41,8 +41,8 @@ class NoteServiceUnitTests {
         when(noteRepository.findById("1")).thenReturn(Optional.of(note));
 
         Note actualNote = noteService.getNoteById("1");
-        assertEquals(note, actualNote);
         verify(noteRepository).findById("1");
+        assertEquals(note, actualNote);
     }
 
     @Test
@@ -62,10 +62,10 @@ class NoteServiceUnitTests {
         when(noteRepository.save(any(Note.class))).thenReturn(noteToSave);
 
         Note actualNote = noteService.createNote(noteDTO);
-        assertEquals(noteToSave, actualNote);
 
         verify(idService).randomId();
         verify(noteRepository).save(any(Note.class));
+        assertEquals(noteToSave, actualNote);
     }
 
     @Test
@@ -79,10 +79,10 @@ class NoteServiceUnitTests {
         when(noteRepository.save(any(Note.class))).thenReturn(updatedNote);
 
         Note actualNote = noteService.updateNote(noteId, updatedNoteDTO);
-        assertEquals(updatedNote, actualNote);
 
         verify(noteRepository).findById(noteId);
         verify(noteRepository).save(any(Note.class));
+        assertEquals(updatedNote, actualNote);
     }
 
     @Test

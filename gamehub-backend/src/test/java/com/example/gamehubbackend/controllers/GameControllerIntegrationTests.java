@@ -192,7 +192,7 @@ class GameControllerIntegrationTests {
         gameRepository.save(new Game("1","Super Mario World", List.of("Jump and Run"), "2017-03-03", List.of("NES","SNES"),"linkToImg"));
 
         mockMvc.perform(delete("/api/games/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/games"))
                 .andExpect(status().isOk())

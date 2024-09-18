@@ -28,8 +28,9 @@ class ReviewServiceUnitTest {
         when(reviewRepository.findAll()).thenReturn(reviews);
 
         List<Review> actualReviews = reviewService.getAllReviews();
-        assertEquals(reviews, actualReviews);
+
         verify(reviewRepository).findAll();
+        assertEquals(reviews, actualReviews);
     }
 
     @Test
@@ -42,8 +43,9 @@ class ReviewServiceUnitTest {
         when(reviewRepository.findByGameId(gameId)).thenReturn(Optional.of(reviews));
 
         List<Review> actualReviews = reviewService.getReviewsByGameId(gameId);
-        assertEquals(reviews, actualReviews);
+
         verify(reviewRepository).findByGameId(gameId);
+        assertEquals(reviews, actualReviews);
     }
 
     @Test

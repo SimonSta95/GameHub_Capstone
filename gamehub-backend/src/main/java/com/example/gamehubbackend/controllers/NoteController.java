@@ -4,6 +4,7 @@ import com.example.gamehubbackend.models.Note;
 import com.example.gamehubbackend.models.NoteDTO;
 import com.example.gamehubbackend.services.NoteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -75,9 +76,11 @@ public class NoteController {
      * Delete a note by its ID.
      *
      * @param id the ID of the note to be deleted
+     * @return no content and status 204
      */
     @DeleteMapping("/{id}")
-    public void deleteNote(@PathVariable String id) {
+    public ResponseEntity<Object> deleteNote(@PathVariable String id) {
         noteService.deleteNote(id);
+        return ResponseEntity.noContent().build();
     }
 }

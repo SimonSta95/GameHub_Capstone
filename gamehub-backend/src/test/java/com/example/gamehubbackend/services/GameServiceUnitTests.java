@@ -96,10 +96,10 @@ class GameServiceUnitTests {
         Game expected = new Game("1", "Super Mario World 2", List.of("Jump and Run"), "2020-02-01", List.of("NES", "SNES"), "linkToImg");
         Game actual = gameService.updateGame(updateGameDTO, id);
 
-        assertNotNull(actual);
-        assertEquals(expected, actual);
         verify(gameRepo).findById(id);
         verify(gameRepo).save(updatedGame);
+        assertNotNull(actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -115,9 +115,9 @@ class GameServiceUnitTests {
                 GameNotFoundException.class, () -> gameService.updateGame(updateGameDTO, id)
         );
 
-        assertEquals("No Game found with id: 1", thrown.getMessage());
         verify(gameRepo).findById(id);
         verify(gameRepo, never()).save(updatedGame);
+        assertEquals("No Game found with id: 1", thrown.getMessage());
     }
 
     @Test

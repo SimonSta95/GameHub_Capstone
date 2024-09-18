@@ -1,11 +1,11 @@
 package com.example.gamehubbackend.controllers;
 
 import com.example.gamehubbackend.models.AddGameDTO;
-import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public class UserController {
      * @return a list of User objects
      */
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userService.getAllUser();
     }
 
@@ -34,7 +34,7 @@ public class UserController {
      * @return the User object with the specified ID
      */
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable String id) {
+    public UserResponse getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     }
 
@@ -68,7 +68,7 @@ public class UserController {
      * @return the updated User object
      */
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
+    public UserResponse updateUser(@PathVariable String id, @RequestBody UserDTO userDTO) {
         return userService.updateUser(id, userDTO);
     }
 
@@ -79,7 +79,7 @@ public class UserController {
      * @return the updated User object with the game added
      */
     @PutMapping("/addGame")
-    public User addGameToLibrary(@RequestBody AddGameDTO gameToAdd) {
+    public UserResponse addGameToLibrary(@RequestBody AddGameDTO gameToAdd) {
         return userService.addGameToLibrary(gameToAdd.userId(), gameToAdd.game());
     }
 
@@ -90,7 +90,7 @@ public class UserController {
      * @return the updated User object with the game removed
      */
     @PutMapping("/deleteGame")
-    public User deleteGameFromLibrary(@RequestBody AddGameDTO gameToDelete) {
+    public UserResponse deleteGameFromLibrary(@RequestBody AddGameDTO gameToDelete) {
         return userService.removeGameFromLibrary(gameToDelete.userId(), gameToDelete.game());
     }
 
@@ -98,9 +98,11 @@ public class UserController {
      * Delete a user by their ID.
      *
      * @param id the ID of the user to delete
+     * @return no content and status 204
      */
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable String id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }

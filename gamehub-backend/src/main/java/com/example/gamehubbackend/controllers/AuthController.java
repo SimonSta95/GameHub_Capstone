@@ -5,9 +5,6 @@ import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +26,8 @@ public class AuthController {
      */
     @GetMapping("/me")
     public UserResponse getCurrentUser(Principal principal) {
-        if (principal instanceof OAuth2AuthenticationToken token) {
-            // Handle OAuth2 authentication
-            OAuth2User oAuth2User = token.getPrincipal();
-            return userService.getUserByUsername(oAuth2User.getAttributes().get("login").toString());
-        }
 
-        if (principal instanceof UsernamePasswordAuthenticationToken) {
-            // Handle Username/Password authentication
-            return userService.getLoggedInUser();
-        }
-
-        return null;  // Return null if no valid principal
+        return userService.getLoggedInUser(principal);
     }
 
     /**

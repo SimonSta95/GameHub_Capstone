@@ -38,19 +38,25 @@ class UserServiceUnitTests {
                 new User("2","TestUser2", "Test","2","link", "USER", List.of(game1), localDateTime, localDateTime)
         );
 
+        List<UserResponse> expected = List.of(
+            new UserResponse("1","TestUser1","1","link", "USER", List.of(game1, game2)),
+            new UserResponse("2","TestUser2","2","link", "USER", List.of(game1))
+        );
+
         when(userRepository.findAll()).thenReturn(users);
 
-        List<User> actualUsers = userService.getAllUser();
+        List<UserResponse> actualUsers = userService.getAllUser();
 
         verify(userRepository).findAll();
-        assertEquals(users, actualUsers);
+        assertEquals(expected, actualUsers);
     }
 
     @Test
     void getAllUsers_NoUsers_Test(){
-        List<User> expectedUsers = List.of();
-        when(userRepository.findAll()).thenReturn(expectedUsers);
-        List<User> actualUsers = userService.getAllUser();
+        List<User> users = List.of();
+        List<UserResponse> expectedUsers = List.of();
+        when(userRepository.findAll()).thenReturn(users);
+        List<UserResponse> actualUsers = userService.getAllUser();
 
         verify(userRepository).findAll();
         assertEquals(expectedUsers, actualUsers);
@@ -61,12 +67,14 @@ class UserServiceUnitTests {
         GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
         User user = new User("1","TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, localDateTime);
 
+        UserResponse expected = new UserResponse(user.id(), user.gitHubId(), user.username(), user.avatarUrl(), user.role(), user.gameLibrary());
+
         when(userRepository.findById("1")).thenReturn(Optional.of(user));
 
-        User actualUser = userService.getUserById("1");
+        UserResponse actualUser = userService.getUserById("1");
 
         verify(userRepository).findById("1");
-        assertEquals(user, actualUser);
+        assertEquals(expected, actualUser);
     }
 
     @Test
@@ -144,11 +152,13 @@ class UserServiceUnitTests {
         try (MockedStatic<LocalDateTime> mockedLocalDate = mockStatic(LocalDateTime.class)) {
             mockedLocalDate.when(LocalDateTime::now).thenReturn(updateDateTime);
 
-            User actualUser = userService.updateUser(id, updateUserDTO);
+            UserResponse actualUser = userService.updateUser(id, updateUserDTO);
+
+            UserResponse expectedUser = new UserResponse("1", "TestUser1","1","link", "USER", List.of(game1, game2));
 
             verify(userRepository).findById(id);
             verify(userRepository).save(updatedUser);
-            assertEquals(updatedUser, actualUser);
+            assertEquals(expectedUser, actualUser);
         }
     }
 
@@ -183,11 +193,12 @@ class UserServiceUnitTests {
         when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
         when(userRepository.save(updatedUser)).thenReturn(updatedUser);
 
-        User actualUser = userService.addGameToLibrary(id, game2);
+        UserResponse actualUser = userService.addGameToLibrary(id, game2);
+        UserResponse expected = new UserResponse("1", "TestUser1","1", "link", "USER", new ArrayList<>(List.of(game1, game2)));
 
         verify(userRepository).findById(id);
         verify(userRepository).save(updatedUser);
-        assertEquals(updatedUser, actualUser);
+        assertEquals(expected, actualUser);
     }
 
     @Test
@@ -212,12 +223,21 @@ class UserServiceUnitTests {
         // Create expected user after removing game2
         User updatedUser = existingUser.withGameLibrary(new ArrayList<>(List.of(game1))); // Only game1 remains
 
+        UserResponse expected = new UserResponse(
+                updatedUser.id(),
+                updatedUser.gitHubId(),
+                updatedUser.username(),
+                updatedUser.avatarUrl(),
+                updatedUser.role(),
+                updatedUser.gameLibrary()
+        );
+
         // Mock repository behavior
         when(userRepository.findById(userId)).thenReturn(Optional.of(existingUser));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // Call service method to remove game from library
-        User result = userService.removeGameFromLibrary(userId, game2);
+        UserResponse result = userService.removeGameFromLibrary(userId, game2);
 
         // Verify that the game was removed and the user was saved
         verify(userRepository).findById(userId);
@@ -227,6 +247,6 @@ class UserServiceUnitTests {
         ));
 
         // Assert that the returned user matches the updated user
-        assertEquals(updatedUser, result);
+        assertEquals(expected, result);
     }
 }

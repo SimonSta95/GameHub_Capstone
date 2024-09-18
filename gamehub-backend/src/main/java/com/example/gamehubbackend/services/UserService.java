@@ -7,11 +7,15 @@ import com.example.gamehubbackend.models.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.security.Principal;
 import java.util.List;
 
 @Service
@@ -28,8 +32,16 @@ public class UserService {
      *
      * @return List of all users.
      */
-    public List<User> getAllUser() {
-        return userRepository.findAll();  // Fetches all users from the repository
+    public List<UserResponse> getAllUser() {
+        List<User> userList = userRepository.findAll();// Fetches all users from the repository
+        return userList.stream().map(user -> new UserResponse(
+                user.id(),
+                user.gitHubId(),
+                user.username(),
+                user.avatarUrl(),
+                user.role(),
+                user.gameLibrary()
+        )).toList();
     }
 
     /**
@@ -37,9 +49,21 @@ public class UserService {
      *
      * @return UserResponse containing details of the logged-in user.
      */
-    public UserResponse getLoggedInUser() {
-        var principal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return getUserByUsername(principal.getUsername());  // Fetch user details by username
+    public UserResponse getLoggedInUser(Principal principal) {
+
+        if (principal instanceof OAuth2AuthenticationToken token) {
+            // Handle OAuth2 authentication
+            OAuth2User oAuth2User = token.getPrincipal();
+            return getUserByUsername(oAuth2User.getAttributes().get("login").toString());
+        }
+
+        if (principal instanceof UsernamePasswordAuthenticationToken) {
+            var userPrincipal = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            // Handle Username/Password authentication
+            return getUserByUsername(userPrincipal.getUsername());
+        }
+
+        return null;
     }
 
     /**
@@ -48,8 +72,17 @@ public class UserService {
      * @param id The user's ID.
      * @return The user if found, else throws UserNotFoundException.
      */
-    public User getUserById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id: " + id));
+    public UserResponse getUserById(String id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("No user found with id: " + id));
+
+        return new UserResponse(
+                user.id(),
+                user.gitHubId(),
+                user.username(),
+                user.avatarUrl(),
+                user.role(),
+                user.gameLibrary()
+        );
     }
 
     /**
@@ -133,16 +166,26 @@ public class UserService {
      * @param userDTO The new user details.
      * @return The updated user.
      */
-    public User updateUser(String id, UserDTO userDTO) {
+    public UserResponse updateUser(String id, UserDTO userDTO) {
         // Fetch the existing user and update the necessary fields
-        User user = getUserById(id)
-                .withUsername(userDTO.username())
-                .withRole(userDTO.role())
-                .withGameLibrary(userDTO.gameLibrary())
-                .withLastUpdateDate(LocalDateTime.now());  // Update the timestamp
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("No user found with id: " + id));
+
+        user = user.withUsername(userDTO.username())
+                    .withRole(userDTO.role())
+                    .withGameLibrary(userDTO.gameLibrary());
 
         // Save and return the updated user
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return new UserResponse(
+                user.id(),
+                user.gitHubId(),
+                user.username(),
+                user.avatarUrl(),
+                user.role(),
+                user.gameLibrary()
+        );
     }
 
     /**
@@ -152,15 +195,24 @@ public class UserService {
      * @param game   The game to be added.
      * @return The updated user with the new game in their library.
      */
-    public User addGameToLibrary(String userId, GameFromFrontendDTO game) {
-        User user = getUserById(userId);
+    public UserResponse addGameToLibrary(String userId, GameFromFrontendDTO game) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
 
         // Add the game if it is not already in the user's library
         if (!user.gameLibrary().contains(game)) {
             user.gameLibrary().add(game);
         }
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return new UserResponse(
+                user.id(),
+                user.gitHubId(),
+                user.username(),
+                user.avatarUrl(),
+                user.role(),
+                user.gameLibrary()
+        );
     }
 
     /**
@@ -170,22 +222,32 @@ public class UserService {
      * @param game   The game to be removed.
      * @return The updated user after removing the game.
      */
-    public User removeGameFromLibrary(String userId, GameFromFrontendDTO game) {
-        User user = getUserById(userId);
+    public UserResponse removeGameFromLibrary(String userId, GameFromFrontendDTO game) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
 
         // Remove the game from the user's library
         user.gameLibrary().remove(game);
+        userRepository.save(user);
 
-        return userRepository.save(user);
+        return new UserResponse(
+                user.id(),
+                user.gitHubId(),
+                user.username(),
+                user.avatarUrl(),
+                user.role(),
+                user.gameLibrary()
+        );
     }
 
     /**
      * Delete a user by ID.
      *
      * @param id The user's ID.
+     * @return no content and 204 status
      */
-    public void deleteUser(String id) {
+    public ResponseEntity<Object> deleteUser(String id) {
         // Remove the user from the database
         userRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

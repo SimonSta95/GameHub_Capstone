@@ -74,7 +74,7 @@ function App() {
     const addGameToLibrary = (game: GameAPI) => {
         if (!user) return; // Ensure user is logged in
         const dto: UserGameLibraryAction = {
-            userId: user.gitHubId,
+            userId: user.id,
             game: game
         };
 
@@ -92,7 +92,7 @@ function App() {
     const deleteGameFromLibrary = (game: GameAPI) => {
         if (!user) return; // Ensure user is logged in
         const dto: UserGameLibraryAction = {
-            userId: user?.gitHubId ?? '',
+            userId: user?.id ?? '',
             game: game
         };
 

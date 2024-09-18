@@ -5,7 +5,7 @@ import './Header.css';
 import { User } from "../../types.ts";
 
 type HeaderProps = {
-    user?: User | null;
+    user: User | null;
     onLogin: () => void;
     onLogout: () => void;
 };

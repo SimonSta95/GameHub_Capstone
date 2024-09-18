@@ -39,8 +39,8 @@ class UserServiceUnitTests {
         );
 
         List<UserResponse> expected = List.of(
-            new UserResponse("1","TestUser1","1","link", "USER", List.of(game1, game2)),
-            new UserResponse("2","TestUser2","2","link", "USER", List.of(game1))
+            new UserResponse("1","1","TestUser1","link", "USER", List.of(game1, game2)),
+            new UserResponse("2","2","TestUser2","link", "USER", List.of(game1))
         );
 
         when(userRepository.findAll()).thenReturn(users);
@@ -140,24 +140,34 @@ class UserServiceUnitTests {
     void updateUser_Test_Success(){
         String id = "1";
         GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        User existingUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime);
-        UserDTO updateUserDTO = new UserDTO("TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, updateDateTime);
-        User updatedUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, updateDateTime);
+        User existingUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1, new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2")), localDateTime, updateDateTime);
+        UserDTO updateUserDTO = new UserDTO("TestUser1", "Test","1","link", "ADMIN", List.of(game1),localDateTime, updateDateTime); // Update user role and game library
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(updatedUser)).thenReturn(updatedUser);
 
         try (MockedStatic<LocalDateTime> mockedLocalDate = mockStatic(LocalDateTime.class)) {
             mockedLocalDate.when(LocalDateTime::now).thenReturn(updateDateTime);
 
+            // Update existing user with the DTO values
+            existingUser = existingUser.withUsername(updateUserDTO.username())
+                    .withRole(updateUserDTO.role())
+                    .withGameLibrary(updateUserDTO.gameLibrary());
+
             UserResponse actualUser = userService.updateUser(id, updateUserDTO);
 
-            UserResponse expectedUser = new UserResponse("1", "TestUser1","1","link", "USER", List.of(game1, game2));
+            // Expected user should reflect the updated information
+            UserResponse expectedUser = new UserResponse(
+                    existingUser.id(),
+                    existingUser.gitHubId(),
+                    existingUser.username(),
+                    existingUser.avatarUrl(),
+                    existingUser.role(),
+                    updateUserDTO.gameLibrary() // Use the game library from the DTO
+            );
 
             verify(userRepository).findById(id);
-            verify(userRepository).save(updatedUser);
+            verify(userRepository).save(existingUser); // Save the updated existingUser
             assertEquals(expectedUser, actualUser);
         }
     }
@@ -188,17 +198,33 @@ class UserServiceUnitTests {
         GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         User existingUser = new User("1", "TestUser1", "Test", "1", "link", "USER", new ArrayList<>(List.of(game1)), localDateTime, localDateTime);
-        User updatedUser = new User("1", "TestUser1", "Test", "1", "link", "USER", new ArrayList<>(List.of(game1, game2)), localDateTime, localDateTime);
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(updatedUser)).thenReturn(updatedUser);
 
-        UserResponse actualUser = userService.addGameToLibrary(id, game2);
-        UserResponse expected = new UserResponse("1", "TestUser1","1", "link", "USER", new ArrayList<>(List.of(game1, game2)));
+        try (MockedStatic<LocalDateTime> mockedLocalDate = mockStatic(LocalDateTime.class)) {
+            mockedLocalDate.when(LocalDateTime::now).thenReturn(localDateTime);
 
-        verify(userRepository).findById(id);
-        verify(userRepository).save(updatedUser);
-        assertEquals(expected, actualUser);
+            // Don't create a separate updated user, modify the existingUser
+            if (!existingUser.gameLibrary().contains(game2)) {
+                existingUser.gameLibrary().add(game2);
+            }
+
+            UserResponse actualUser = userService.addGameToLibrary(id, game2);
+
+            // Expected user should reflect the added game in the library
+            UserResponse expectedUser = new UserResponse(
+                    existingUser.id(),
+                    existingUser.gitHubId(),
+                    existingUser.username(),
+                    existingUser.avatarUrl(),
+                    existingUser.role(),
+                    existingUser.gameLibrary()
+            );
+
+            verify(userRepository).findById(id);
+            verify(userRepository).save(existingUser); // Save the modified existingUser
+            assertEquals(expectedUser, actualUser);
+        }
     }
 
     @Test

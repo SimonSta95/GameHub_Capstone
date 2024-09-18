@@ -155,7 +155,7 @@ class NoteControllerIntegrationTests {
         noteRepository.save(new Note("1", "Test","user1", "game1", "Title 1", "Content 1", "Category 1", createdDateTime, updatedDateTime));
 
         mockMvc.perform(delete("/api/notes/1"))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/api/notes"))
                 .andExpect(status().isOk())

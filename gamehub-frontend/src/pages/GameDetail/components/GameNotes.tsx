@@ -41,8 +41,9 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
     const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [newNote, setNewNote] = useState<{ title: string; content: string; category: string }>({
+    const [newNote, setNewNote] = useState<{ title: string; gameTitle: string; content: string; category: string }>({
         title: "",
+        gameTitle: "",
         content: "",
         category: "Note"
     });
@@ -97,7 +98,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             // Create a new note via API
             const response = await axios.post<Note>(`/api/notes`, {
                 userId: props.user.id,
-                name: props.game.name,
+                gameTitle: props.game.name,
                 gameId: props.game.id,
                 title: newNote.title,
                 content: newNote.content,
@@ -105,7 +106,7 @@ export default function GameNotes(props: Readonly<GameNotesProps>) {
             });
             // Update state with the newly created note
             setNotes([...notes, response.data]);
-            setNewNote({ title: "", content: "", category: "Note" }); // Reset new note form
+            setNewNote({ title: "", gameTitle: "", content: "", category: "Note" }); // Reset new note form
             show('Note added successfully!', 'success'); // Show success toast
         } catch (error) {
             console.error("Failed to create note:", error);

@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -138,9 +139,9 @@ public class UserService {
                 userDTO.username(),
                 passwordEncoder.encode(userDTO.password()),  // Password is encrypted
                 userDTO.gitHubId(),
-                userDTO.avatarUrl(),
+                "",
                 "USER",
-                userDTO.gameLibrary(),
+                new ArrayList<>(),
                 userDTO.creationDate(),
                 userDTO.lastUpdateDate()
         );

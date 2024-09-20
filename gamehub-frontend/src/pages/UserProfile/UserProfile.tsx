@@ -19,7 +19,9 @@ export default function UserProfile() {
     // Fetch user data from the API
     const fetchUser = () => {
         axios.get(`/api/users/${params.id}`)
-            .then(response => setUser(response.data))
+            .then(response => {
+                console.log(response.data)
+                setUser(response.data)})
             .catch(() => {
                 show("Failed to fetch User", "error");
                 setUser(null);

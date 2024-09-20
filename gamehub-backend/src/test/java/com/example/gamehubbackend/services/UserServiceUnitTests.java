@@ -110,18 +110,16 @@ class UserServiceUnitTests {
 
     @Test
     void createUser_Test(){
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
-        UserDTO userDTO = new UserDTO("TestUser1","Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime);
-        User userToSave = new User("1","TestUser1", "encodedPassword", "1","link", "USER", List.of(game1, game2), localDateTime, localDateTime); // Set the encoded password
+        UserDTO userDTO = new UserDTO("TestUser1","Test","1","", "USER", List.of(), localDateTime, localDateTime);
+        User userToSave = new User("1","TestUser1", "encodedPassword", "1","", "USER", List.of(), localDateTime, localDateTime); // Set the encoded password
 
         when(idService.randomId()).thenReturn("1");
         when(passwordEncoder.encode("Test")).thenReturn("encodedPassword"); // Mock password encoding
         when(userRepository.save(userToSave)).thenReturn(userToSave);
 
         UserResponse actualUser = userService.saveUser(userDTO);
-        UserResponse expected = new UserResponse("1","1","TestUser1","link","USER",List.of(game1, game2));
+        UserResponse expected = new UserResponse("1","1","TestUser1","","USER",List.of());
 
         verify(idService).randomId();
         verify(passwordEncoder).encode("Test"); // Verify that encoding was called

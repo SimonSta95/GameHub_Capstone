@@ -139,7 +139,7 @@ public class UserService {
                 passwordEncoder.encode(userDTO.password()),  // Password is encrypted
                 userDTO.gitHubId(),
                 userDTO.avatarUrl(),
-                userDTO.role(),
+                "USER",
                 userDTO.gameLibrary(),
                 userDTO.creationDate(),
                 userDTO.lastUpdateDate()

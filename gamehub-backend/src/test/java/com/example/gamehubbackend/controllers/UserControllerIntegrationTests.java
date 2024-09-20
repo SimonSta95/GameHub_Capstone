@@ -131,20 +131,7 @@ class UserControllerIntegrationTests {
                                   "password": "magicPassword123",
                                   "gitHubId": "1",
                                   "role": "USER",
-                                  "gameLibrary": [
-                                    {
-                                      "id": "game1",
-                                      "title": "Game 1",
-                                      "platforms": ["Platform1"],
-                                      "coverImage": "coverImage1"
-                                    },
-                                    {
-                                      "id": "game2",
-                                      "title": "Game 2",
-                                      "platforms": ["Platform2"],
-                                      "coverImage": "coverImage2"
-                                    }
-                                  ],
+                                  "gameLibrary": [],
                                   "creationDate": "2020-01-01T01:00:00",
                                   "lastUpdateDate": "2020-01-01T02:00:00"
                                 }
@@ -156,20 +143,7 @@ class UserControllerIntegrationTests {
                         {
                           "username": "TestUser1",
                           "role": "USER",
-                          "gameLibrary": [
-                            {
-                              "id": "game1",
-                              "title": "Game 1",
-                              "platforms": ["Platform1"],
-                              "coverImage": "coverImage1"
-                            },
-                            {
-                              "id": "game2",
-                              "title": "Game 2",
-                              "platforms": ["Platform2"],
-                              "coverImage": "coverImage2"
-                            }
-                          ]
+                          "gameLibrary": []
                         }
                         """
                 ))

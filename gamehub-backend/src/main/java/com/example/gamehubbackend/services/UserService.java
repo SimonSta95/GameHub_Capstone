@@ -134,12 +134,13 @@ public class UserService {
      */
     public UserResponse saveUser(UserDTO userDTO) {
         // Create a new user with a random ID and encrypted password
+        String avatar = userDTO.avatarUrl() != null  ? userDTO.avatarUrl() : "";
         User userToSave = new User(
                 idService.randomId(),
                 userDTO.username(),
                 passwordEncoder.encode(userDTO.password()),  // Password is encrypted
                 userDTO.gitHubId(),
-                "",
+                avatar,
                 "USER",
                 new ArrayList<>(),
                 userDTO.creationDate(),

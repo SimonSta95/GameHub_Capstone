@@ -15,6 +15,7 @@ import LoginPage from "./pages/LoginPage/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.tsx";
 import UserProfile from "./pages/UserProfile/UserProfile.tsx";
 import { useToaster } from "./ToasterContext.tsx";
+import AdminPage from "./pages/AdminPage/AdminPage.tsx";
 
 function App() {
     const [user, setUser] = useState<User | null>(null);
@@ -138,6 +139,7 @@ function App() {
                         deleteGameFromLibrary={deleteGameFromLibrary}
                     />} />
                     <Route path="/user/:id" element={<UserProfile />} />
+                    <Route path="/admin" element={<AdminPage/>} />
                 </Routes>
             </main>
             <Footer />

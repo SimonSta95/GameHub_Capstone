@@ -1,7 +1,7 @@
 package com.example.gamehubbackend.config;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
-import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.dto.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;

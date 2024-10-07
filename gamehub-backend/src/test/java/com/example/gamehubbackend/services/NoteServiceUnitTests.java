@@ -2,7 +2,7 @@ package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.NoteNotFoundException;
 import com.example.gamehubbackend.models.Note;
-import com.example.gamehubbackend.models.NoteDTO;
+import com.example.gamehubbackend.dto.NoteDTO;
 import com.example.gamehubbackend.repositories.NoteRepository;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,8 @@ import static org.mockito.Mockito.*;
 class NoteServiceUnitTests {
     private final NoteRepository noteRepository = mock(NoteRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final NoteService noteService = new NoteService(noteRepository, idService);
+    private final UserService userService = mock(UserService.class);
+    private final NoteService noteService = new NoteService(noteRepository, idService, userService);
 
     private final LocalDateTime localDateTime = LocalDateTime.parse("2020-01-01T01:00:00");
     private final LocalDateTime updateDateTime = LocalDateTime.parse("2020-01-01T02:00:00");

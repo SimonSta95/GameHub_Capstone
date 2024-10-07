@@ -2,7 +2,7 @@ package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.ReviewNotFoundException;
 import com.example.gamehubbackend.models.Review;
-import com.example.gamehubbackend.models.ReviewDTO;
+import com.example.gamehubbackend.dto.ReviewDTO;
 import com.example.gamehubbackend.repositories.ReviewRepository;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,8 @@ class ReviewServiceUnitTest {
 
     private final ReviewRepository reviewRepository = mock(ReviewRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final ReviewService reviewService = new ReviewService(reviewRepository, idService);
+    private final UserService userService = mock(UserService.class);
+    private final ReviewService reviewService = new ReviewService(reviewRepository, idService,userService);
 
     @Test
     void getAllReviews_Test() {

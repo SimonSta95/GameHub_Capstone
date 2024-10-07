@@ -1,9 +1,9 @@
 package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
-import com.example.gamehubbackend.models.GameFromFrontendDTO;
+import com.example.gamehubbackend.dto.LibraryGameDTO;
 import com.example.gamehubbackend.models.User;
-import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.dto.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.repositories.UserRepository;
 
@@ -30,8 +30,8 @@ class UserServiceUnitTests {
 
     @Test
     void getAllUsers_Test(){
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         List<User> users = List.of(
                 new User("1","TestUser1", "Test","1","link", "USER", List.of(game1, game2), localDateTime, localDateTime),
@@ -64,7 +64,7 @@ class UserServiceUnitTests {
 
     @Test
     void getUserById_Test(){
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
         User user = new User("1","TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, localDateTime);
 
         UserResponse expected = new UserResponse(user.id(), user.gitHubId(), user.username(), user.avatarUrl(), user.role(), user.gameLibrary());
@@ -87,7 +87,7 @@ class UserServiceUnitTests {
 
     @Test
     void getUserByGitHubId_Test(){
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
         User user = new User("1","TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, localDateTime);
 
         UserResponse expected = new UserResponse("1","1","TestUser1","link","USER",List.of(game1));
@@ -137,9 +137,9 @@ class UserServiceUnitTests {
     @Test
     void updateUser_Test_Success(){
         String id = "1";
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
-        User existingUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1, new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2")), localDateTime, updateDateTime);
+        User existingUser = new User("1", "TestUser1", "Test","1","link", "USER", List.of(game1, new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2")), localDateTime, updateDateTime);
         UserDTO updateUserDTO = new UserDTO("TestUser1", "Test","1","link", "ADMIN", List.of(game1),localDateTime, updateDateTime); // Update user role and game library
 
         when(userRepository.findById(id)).thenReturn(Optional.of(existingUser));
@@ -173,7 +173,7 @@ class UserServiceUnitTests {
     @Test
     void updateUser_Test_Failure(){
         String id = "1";
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
         UserDTO userDTO = new UserDTO("TestUser1", "Test","1","link", "USER", List.of(game1), localDateTime, updateDateTime);
 
@@ -192,8 +192,8 @@ class UserServiceUnitTests {
     @Test
     void addGameToLibrary_Test() {
         String id = "1";
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         User existingUser = new User("1", "TestUser1", "Test", "1", "link", "USER", new ArrayList<>(List.of(game1)), localDateTime, localDateTime);
 
@@ -228,8 +228,8 @@ class UserServiceUnitTests {
     @Test
     void deleteGameFromLibrary_Test() {
         String userId = "1";
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         // Mocking an existing user with both games in their library
         User existingUser = new User(

@@ -1,4 +1,4 @@
-package com.example.gamehubbackend.models;
+package com.example.gamehubbackend.dto;
 
 import java.time.LocalDateTime;
 

@@ -1,7 +1,7 @@
 package com.example.gamehubbackend.controllers;
 
 import com.example.gamehubbackend.models.Review;
-import com.example.gamehubbackend.models.ReviewDTO;
+import com.example.gamehubbackend.dto.ReviewDTO;
 import com.example.gamehubbackend.services.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

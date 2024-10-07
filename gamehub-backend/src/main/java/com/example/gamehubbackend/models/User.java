@@ -1,5 +1,6 @@
 package com.example.gamehubbackend.models;
 
+import com.example.gamehubbackend.dto.LibraryGameDTO;
 import lombok.With;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,7 +16,7 @@ public record User(
    String gitHubId,
    String avatarUrl,
    String role,
-   List<GameFromFrontendDTO> gameLibrary,
+   List<LibraryGameDTO> gameLibrary,
    LocalDateTime creationDate,
    LocalDateTime lastUpdateDate
 ) {}

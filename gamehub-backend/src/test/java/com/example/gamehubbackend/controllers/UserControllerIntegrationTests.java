@@ -1,6 +1,6 @@
 package com.example.gamehubbackend.controllers;
 
-import com.example.gamehubbackend.models.GameFromFrontendDTO;
+import com.example.gamehubbackend.dto.LibraryGameDTO;
 import com.example.gamehubbackend.models.User;
 import com.example.gamehubbackend.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -43,9 +43,9 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void getUserById() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
-        GameFromFrontendDTO game3 = new GameFromFrontendDTO("game3", "Game 3", List.of("Platform3"), "coverImage3");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game3 = new LibraryGameDTO("game3", "Game 3", List.of("Platform3"), "coverImage3");
 
         userRepository.save(new User("1", "TestUser1", "Test","1", "link", "USER", List.of(game1, game2, game3), localDateTime, updateDateTime));
 
@@ -86,8 +86,8 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void getUserByGitHubId() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
@@ -154,8 +154,8 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void updateUser() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
@@ -204,8 +204,8 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void deleteUser() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
-        GameFromFrontendDTO game2 = new GameFromFrontendDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game2 = new LibraryGameDTO("game2", "Game 2", List.of("Platform2"), "coverImage2");
 
         userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1, game2), localDateTime, updateDateTime));
 
@@ -262,7 +262,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void deleteGameFromLibrary() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
         userRepository.save(new User("1", "TestUser1","Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
 
@@ -391,7 +391,7 @@ class UserControllerIntegrationTests {
     @WithMockUser
     @DirtiesContext
     void deleteNonExistentGameFromLibrary() throws Exception {
-        GameFromFrontendDTO game1 = new GameFromFrontendDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
+        LibraryGameDTO game1 = new LibraryGameDTO("game1", "Game 1", List.of("Platform1"), "coverImage1");
 
         userRepository.save(new User("1", "TestUser1", "Test", "1", "link", "USER", List.of(game1), localDateTime, updateDateTime));
 

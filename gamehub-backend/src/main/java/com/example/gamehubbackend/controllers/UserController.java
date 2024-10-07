@@ -1,7 +1,7 @@
 package com.example.gamehubbackend.controllers;
 
-import com.example.gamehubbackend.models.AddGameDTO;
-import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.dto.AddGameDTO;
+import com.example.gamehubbackend.dto.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.services.UserService;
 import lombok.RequiredArgsConstructor;

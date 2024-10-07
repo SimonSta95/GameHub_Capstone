@@ -2,9 +2,11 @@ package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.NoteNotFoundException;
 import com.example.gamehubbackend.models.Note;
-import com.example.gamehubbackend.models.NoteDTO;
+import com.example.gamehubbackend.dto.NoteDTO;
+import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.repositories.NoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ public class NoteService {
 
     private final NoteRepository noteRepository;  // Repository for note operations
     private final IdService idService;  // Service to generate unique IDs
+    private final UserService userService;
 
     /**
      * Retrieves all notes from the repository.
@@ -57,18 +60,25 @@ public class NoteService {
      * @return the newly created Note object
      */
     public Note createNote(NoteDTO noteDTO) {
-        Note noteToSave = new Note(
-                idService.randomId(),  // Generate a unique ID for the note
-                noteDTO.gameTitle(),
-                noteDTO.userId(),
-                noteDTO.gameId(),
-                noteDTO.title(),
-                noteDTO.content(),
-                noteDTO.category(),
-                LocalDateTime.now(),  // Set the creation timestamp to the current time
-                LocalDateTime.now()  // Set the updated timestamp to the current time
-        );
-        return noteRepository.save(noteToSave);
+
+        UserResponse user = userService.getUserById(noteDTO.userId());
+
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == user.username()) {
+
+            Note noteToSave = new Note(
+                    idService.randomId(),  // Generate a unique ID for the note
+                    noteDTO.gameTitle(),
+                    noteDTO.userId(),
+                    noteDTO.gameId(),
+                    noteDTO.title(),
+                    noteDTO.content(),
+                    noteDTO.category(),
+                    LocalDateTime.now(),  // Set the creation timestamp to the current time
+                    LocalDateTime.now()  // Set the updated timestamp to the current time
+            );
+            return noteRepository.save(noteToSave);
+        }
+        return null;
     }
 
     /**
@@ -80,18 +90,25 @@ public class NoteService {
      * @throws NoteNotFoundException if no note is found with the given ID
      */
     public Note updateNote(String id, NoteDTO noteDTO) {
-        Note noteToUpdate = noteRepository.findById(id)  // Find the note by ID
-                .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
-                .withGameTitle(noteDTO.gameTitle())
-                .withUserId(noteDTO.userId())
-                .withGameId(noteDTO.gameId())
-                .withTitle(noteDTO.title())
-                .withContent(noteDTO.content())
-                .withCategory(noteDTO.category())
-                .withCreated(noteDTO.created())
-                .withUpdated(LocalDateTime.now());  // Update the last modified timestamp to now
 
-        return noteRepository.save(noteToUpdate);
+        UserResponse user = userService.getUserById(noteDTO.userId());
+
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == user.username()) {
+
+            Note noteToUpdate = noteRepository.findById(id)  // Find the note by ID
+                    .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
+                    .withGameTitle(noteDTO.gameTitle())
+                    .withUserId(noteDTO.userId())
+                    .withGameId(noteDTO.gameId())
+                    .withTitle(noteDTO.title())
+                    .withContent(noteDTO.content())
+                    .withCategory(noteDTO.category())
+                    .withCreated(noteDTO.created())
+                    .withUpdated(LocalDateTime.now());  // Update the last modified timestamp to now
+
+            return noteRepository.save(noteToUpdate);
+        }
+        return null;
     }
 
     /**

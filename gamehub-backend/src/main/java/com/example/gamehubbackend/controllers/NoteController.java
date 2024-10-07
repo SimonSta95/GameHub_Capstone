@@ -1,7 +1,7 @@
 package com.example.gamehubbackend.controllers;
 
 import com.example.gamehubbackend.models.Note;
-import com.example.gamehubbackend.models.NoteDTO;
+import com.example.gamehubbackend.dto.NoteDTO;
 import com.example.gamehubbackend.services.NoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

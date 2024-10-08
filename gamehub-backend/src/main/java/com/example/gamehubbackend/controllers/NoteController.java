@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -68,7 +69,7 @@ public class NoteController {
      * @return the updated Note object
      */
     @PutMapping(path = {"{id}/update", "{id}"})
-    public Note updateNote(@PathVariable String id, @RequestBody NoteDTO noteDTO) {
+    public Note updateNote(@PathVariable String id, @RequestBody NoteDTO noteDTO) throws AccessDeniedException {
         return noteService.updateNote(id, noteDTO);
     }
 
@@ -79,8 +80,9 @@ public class NoteController {
      * @return no content and status 204
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteNote(@PathVariable String id) {
+    public ResponseEntity<Object> deleteNote(@PathVariable String id) throws AccessDeniedException {
         noteService.deleteNote(id);
         return ResponseEntity.noContent().build();
     }
+
 }

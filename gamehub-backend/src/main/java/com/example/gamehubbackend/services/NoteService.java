@@ -6,9 +6,14 @@ import com.example.gamehubbackend.dto.NoteDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.repositories.NoteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -61,24 +66,18 @@ public class NoteService {
      */
     public Note createNote(NoteDTO noteDTO) {
 
-        UserResponse user = userService.getUserById(noteDTO.userId());
-
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == user.username()) {
-
-            Note noteToSave = new Note(
-                    idService.randomId(),  // Generate a unique ID for the note
-                    noteDTO.gameTitle(),
-                    noteDTO.userId(),
-                    noteDTO.gameId(),
-                    noteDTO.title(),
-                    noteDTO.content(),
-                    noteDTO.category(),
-                    LocalDateTime.now(),  // Set the creation timestamp to the current time
-                    LocalDateTime.now()  // Set the updated timestamp to the current time
-            );
-            return noteRepository.save(noteToSave);
-        }
-        return null;
+        Note noteToSave = new Note(
+                idService.randomId(),  // Generate a unique ID for the note
+                noteDTO.gameTitle(),
+                noteDTO.userId(),
+                noteDTO.gameId(),
+                noteDTO.title(),
+                noteDTO.content(),
+                noteDTO.category(),
+                LocalDateTime.now(),  // Set the creation timestamp to the current time
+                LocalDateTime.now()  // Set the updated timestamp to the current time
+        );
+        return noteRepository.save(noteToSave);
     }
 
     /**
@@ -89,26 +88,34 @@ public class NoteService {
      * @return the updated Note object
      * @throws NoteNotFoundException if no note is found with the given ID
      */
-    public Note updateNote(String id, NoteDTO noteDTO) {
+    public Note updateNote(String id, NoteDTO noteDTO) throws AccessDeniedException {
 
-        UserResponse user = userService.getUserById(noteDTO.userId());
-
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() == user.username()) {
-
-            Note noteToUpdate = noteRepository.findById(id)  // Find the note by ID
-                    .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
-                    .withGameTitle(noteDTO.gameTitle())
-                    .withUserId(noteDTO.userId())
-                    .withGameId(noteDTO.gameId())
-                    .withTitle(noteDTO.title())
-                    .withContent(noteDTO.content())
-                    .withCategory(noteDTO.category())
-                    .withCreated(noteDTO.created())
-                    .withUpdated(LocalDateTime.now());  // Update the last modified timestamp to now
-
-            return noteRepository.save(noteToUpdate);
+        Note note = getNoteById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            OAuth2User principal = (OAuth2User) authentication.getPrincipal();
+            if (!isOwner(note, principal)) {
+                throw new AccessDeniedException("Only the owner of the note can delete it.");
+            }
+        } else {
+            String currentUserId = authentication.getName();
+            if (!isOwner(note, currentUserId)) {
+                throw new AccessDeniedException("Only the owner of the note can delete it.");
+            }
         }
-        return null;
+
+        Note noteToUpdate = noteRepository.findById(id)  // Find the note by ID
+                .orElseThrow(() -> new NoteNotFoundException("No note found with id: " + id))
+                .withGameTitle(noteDTO.gameTitle())
+                .withUserId(noteDTO.userId())
+                .withGameId(noteDTO.gameId())
+                .withTitle(noteDTO.title())
+                .withContent(noteDTO.content())
+                .withCategory(noteDTO.category())
+                .withCreated(noteDTO.created())
+                .withUpdated(LocalDateTime.now());  // Update the last modified timestamp to now
+
+        return noteRepository.save(noteToUpdate);
     }
 
     /**
@@ -116,7 +123,40 @@ public class NoteService {
      *
      * @param id the ID of the note to delete
      */
-    public void deleteNote(String id) {
+    public void deleteNote(String id) throws AccessDeniedException {
+
+        Note note = getNoteById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            OAuth2User principal = (OAuth2User) authentication.getPrincipal();
+            if (!isOwner(note, principal)) {
+                throw new AccessDeniedException("Only the owner of the note can delete it.");
+            }
+        } else {
+            String currentUserId = authentication.getName();
+            if (!isOwner(note, currentUserId)) {
+                throw new AccessDeniedException("Only the owner of the note can delete it.");
+            }
+        }
+
         noteRepository.deleteById(id);  // Delete the note from the repository by its ID
+    }
+
+    private boolean isOwner(Note note, OAuth2User principal) {
+        String githubId = principal.getAttribute("id").toString();
+        UserResponse user = userService.getUserByGitHubId(githubId);
+        if (user != null) {
+            String currentUserId = user.id();
+            return note.userId().equals(currentUserId);
+        } else {
+            // Handle the case where the user is not found
+            return false;
+        }
+    }
+
+    private boolean isOwner(Note note, String currentUserId) {
+
+        UserResponse user = userService.getUserByUsername(currentUserId);
+        return note.userId().equals(user.id());
     }
 }

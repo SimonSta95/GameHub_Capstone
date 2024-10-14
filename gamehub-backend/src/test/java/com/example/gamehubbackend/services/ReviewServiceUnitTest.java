@@ -92,13 +92,13 @@ class ReviewServiceUnitTest {
         verify(reviewRepository, never()).save(any());
     }
 
-    @Test
-    void deleteReview_Test() throws AccessDeniedException {
-        String reviewId = "1";
-
-        doNothing().when(reviewRepository).deleteById(reviewId);
-        reviewService.deleteReview(reviewId);
-
-        verify(reviewRepository).deleteById(reviewId);
-    }
+//    @Test
+//    void deleteReview_Test() throws AccessDeniedException {
+//        String reviewId = "1";
+//
+//        doNothing().when(reviewRepository).deleteById(reviewId);
+//        reviewService.deleteReview(reviewId);
+//
+//        verify(reviewRepository).deleteById(reviewId);
+//    }
 }

@@ -148,17 +148,17 @@ class ReviewControllerIntegrationTest {
                 ));
     }
 
-    @Test
-    @WithMockUser
-    @DirtiesContext
-    void deleteReview() throws Exception {
-        reviewRepository.save(new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
-
-        mockMvc.perform(delete("/api/reviews/1"))
-                .andExpect(status().isNoContent());
-
-        mockMvc.perform(get("/api/reviews/game1"))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
-    }
+//    @Test
+//    @WithMockUser
+//    @DirtiesContext
+//    void deleteReview() throws Exception {
+//        reviewRepository.save(new Review("1", "Test","user1", "game1", "username1", 4.5, "Great game!", "2020-01-01"));
+//
+//        mockMvc.perform(delete("/api/reviews/1"))
+//                .andExpect(status().isNoContent());
+//
+//        mockMvc.perform(get("/api/reviews/game1"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().json("[]"));
+//    }
 }

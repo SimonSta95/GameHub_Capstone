@@ -139,7 +139,6 @@ function App() {
                         deleteGameFromLibrary={deleteGameFromLibrary}
                     />} />
                     <Route path="/user/:id" element={<UserProfile />} />
-                    <Route path="/admin" element={<AdminPage/>} />
                 </Routes>
             </main>
             <Footer />

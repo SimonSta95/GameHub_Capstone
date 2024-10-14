@@ -1,5 +1,6 @@
 package com.example.gamehubbackend.models;
 
+import com.example.gamehubbackend.dto.LibraryGameDTO;
 import lombok.With;
 
 import java.util.List;
@@ -11,6 +12,6 @@ public record UserResponse(
         String username,
         String avatarUrl,
         String role,
-        List<GameFromFrontendDTO> gameLibrary
+        List<LibraryGameDTO> gameLibrary
 ) {
 }

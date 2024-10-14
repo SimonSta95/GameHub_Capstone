@@ -1,4 +1,4 @@
-package com.example.gamehubbackend.models;
+package com.example.gamehubbackend.dto;
 
 import lombok.With;
 
@@ -12,7 +12,7 @@ public record UserDTO(
         String gitHubId,
         String avatarUrl,
         String role,
-        List<GameFromFrontendDTO> gameLibrary,
+        List<LibraryGameDTO> gameLibrary,
         LocalDateTime creationDate,
         LocalDateTime lastUpdateDate
 ) {}

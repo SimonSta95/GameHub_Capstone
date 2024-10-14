@@ -2,10 +2,11 @@ package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.NoteNotFoundException;
 import com.example.gamehubbackend.models.Note;
-import com.example.gamehubbackend.models.NoteDTO;
+import com.example.gamehubbackend.dto.NoteDTO;
 import com.example.gamehubbackend.repositories.NoteRepository;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +17,8 @@ import static org.mockito.Mockito.*;
 class NoteServiceUnitTests {
     private final NoteRepository noteRepository = mock(NoteRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final NoteService noteService = new NoteService(noteRepository, idService);
+    private final UserService userService = mock(UserService.class);
+    private final NoteService noteService = new NoteService(noteRepository, idService, userService);
 
     private final LocalDateTime localDateTime = LocalDateTime.parse("2020-01-01T01:00:00");
     private final LocalDateTime updateDateTime = LocalDateTime.parse("2020-01-01T02:00:00");
@@ -69,7 +71,7 @@ class NoteServiceUnitTests {
     }
 
     @Test
-    void updateNote_Test() {
+    void updateNote_Test() throws AccessDeniedException {
         String noteId = "1";
         Note existingNote = new Note("1", "Test","user1", "game1", "Old Title", "Old Content", "category1", localDateTime, updateDateTime);
         NoteDTO updatedNoteDTO = new NoteDTO("user1", "Test","game1", "Updated Title", "Updated Content", "category1", localDateTime, updateDateTime);
@@ -98,7 +100,7 @@ class NoteServiceUnitTests {
     }
 
     @Test
-    void deleteNote_Test() {
+    void deleteNote_Test() throws AccessDeniedException {
         String noteId = "1";
 
         doNothing().when(noteRepository).deleteById(noteId);

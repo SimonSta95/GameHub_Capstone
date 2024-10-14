@@ -1,9 +1,9 @@
 package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.UserNotFoundException;
-import com.example.gamehubbackend.models.GameFromFrontendDTO;
+import com.example.gamehubbackend.dto.LibraryGameDTO;
 import com.example.gamehubbackend.models.User;
-import com.example.gamehubbackend.models.UserDTO;
+import com.example.gamehubbackend.dto.UserDTO;
 import com.example.gamehubbackend.models.UserResponse;
 import com.example.gamehubbackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -197,7 +197,7 @@ public class UserService {
      * @param game   The game to be added.
      * @return The updated user with the new game in their library.
      */
-    public UserResponse addGameToLibrary(String userId, GameFromFrontendDTO game) {
+    public UserResponse addGameToLibrary(String userId, LibraryGameDTO game) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
 
         // Add the game if it is not already in the user's library
@@ -224,7 +224,7 @@ public class UserService {
      * @param game   The game to be removed.
      * @return The updated user after removing the game.
      */
-    public UserResponse removeGameFromLibrary(String userId, GameFromFrontendDTO game) {
+    public UserResponse removeGameFromLibrary(String userId, LibraryGameDTO game) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("No user found with id: " + userId));
 
         // Remove the game from the user's library

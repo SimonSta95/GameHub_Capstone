@@ -2,21 +2,24 @@ package com.example.gamehubbackend.services;
 
 import com.example.gamehubbackend.exceptions.ReviewNotFoundException;
 import com.example.gamehubbackend.models.Review;
-import com.example.gamehubbackend.models.ReviewDTO;
+import com.example.gamehubbackend.dto.ReviewDTO;
 import com.example.gamehubbackend.repositories.ReviewRepository;
 import org.junit.jupiter.api.Test;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
 class ReviewServiceUnitTest {
 
     private final ReviewRepository reviewRepository = mock(ReviewRepository.class);
     private final IdService idService = mock(IdService.class);
-    private final ReviewService reviewService = new ReviewService(reviewRepository, idService);
+    private final UserService userService = mock(UserService.class);
+    private final ReviewService reviewService = new ReviewService(userService, reviewRepository, idService);
 
     @Test
     void getAllReviews_Test() {
@@ -90,7 +93,7 @@ class ReviewServiceUnitTest {
     }
 
     @Test
-    void deleteReview_Test() {
+    void deleteReview_Test() throws AccessDeniedException {
         String reviewId = "1";
 
         doNothing().when(reviewRepository).deleteById(reviewId);

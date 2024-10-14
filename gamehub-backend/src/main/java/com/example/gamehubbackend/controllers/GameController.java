@@ -6,7 +6,7 @@ import com.example.gamehubbackend.models.rawg.RawgGameList;
 import com.example.gamehubbackend.services.GameService;
 import com.example.gamehubbackend.services.rawg.RawgService;
 import lombok.RequiredArgsConstructor;
-import com.example.gamehubbackend.models.GameDTO;
+import com.example.gamehubbackend.dto.GameDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

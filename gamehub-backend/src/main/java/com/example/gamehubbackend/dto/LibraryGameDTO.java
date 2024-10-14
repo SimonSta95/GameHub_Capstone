@@ -1,8 +1,8 @@
-package com.example.gamehubbackend.models;
+package com.example.gamehubbackend.dto;
 
 import java.util.List;
 
-public record GameFromFrontendDTO(
+public record LibraryGameDTO(
         String id,
         String title,
         List<String> platforms,

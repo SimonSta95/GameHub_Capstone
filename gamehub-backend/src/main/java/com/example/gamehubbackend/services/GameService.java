@@ -3,7 +3,7 @@ package com.example.gamehubbackend.services;
 import com.example.gamehubbackend.models.Game;
 import com.example.gamehubbackend.exceptions.GameNotFoundException;
 import lombok.RequiredArgsConstructor;
-import com.example.gamehubbackend.models.GameDTO;
+import com.example.gamehubbackend.dto.GameDTO;
 import org.springframework.stereotype.Service;
 import com.example.gamehubbackend.repositories.GameRepository;
 
